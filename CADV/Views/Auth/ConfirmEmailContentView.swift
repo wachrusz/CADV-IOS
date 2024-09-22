@@ -6,6 +6,68 @@
 //
 
 import SwiftUI
+import UIKit
+
+class CustomCodeTextField: UITextField {
+    var onDeleteBackward: (() -> Void)?
+    
+    override func deleteBackward() {
+        onDeleteBackward?() // Вызываем действие при нажатии Backspace
+        super.deleteBackward()
+    }
+}
+
+struct CustomCodeTextFieldWrapper: UIViewRepresentable {
+    @Binding var text: String
+    var onDeleteBackward: () -> Void
+    var isFirstResponder: Bool = false
+    
+    func makeUIView(context: Context) -> CustomCodeTextField {
+        let textField = CustomCodeTextField()
+        textField.delegate = context.coordinator
+        textField.textAlignment = .center
+        textField.font = UIFont.systemFont(ofSize: 18, weight: .semibold)
+        textField.keyboardType = .numberPad
+        
+        textField.textColor = .black
+        
+        textField.onDeleteBackward = onDeleteBackward
+        return textField
+    }
+
+    
+    func updateUIView(_ uiView: CustomCodeTextField, context: Context) {
+        uiView.text = text
+        
+        if isFirstResponder && !uiView.isFirstResponder {
+            uiView.becomeFirstResponder()
+        } else if !isFirstResponder && uiView.isFirstResponder {
+            uiView.resignFirstResponder()
+        }
+    }
+    
+    func makeCoordinator() -> Coordinator {
+        return Coordinator(self)
+    }
+    
+    class Coordinator: NSObject, UITextFieldDelegate {
+        var parent: CustomCodeTextFieldWrapper
+        
+        init(_ parent: CustomCodeTextFieldWrapper) {
+            self.parent = parent
+        }
+        
+        func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+            guard let textFieldText = textField.text as NSString? else { return false }
+            let newText = textFieldText.replacingCharacters(in: range, with: string)
+            if newText.count <= 1 {
+                parent.text = newText
+                return true
+            }
+            return false
+        }
+    }
+}
 
 struct EnterVerificationEmailCode: View {
     @State private var keyboardHeight: CGFloat = 0
@@ -45,31 +107,28 @@ struct EnterVerificationEmailCode: View {
                     
                     HStack(spacing: 10) {
                         ForEach(0..<4, id: \.self) { index in
-                            TextField("", text: Binding(
-                                get: { code[index] },
-                                set: { newValue in
-                                    // Handle input
-                                    if newValue.count <= 1 {
-                                        code[index] = newValue
-                                        // Move to next field
-                                        if !newValue.isEmpty {
+                            CustomCodeTextFieldWrapper(
+                                text: Binding(
+                                    get: { code[index] },
+                                    set: { newValue in
+                                        if newValue.count == 1 {
+                                            code[index] = newValue
                                             focusedField = index + 1 < 4 ? index + 1 : nil
                                         }
+                                        if index == 3 && newValue.count == 1 {
+                                            focusedField = 0
+                                            validateCode()
+                                        }
                                     }
-                                    // Handle deletion
-                                    else if newValue.isEmpty {
-                                        code[index] = newValue
-                                        // Move to previous field
-                                        focusedField = index > 0 ? index - 1 : nil
+                                ),
+                                onDeleteBackward: {
+                                    if code[index].isEmpty && index > 0 {
+                                        focusedField = index - 1
                                     }
-                                    // Validate code when all fields are filled
-                                    if index == 3 && newValue.count == 1 {
-                                        validateCode()
-                                    }
-                                }
-                            ))
-                            .font(Font.custom("Inter", size: 18).weight(.semibold))
-                            .foregroundColor(.black)
+                                    code[index] = ""
+                                },
+                                isFirstResponder: focusedField == index
+                            )
                             .frame(width: 50, height: 50)
                             .background(Color(red: 0.98, green: 0.98, blue: 0.98))
                             .cornerRadius(10)
@@ -77,10 +136,11 @@ struct EnterVerificationEmailCode: View {
                                 RoundedRectangle(cornerRadius: 10)
                                     .stroke(Color(red: 0.85, green: 0.85, blue: 0.85), lineWidth: 0.5)
                             )
-                            .multilineTextAlignment(.center)
-                            .keyboardType(.numberPad)
                             .focused($focusedField, equals: index)
                         }
+                    }
+                    .onAppear {
+                        focusedField = nil
                     }
                     .padding(.horizontal)
                 }
@@ -137,7 +197,7 @@ struct EnterVerificationEmailCode: View {
             NotificationCenter.default.addObserver(forName: UIResponder.keyboardWillHideNotification, object: nil, queue: .main) { _ in
                 keyboardHeight = 0
             }
-            focusedField = 0
+            focusedField = nil
         }
         .onDisappear {
             NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillShowNotification, object: nil)
@@ -147,12 +207,13 @@ struct EnterVerificationEmailCode: View {
     
     private func validateCode() {
         let enteredCode = code.joined()
+        print("CurrentCode is \(enteredCode)")
         if enteredCode == correctCode {
             isNavigationActive = true
         } else {
-            code = Array(repeating: "", count: 4) // Clear the code
-            focusedField = 0 // Reset focus
-            showErrorView = true // Show the error view
+            code = Array(repeating: "", count: 4)
+            focusedField = 0
+            showErrorView = true
         }
     }
 }
