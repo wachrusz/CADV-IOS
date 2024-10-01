@@ -12,7 +12,7 @@ class CustomCodeTextField: UITextField {
     var onDeleteBackward: (() -> Void)?
     
     override func deleteBackward() {
-        onDeleteBackward?() // Вызываем действие при нажатии Backspace
+        onDeleteBackward?()
         super.deleteBackward()
     }
 }
@@ -75,7 +75,7 @@ struct EnterVerificationEmailCode: View {
     @FocusState private var focusedField: Int?
     @State private var showErrorView = false
     @State private var isNavigationActive = false
-    private let correctCode = "0000"
+    private let correctCode = "0000" //temp
     
     var body: some View {
         ZStack {
@@ -166,6 +166,9 @@ struct EnterVerificationEmailCode: View {
                     .padding(.horizontal)
                 }
                 Spacer(minLength: -keyboardHeight)
+                NavigationLink(destination: TabBarContentView(), isActive: $isNavigationActive) {
+                    EmptyView()
+                }
             }
             
             if showErrorView {
@@ -186,7 +189,7 @@ struct EnterVerificationEmailCode: View {
                 }
             }
         }
-        .navigationBarBackButtonHidden(true)
+        .hideBackButton()
         .onAppear {
             NotificationCenter.default.addObserver(forName: UIResponder.keyboardWillShowNotification, object: nil, queue: .main) { notification in
                 if let keyboardFrame = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect {
@@ -221,11 +224,5 @@ struct EnterVerificationEmailCode: View {
 extension UIApplication {
     func endEditing() {
         windows.first?.endEditing(true)
-    }
-}
-
-struct NewView: View {
-    var body: some View {
-        Text("Код верный, переход к новому экрану.")
     }
 }
