@@ -16,6 +16,7 @@ struct MainPageView: View {
     @State private var selectedCategory: String = "Доходы"
     @State private var selectedPlan: String = "Факт"
     @State private var pageIndex: Int = 0
+    @State private var isDataFetched: Bool = false
 
     func fetchData() {
         profile = ProfileInfo.GetProfileInfo()
@@ -42,7 +43,10 @@ struct MainPageView: View {
                 .background(Color.white)
                 .hideBackButton()
                 .onAppear {
-                    fetchData()
+                    if !isDataFetched {
+                        fetchData()
+                        isDataFetched = true
+                    }
                 }
         }
     }
@@ -74,12 +78,9 @@ struct MainPageView: View {
                 .foregroundColor(.black)
             
             VStack(alignment: .leading) {
-                Text("\(profile.Name) \(profile.Surname)")
+                Text("\(profile.Surname)\n\(profile.Name)")
                     .font(.custom("Gilroy", size: 14).weight(.bold))
                     .foregroundColor(.black)
-                Text("\(totalAmount(for: "total"))")
-                    .font(.custom("Gilroy", size: 14).weight(.semibold))
-                    .foregroundColor(Color.gray)
             }.frame(maxWidth: .infinity)
         }
         .frame(height: 45)
@@ -107,7 +108,7 @@ struct MainPageView: View {
             Text("₽")
                 .font(.custom("Inter", size: 36).weight(.semibold))
                 .foregroundColor(Color.gray)
-            Text(totalAmount(for: selectedCategory)) // Show total based on selected category
+            Text(totalAmount(for: selectedCategory))
                 .font(.custom("Inter", size: 45).weight(.bold))
                 .foregroundColor(.black)
         }

@@ -7,18 +7,6 @@
 
 import SwiftUI
 
-struct AnalyticsView: View {
-    var body: some View {
-        GeometryReader { geometry in
-            VStack {
-                Text("Analytics Screen")
-                    .frame(width: geometry.size.width, height: geometry.size.height - 65)
-                    .background(Color.white)
-            }
-        }
-    }
-}
-
 struct SettingsView: View {
     var body: some View {
         GeometryReader { geometry in
@@ -102,7 +90,7 @@ struct TabBarContentView: View {
                         .frame(width: geometry.size.width, height: geometry.size.height)
                         .navigationBarBackButtonHidden(true)
                 case 1:
-                    AnalyticsView()
+                    AnalyticsPageView()
                         .frame(width: geometry.size.width, height: geometry.size.height)
                 case 2:
                     SettingsView()

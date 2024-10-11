@@ -86,7 +86,6 @@ struct Income: Codable, Identifiable {
         )
     }
 
-    // Генерация случайной даты
     private static func generateRandomDate() -> String {
         let randomTimeInterval = TimeInterval.random(in: -31536000...0)
         let randomDate = Date(timeIntervalSinceNow: randomTimeInterval)
@@ -95,7 +94,6 @@ struct Income: Codable, Identifiable {
         return dateFormatter.string(from: randomDate)
     }
 
-    // Генерация случайного номера банковского счета
     private static func generateRandomBankAccount() -> String {
         let randomDigits = (0..<20).map { _ in String(Int.random(in: 0...9)) }.joined()
         return randomDigits
