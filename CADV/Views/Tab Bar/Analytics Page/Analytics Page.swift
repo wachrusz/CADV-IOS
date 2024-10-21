@@ -25,6 +25,8 @@ struct AnalyticsPageView: View {
     @State private var isLongPressing = false
     @State private var showAnnualPayments: Bool = false
     @State private var isExpanded: Bool = false
+    @State private var isAddingBank = false
+    @State private var isEnteringManually = false
     @State private var dragOffset = CGSize.zero
     let feedbackGeneratorMedium = UIImpactFeedbackGenerator(style: .medium)
     let feedbackGeneratorHard = UIImpactFeedbackGenerator(style: .heavy)
@@ -180,7 +182,7 @@ struct AnalyticsPageView: View {
                     .foregroundColor(Color(red: 0.60, green: 0.60, blue: 0.60))
             default:
                 TabView {
-                    ForEach(0..<getNumberOfPages(), id: \.self) { pageIndex in
+                    ForEach(0..<getNumberOfPages(itemsArray: annualPayments.Array), id: \.self) { pageIndex in
                         ScrollView {
                             LazyVStack(alignment: .leading, spacing: 10) {
                                 ForEach(getPageItems(items: annualPayments.Array, pageIndex: pageIndex), id: \.ID) { payment in
@@ -263,8 +265,8 @@ struct AnalyticsPageView: View {
         }
     }
     
-    private func getNumberOfPages(itemsPerPage: Int = 20) -> Int {
-        return (annualPayments.Array.count + itemsPerPage - 1) / itemsPerPage
+    private func getNumberOfPages(itemsPerPage: Int = 20, itemsArray: [Any]) -> Int {
+        return (itemsArray.count + itemsPerPage - 1) / itemsPerPage
     }
     
     private func getPageItems(items: [AnnualPayment], pageIndex: Int) -> [AnnualPayment] {
@@ -475,9 +477,9 @@ struct AnalyticsPageView: View {
             Text("₽")
                 .font(.custom("Inter", size: 36).weight(.semibold))
                 .foregroundColor(Color.gray)
-            //Text(totalAmount(for: selectedCategory)) // Show total based on selected category
-              //  .font(.custom("Inter", size: 45).weight(.bold))
-                //.foregroundColor(.black)
+            Text(formattedTotalAmount(amount: bankAccounts.TotalAmount))
+                .font(.custom("Inter", size: 45).weight(.bold))
+                .foregroundColor(.black)
         }
         .frame(height: 85)
         .padding(.horizontal)
@@ -542,6 +544,18 @@ struct AnalyticsPageView: View {
             return "\(type.rawValue == "Доход" ? "+" : "-")₽"
         }
     }
+    private func currencyCodeToSymbol(code: String) -> String{
+        switch code{
+        case "RUB":
+            return "₽"
+        case "EUR":
+            return "€"
+        case "USD":
+            return "$"
+        default:
+            return "₽"
+        }
+    }
     
     private func bankAccountList(bankAccount: BankAccount) -> some View{
         HStack{
@@ -560,22 +574,22 @@ struct AnalyticsPageView: View {
                         .foregroundColor(Color.black.opacity(0.5))
                 }
             }
-            .frame(maxWidth: .infinity)
-            
-            Spacer()
+            .frame(maxWidth: .infinity, alignment: .leading)
             
             VStack(alignment: .leading, spacing: 5){
                 Text(formattedTotalAmount(amount: bankAccount.totalAmount))
                     .font(.custom("Gilroy", size: 14).weight(.semibold))
                     .foregroundColor(Color.black)
                 ForEach(bankAccount.subAccounts){subAccount in
-                    Text(formattedTotalAmount(amount: subAccount.totalAmount))
+                    Text("\(currencyCodeToSymbol(code: subAccount.currency.rawValue)) \(formattedTotalAmount(amount: subAccount.totalAmount))")
                         .font(.custom("Gilroy", size: 12).weight(.semibold))
                         .foregroundColor(Color.black.opacity(0.5))
                 }
             }
-            .frame(maxWidth: .infinity)
+            .frame(maxWidth: .infinity, alignment: .trailing)
         }
+        .frame(maxHeight: 100)
+        .cornerRadius(10)
     }
     
     // Summary Section
@@ -584,9 +598,9 @@ struct AnalyticsPageView: View {
             switch selectedPlan{
             case "Транзакции":
                 TabView {
-                    ForEach(0..<getNumberOfPages(), id: \.self) { pageIndex in
+                    ForEach(0..<getNumberOfPages(itemsArray: transactions.Array), id: \.self) { pageIndex in
                         ScrollView {
-                            VStack(alignment: .leading, spacing: 10) {
+                            LazyVStack(alignment: .leading, spacing: 10) {
                                 let groupedTransactions = Dictionary(grouping: transactions, by: { $0.dateObject ?? Date() })
                                 ForEach(groupedTransactions.keys.sorted(by: >), id: \.self) { date in
                                     Section(header: Text(date, style: .date).foregroundColor(Color.black)) {
@@ -604,10 +618,37 @@ struct AnalyticsPageView: View {
                 .background(Color.white)
                 .cornerRadius(10)
             //TODO: REDOOOOOO
-            case "Счета":
-                VStack {
-                    VStack(spacing: 10) {
-                        VStack(spacing: 10) {
+            case "Счета":VStack {
+                if (contentHeight > 150 && !isExpanded) || (contentHeight < 150) {
+                    LazyVStack(spacing: 10) {
+                        ForEach(bankAccounts) { bankAccount in
+                            bankAccountList(bankAccount: bankAccount)
+                        }
+                    }
+                    .background(
+                        GeometryReader { geometry in
+                            Color.clear
+                                .onAppear {
+                                    contentHeight = geometry.size.height
+                                }
+                        }
+                    )
+                    .frame(maxHeight: min(contentHeight, 150), alignment: .top)
+                    .background(Color.white)
+                    .cornerRadius(10)
+                    .opacity(isExpanded ? 0 : 1)
+                    .overlay(
+                        LinearGradient(
+                            gradient: Gradient(colors: [Color.white.opacity(0), Color.white]),
+                            startPoint: .top,
+                            endPoint: .bottom
+                        )
+                        .opacity(contentHeight < 150 ? 0 : 1)
+                    )
+                    .animation(.easeInOut(duration: 0.1), value: contentHeight)
+                } else {
+                    ScrollView {
+                        LazyVStack(spacing: 10) {
                             ForEach(bankAccounts) { bankAccount in
                                 bankAccountList(bankAccount: bankAccount)
                             }
@@ -620,26 +661,41 @@ struct AnalyticsPageView: View {
                                     }
                             }
                         )
-                    }
-                    .frame(maxHeight: isExpanded ? .infinity : min(contentHeight, 100))
-                    .background(Color.white)
-                    .cornerRadius(10)
-                    .shadow(radius: 10)
-                    .clipped()
-                    
-                    if contentHeight > 100 {
-                        Button(action: {
-                            withAnimation {
-                                isExpanded.toggle()
-                            }
-                        }) {
-                            Text(isExpanded ? "Свернуть" : "Развернуть")
-                                .foregroundColor(.blue)
-                                .padding()
-                        }
+                        .frame(maxHeight: isExpanded ? .infinity : min(contentHeight, 150), alignment: .top)
+                        .background(Color.white)
+                        .cornerRadius(10)
+                        .opacity(isExpanded ? 1 : 0)
+                        .animation(.easeInOut(duration: 0.1), value: contentHeight)
                     }
                 }
-                .padding()
+                
+                if bankAccounts.isEmpty {
+                    VStack {
+                        Text("Подключите приложение банка, чтобы данные о ваших финансах учитывались автоматически или добавьте информацию о наличном счете, чтобы учитывать операции с наличными")
+                            .padding()
+                    }
+                }
+
+                if contentHeight > 150 {
+                    Button(action: {
+                        withAnimation {
+                            isExpanded.toggle()
+                        }
+                    }) {
+                        Text(isExpanded ? "Свернуть" : "Развернуть")
+                            .foregroundColor(.blue)
+                            .padding()
+                    }
+                }
+            }
+            .padding()
+            .onAppear {
+                if bankAccounts.count == 1 {
+                    contentHeight = 50
+                }
+                print("--------------\n\(Date())\n\(bankAccounts)\n")
+            }
+
             default:
                 EmptyView()
             }
@@ -648,8 +704,16 @@ struct AnalyticsPageView: View {
 
     private func actionButtons() -> some View {
         HStack(spacing: 20) {
-            actionButton(text: "Добавить банк", textColor: .white, backgroundColor: .black)
-            actionButton(text: "Внести вручную", textColor: .black, backgroundColor: Color(red: 0.94, green: 0.94, blue: 0.94))
+            actionButton(text: "Добавить банк", textColor: .white, backgroundColor: .black){
+                isAddingBank = true
+            }
+            
+            actionButton(text: "Внести вручную", textColor: .black, backgroundColor: Color(red: 0.94, green: 0.94, blue: 0.94)){
+                isEnteringManually = true
+            }
+            .sheet(isPresented: $isEnteringManually) {
+                CreateBankAccountView(bankAccounts: $bankAccounts)
+            }
         }
         .padding(.horizontal)
     }
@@ -675,14 +739,16 @@ struct AnalyticsPageView: View {
             .overlay(RoundedRectangle(cornerRadius: 15).stroke(Color.black.opacity(0.1), lineWidth: 1))
     }
 
-    private func actionButton(text: String, textColor: Color, backgroundColor: Color) -> some View {
-        Text(text)
-            .font(.custom("Inter", size: 14).weight(.semibold))
-            .foregroundColor(textColor)
-            .padding()
-            .frame(maxWidth: .infinity, maxHeight: 40)
-            .background(backgroundColor)
-            .cornerRadius(10)
+    private func actionButton(text: String, textColor: Color, backgroundColor: Color, action: @escaping () -> Void) -> some View {
+        Button(action: action){
+            Text(text)
+                .font(.custom("Inter", size: 14).weight(.semibold))
+                .foregroundColor(textColor)
+                .padding()
+                .frame(maxWidth: .infinity, maxHeight: 40)
+                .background(backgroundColor)
+                .cornerRadius(10)
+        }
     }
 
  /*

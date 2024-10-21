@@ -9,6 +9,9 @@ import Foundation
 
 struct BankAccounts: Sequence, RandomAccessCollection {
     var Array: [BankAccount]
+    var TotalAmount: Double {self.Array.reduce(0) { $0 + $1.totalAmount }}
+    var Group: BankAccountsGroup?
+    var Currency: CurrencyType = .ruble
     
     func makeIterator() -> Array<BankAccount>.Iterator {
         return Array.makeIterator()
@@ -46,18 +49,16 @@ struct BankAccount: Codable, Hashable, Identifiable {
         case name = "name"
     }
     
-    // Генерация случайного количества банковских счетов (от 1 до 5)
     static func getBankAccounts() -> [BankAccount] {
         let names = ["Raiffeisen", "T-Bank", "Sber", "Gazprombank", "VTB"]
         var accounts: [BankAccount] = []
         
-        // Генерация случайного количества счетов (от 1 до 5)
         let numberOfAccounts = Int.random(in: 1...5)
         let shuffledNames = names.shuffled().prefix(numberOfAccounts)
         
         for name in shuffledNames {
-            let totalAmount = Double.random(in: 1000...100000)  // Случайная сумма
-            let subAccounts = SubAccount.getSubAccounts()        // Получение субсчетов
+            let subAccounts = SubAccount.getSubAccounts()
+            let totalAmount = subAccounts.reduce(0) { $0 + $1.totalAmount }
             let account = BankAccount(totalAmount: totalAmount, name: name, subAccounts: subAccounts)
             accounts.append(account)
         }

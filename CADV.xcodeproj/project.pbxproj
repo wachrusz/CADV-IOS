@@ -12,6 +12,7 @@
 		3CC743F02C8DC49600F10E5E /* StartContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CC743EF2C8DC49600F10E5E /* StartContentView.swift */; };
 		3CC743F22C8DC9C400F10E5E /* LoginContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CC743F12C8DC9C400F10E5E /* LoginContentView.swift */; };
 		3CC743F42C94CA9200F10E5E /* RegisterContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CC743F32C94CA9200F10E5E /* RegisterContentView.swift */; };
+		3CD536272CC69A480099B111 /* CreateBankAccountView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CD536262CC69A480099B111 /* CreateBankAccountView.swift */; };
 		3CD5C3142C9863CA0025EFDC /* ConfirmEmailContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CD5C3132C9863CA0025EFDC /* ConfirmEmailContentView.swift */; };
 		3CD5C3162C9864E30025EFDC /* Utility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CD5C3152C9864E30025EFDC /* Utility.swift */; };
 		3CD5C3192C9873FF0025EFDC /* PopUpContentViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CD5C3182C9873FF0025EFDC /* PopUpContentViews.swift */; };
@@ -65,6 +66,7 @@
 		3CC743EF2C8DC49600F10E5E /* StartContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartContentView.swift; sourceTree = "<group>"; };
 		3CC743F12C8DC9C400F10E5E /* LoginContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginContentView.swift; sourceTree = "<group>"; };
 		3CC743F32C94CA9200F10E5E /* RegisterContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterContentView.swift; sourceTree = "<group>"; };
+		3CD536262CC69A480099B111 /* CreateBankAccountView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateBankAccountView.swift; sourceTree = "<group>"; };
 		3CD5C3132C9863CA0025EFDC /* ConfirmEmailContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfirmEmailContentView.swift; sourceTree = "<group>"; };
 		3CD5C3152C9864E30025EFDC /* Utility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utility.swift; sourceTree = "<group>"; };
 		3CD5C3182C9873FF0025EFDC /* PopUpContentViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopUpContentViews.swift; sourceTree = "<group>"; };
@@ -154,7 +156,6 @@
 		3CD5C31D2CA2F83E0025EFDC /* Main Page */ = {
 			isa = PBXGroup;
 			children = (
-				3CD5C3232CA2FB000025EFDC /* Main Page API */,
 				3CD5C31E2CA2F8630025EFDC /* MainPageContentView.swift */,
 			);
 			path = "Main Page";
@@ -184,11 +185,11 @@
 		3CD5C32C2CAC2CD10025EFDC /* Analytics Page */ = {
 			isa = PBXGroup;
 			children = (
-				3CD5C32F2CAC31170025EFDC /* Analytics Page API */,
 				3CD5C32D2CAC2D0A0025EFDC /* Analytics Page.swift */,
 				3CD5C3342CAEB3880025EFDC /* CreateGoalView.swift */,
 				3CD5C3382CB6D1BC0025EFDC /* EditGoalView.swift */,
 				3CD5C33A2CB80B6D0025EFDC /* AllGoalsView.swift */,
+				3CD536262CC69A480099B111 /* CreateBankAccountView.swift */,
 			);
 			path = "Analytics Page";
 			sourceTree = "<group>";
@@ -269,6 +270,8 @@
 		3CF17ABF2C8783DF00A601AC /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				3CD5C3232CA2FB000025EFDC /* Main Page API */,
+				3CD5C32F2CAC31170025EFDC /* Analytics Page API */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -432,6 +435,7 @@
 				3CC743EA2C8DBC7F00F10E5E /* CustomButton.swift in Sources */,
 				3CD5C3272CA2FB370025EFDC /* MainPageExpense.swift in Sources */,
 				3CD5C32B2CA2FB600025EFDC /* MainPageProfile.swift in Sources */,
+				3CD536272CC69A480099B111 /* CreateBankAccountView.swift in Sources */,
 				3CF17A9A2C87813200A601AC /* Persistence.swift in Sources */,
 				3CC743F02C8DC49600F10E5E /* StartContentView.swift in Sources */,
 				3CD5C33B2CB80B6D0025EFDC /* AllGoalsView.swift in Sources */,

@@ -19,6 +19,11 @@ struct Transactions: Sequence{
     }
 }
 
+enum BankAccountsGroup: String, Codable, Hashable, CaseIterable{
+    case cash = "Наличные"
+    case bank = "Банк"
+}
+
 enum TransactionType: String, Codable, Hashable {
     case income = "Доход"
     case expense = "Расход"
