@@ -13,6 +13,7 @@ struct AnalyticsPageView: View {
     @State private var annualPayments = AnnualPayments(Array: [])
     @State private var transactions = Transactions(Array: [])
     @State private var bankAccounts = BankAccounts(Array: [])
+    @State private var groupedAndSortedTransactions: [(date: Date, transactions: [Transaction])] = []
     @State private var isSummaryExpanded: Bool = false
     @State private var selectedCategory: String = "Состояние"
     @State private var selectedPlan: String = "Транзакции"
@@ -598,13 +599,15 @@ struct AnalyticsPageView: View {
             switch selectedPlan{
             case "Транзакции":
                 TabView {
-                    ForEach(0..<getNumberOfPages(itemsArray: transactions.Array), id: \.self) { pageIndex in
+                    ForEach(0..<getNumberOfPages(itemsPerPage: 5, itemsArray: groupedAndSortedTransactions), id: \.self) { pageIndex in
                         ScrollView {
                             LazyVStack(alignment: .leading, spacing: 10) {
-                                let groupedTransactions = Dictionary(grouping: transactions, by: { $0.dateObject ?? Date() })
-                                ForEach(groupedTransactions.keys.sorted(by: >), id: \.self) { date in
-                                    Section(header: Text(date, style: .date).foregroundColor(Color.black)) {
-                                        ForEach(groupedTransactions[date]!) { transaction in
+                                //TODO: Optimise
+                                let pageTransactions = getTransactionsForPage(pageIndex: pageIndex, groupedTransactions: groupedAndSortedTransactions)
+                                
+                                ForEach(pageTransactions, id: \.date) { group in
+                                    Section(header: Text(group.date, style: .date).foregroundColor(Color.black)) {
+                                        ForEach(group.transactions) { transaction in
                                             transactionElement(transaction: transaction)
                                         }
                                     }
@@ -617,10 +620,15 @@ struct AnalyticsPageView: View {
                 .frame(maxHeight: .infinity)
                 .background(Color.white)
                 .cornerRadius(10)
+                .onAppear {
+                    self.groupedAndSortedTransactions = getGroupedTransactionsAndSortByDate(transactions.Array)
+                    print(groupedAndSortedTransactions.count)
+                }
             //TODO: REDOOOOOO
-            case "Счета":VStack {
-                if (contentHeight > 150 && !isExpanded) || (contentHeight < 150) {
-                    LazyVStack(spacing: 10) {
+            case "Счета":
+                VStack {
+                if (contentHeight > 150 && !isExpanded) || (contentHeight <= 150) {
+                    VStack(spacing: 10) {
                         ForEach(bankAccounts) { bankAccount in
                             bankAccountList(bankAccount: bankAccount)
                         }
@@ -648,7 +656,7 @@ struct AnalyticsPageView: View {
                     .animation(.easeInOut(duration: 0.1), value: contentHeight)
                 } else {
                     ScrollView {
-                        LazyVStack(spacing: 10) {
+                        VStack(spacing: 10) {
                             ForEach(bankAccounts) { bankAccount in
                                 bankAccountList(bankAccount: bankAccount)
                             }
@@ -690,9 +698,6 @@ struct AnalyticsPageView: View {
             }
             .padding()
             .onAppear {
-                if bankAccounts.count == 1 {
-                    contentHeight = 50
-                }
                 print("--------------\n\(Date())\n\(bankAccounts)\n")
             }
 
@@ -701,11 +706,28 @@ struct AnalyticsPageView: View {
             }
         }
     }
+    
+    private func getTransactionsForPage(pageIndex: Int, groupedTransactions: [(date: Date, transactions: [Transaction])]) -> [(date: Date, transactions: [Transaction])] {
+        let start = pageIndex * 5
+        let end = min(start + 5, groupedTransactions.count)
+        return Array(groupedTransactions[start..<end])
+    }
+
+    // Группировка и сортировка транзакций по дате
+    private func getGroupedTransactionsAndSortByDate(_ transactions: [Transaction]) -> [(date: Date, transactions: [Transaction])] {
+        let groupedTransactions = Dictionary(grouping: transactions, by: { $0.dateObject ?? Date() })
+        let sortedTransactions = groupedTransactions.keys.sorted(by: >).map { date in
+            (date: date, transactions: groupedTransactions[date]!)
+        }
+        return sortedTransactions
+    }
 
     private func actionButtons() -> some View {
         HStack(spacing: 20) {
             actionButton(text: "Добавить банк", textColor: .white, backgroundColor: .black){
                 isAddingBank = true
+            }.sheet(isPresented: $isAddingBank){
+                AddBankAccountView()
             }
             
             actionButton(text: "Внести вручную", textColor: .black, backgroundColor: Color(red: 0.94, green: 0.94, blue: 0.94)){

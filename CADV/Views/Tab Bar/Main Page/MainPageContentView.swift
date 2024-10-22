@@ -17,6 +17,7 @@ struct MainPageView: View {
     @State private var selectedPlan: String = "Факт"
     @State private var pageIndex: Int = 0
     @State private var isDataFetched: Bool = false
+    @State private var isAddingBank = false
 
     func fetchData() {
         profile = ProfileInfo.GetProfileInfo()
@@ -142,7 +143,7 @@ struct MainPageView: View {
                     RoundedRectangle(cornerRadius: isSummaryExpanded ? 25 : 10)
                         .fill(isSummaryExpanded ? Color.black : Color.white)
                         .frame(width: isSummaryExpanded ? 50 : 100, height: 50)
-                        .animation(.bouncy)
+                        .animation(.bouncy, value: isSummaryExpanded)
                     Text(isSummaryExpanded ? "-" : "Резюме")
                         .font(.custom("Gilroy", size: isSummaryExpanded ? 30 : 20).weight(.bold))
                         .foregroundColor(isSummaryExpanded ? .white : .black)
@@ -176,7 +177,7 @@ struct MainPageView: View {
                         }
                     }
                 }
-                .tabViewStyle(PageTabViewStyle()) // Enable page-style swipe gestures
+                .tabViewStyle(PageTabViewStyle())
                 .frame(height: 250)
                 .background(Color.white)
                 .cornerRadius(10)
@@ -202,8 +203,14 @@ struct MainPageView: View {
     // Action Buttons
     private func actionButtons() -> some View {
         HStack(spacing: 20) {
-            actionButton(text: "Добавить банк", textColor: .white, backgroundColor: .black)
-            actionButton(text: "Внести вручную", textColor: .black, backgroundColor: Color(red: 0.94, green: 0.94, blue: 0.94))
+            actionButton(text: "Добавить банк", textColor: .white, backgroundColor: .black){
+                isAddingBank = true
+            }.sheet(isPresented: $isAddingBank){
+                AddBankAccountView()
+            }
+            actionButton(text: "Внести вручную", textColor: .black, backgroundColor: Color(red: 0.94, green: 0.94, blue: 0.94)){
+                
+            }
         }
         .padding(.horizontal)
     }
@@ -230,23 +237,26 @@ struct MainPageView: View {
             .overlay(RoundedRectangle(cornerRadius: 15).stroke(Color.black.opacity(0.1), lineWidth: 1))
     }
 
-    private func actionButton(text: String, textColor: Color, backgroundColor: Color) -> some View {
-        Text(text)
-            .font(.custom("Inter", size: 14).weight(.semibold))
-            .foregroundColor(textColor)
-            .padding()
-            .frame(maxWidth: .infinity, maxHeight: 40)
-            .background(backgroundColor)
-            .cornerRadius(10)
+    private func actionButton(text: String, textColor: Color, backgroundColor: Color, action: @escaping () -> Void) -> some View {
+        Button(action: action){
+            Text(text)
+                .font(.custom("Inter", size: 14).weight(.semibold))
+                .foregroundColor(textColor)
+                .padding()
+                .frame(maxWidth: .infinity, maxHeight: 40)
+                .background(backgroundColor)
+                .cornerRadius(10)
+        }
     }
 
     // Summary Item
     private func summaryItem(title: String, amount: String, details: String, detailAmount: String, color: Color) -> some View {
         HStack(alignment: .top, spacing: 5) {
-            AsyncImage(url: URL(string: "https://via.placeholder.com/32x32")) // Replace with actual image URL
+            AsyncImage(url: URL(string: "https://via.placeholder.com/32x32"))
                 .aspectRatio(contentMode: .fill)
                 .frame(width: 32, height: 32)
                 .cornerRadius(5)
+                .background(Color.gray).opacity(0.1)
             
             VStack(alignment: .leading, spacing: 5) {
                 HStack {
@@ -275,21 +285,17 @@ struct MainPageView: View {
         }
     }
     
-    // Function to calculate total amount based on selected category
     private func totalAmount(for category: String) -> String {
         switch category {
         case "Доходы":
-            // Calculate total from incomes
             return selectedPlan == "Факт" ? 
             formattedTotalAmount(amount: incomes.totalFactAmount()) :
             formattedTotalAmount(amount: incomes.totalPlanAmount())
         case "Расходы":
-            // Calculate total from expenses
             return selectedPlan == "Факт" ? 
             formattedTotalAmount(amount: expenses.totalFactAmount()) :
             formattedTotalAmount(amount: expenses.totalPlanAmount())
         case "Фонд благосостояния":
-            // Calculate total from wealth fund
             return selectedPlan == "Факт" ? 
             formattedTotalAmount(amount: wealthFund.totalFactAmount()) :
             formattedTotalAmount(amount: wealthFund.totalPlanAmount())

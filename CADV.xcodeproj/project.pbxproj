@@ -13,6 +13,7 @@
 		3CC743F22C8DC9C400F10E5E /* LoginContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CC743F12C8DC9C400F10E5E /* LoginContentView.swift */; };
 		3CC743F42C94CA9200F10E5E /* RegisterContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CC743F32C94CA9200F10E5E /* RegisterContentView.swift */; };
 		3CD536272CC69A480099B111 /* CreateBankAccountView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CD536262CC69A480099B111 /* CreateBankAccountView.swift */; };
+		3CD5362C2CC7C8A00099B111 /* AddBankAccountView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CD5362B2CC7C8A00099B111 /* AddBankAccountView.swift */; };
 		3CD5C3142C9863CA0025EFDC /* ConfirmEmailContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CD5C3132C9863CA0025EFDC /* ConfirmEmailContentView.swift */; };
 		3CD5C3162C9864E30025EFDC /* Utility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CD5C3152C9864E30025EFDC /* Utility.swift */; };
 		3CD5C3192C9873FF0025EFDC /* PopUpContentViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CD5C3182C9873FF0025EFDC /* PopUpContentViews.swift */; };
@@ -67,6 +68,7 @@
 		3CC743F12C8DC9C400F10E5E /* LoginContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginContentView.swift; sourceTree = "<group>"; };
 		3CC743F32C94CA9200F10E5E /* RegisterContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterContentView.swift; sourceTree = "<group>"; };
 		3CD536262CC69A480099B111 /* CreateBankAccountView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateBankAccountView.swift; sourceTree = "<group>"; };
+		3CD5362B2CC7C8A00099B111 /* AddBankAccountView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddBankAccountView.swift; sourceTree = "<group>"; };
 		3CD5C3132C9863CA0025EFDC /* ConfirmEmailContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfirmEmailContentView.swift; sourceTree = "<group>"; };
 		3CD5C3152C9864E30025EFDC /* Utility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utility.swift; sourceTree = "<group>"; };
 		3CD5C3182C9873FF0025EFDC /* PopUpContentViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopUpContentViews.swift; sourceTree = "<group>"; };
@@ -190,6 +192,7 @@
 				3CD5C3382CB6D1BC0025EFDC /* EditGoalView.swift */,
 				3CD5C33A2CB80B6D0025EFDC /* AllGoalsView.swift */,
 				3CD536262CC69A480099B111 /* CreateBankAccountView.swift */,
+				3CD5362B2CC7C8A00099B111 /* AddBankAccountView.swift */,
 			);
 			path = "Analytics Page";
 			sourceTree = "<group>";
@@ -420,6 +423,7 @@
 			files = (
 				3CD5C3292CA2FB540025EFDC /* MainPageInvestments.swift in Sources */,
 				3CD5C3142C9863CA0025EFDC /* ConfirmEmailContentView.swift in Sources */,
+				3CD5362C2CC7C8A00099B111 /* AddBankAccountView.swift in Sources */,
 				3CC743F22C8DC9C400F10E5E /* LoginContentView.swift in Sources */,
 				3CD5C3372CB55BEB0025EFDC /* AnalyticsPageAnnualPayments.swift in Sources */,
 				3CD5C31F2CA2F8630025EFDC /* MainPageContentView.swift in Sources */,
