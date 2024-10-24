@@ -11,7 +11,7 @@ import SwiftUI
 struct AddBankAccountView: View{
     var body: some View{
         VStack{
-            Image("wrench")
+            Image("tech")
                 .resizable()
                 .frame(maxWidth: 100, maxHeight: 100)
             Text("Извините, этого пока нет :(")
