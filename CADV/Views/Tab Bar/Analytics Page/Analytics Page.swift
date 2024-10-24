@@ -287,7 +287,7 @@ struct AnalyticsPageView: View {
                                     .foregroundColor(.clear)
                                     .frame(width: 25, height: 25)
                                     .background(
-                                        Image("edu")
+                                        Image("education")
                                     )
                                 Text(goal.GoalName)
                                     .font(Font.custom("Gilroy", size: 16).weight(.semibold))
