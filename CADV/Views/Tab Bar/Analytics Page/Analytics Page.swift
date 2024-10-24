@@ -205,7 +205,7 @@ struct AnalyticsPageView: View {
 
     private func annualPaymentsItem(title: String, totalAmount: Double, detailAmount: String, color: Color, paidAmount: Double) -> some View {
         HStack(alignment: .top, spacing: 5) {
-            Image("edu")
+            Image("education")
                 .resizable()
                 .frame(maxWidth: 40, maxHeight: 40)
             
@@ -240,8 +240,20 @@ struct AnalyticsPageView: View {
     
     private func finHealthSection() -> some View{
         VStack{
-            
+            Image("tech")
+                .resizable()
+                .frame(maxWidth: 100, maxHeight: 100)
+            Text("Извините, этого пока нет :(")
+                .font(Font.custom("Inter", size: 14).weight(.semibold))
+                .foregroundColor(.black)
+                .cornerRadius(10)
+                .frame(alignment: .center)
         }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .padding(.leading)
+        .background(.white)
+        .edgesIgnoringSafeArea(.bottom)
+        .hideBackButton()
     }
     
     private func addGoalButton() -> some View {
@@ -283,16 +295,14 @@ struct AnalyticsPageView: View {
                     ForEach(Array(goals.Array.prefix(2))) { goal in
                         VStack(spacing: 5) {
                             HStack(spacing: 5) {
-                                Rectangle()
-                                    .foregroundColor(.clear)
+                                Image("education")
+                                    .resizable()
                                     .frame(width: 25, height: 25)
-                                    .background(
-                                        Image("education")
-                                    )
                                 Text(goal.GoalName)
                                     .font(Font.custom("Gilroy", size: 16).weight(.semibold))
                                     .lineSpacing(20)
                                     .foregroundColor(.black)
+                                    .frame(maxWidth: 155, maxHeight: 25, alignment: .leading)
                             }
                             HStack(spacing: 5) {
                                 Text("Цель:")
@@ -436,6 +446,7 @@ struct AnalyticsPageView: View {
                 .cornerRadius(10)
                 .overlay(RoundedRectangle(cornerRadius: 10).stroke(Color.black.opacity(0.1), lineWidth: 3))
         }
+        .frame(maxHeight: 45)
         .padding(.horizontal)
     }
 
@@ -502,7 +513,7 @@ struct AnalyticsPageView: View {
 
     private func transactionElement(transaction: Transaction) -> some View{
         HStack{
-            Image("edu")
+            Image("education")
                 .resizable()
                 .frame(width: 40,height: 40)
             VStack(alignment: .leading, spacing: 5){
@@ -601,7 +612,7 @@ struct AnalyticsPageView: View {
                 TabView {
                     ForEach(0..<getNumberOfPages(itemsPerPage: 5, itemsArray: groupedAndSortedTransactions), id: \.self) { pageIndex in
                         ScrollView {
-                            LazyVStack(alignment: .leading, spacing: 10) {
+                            VStack(alignment: .leading, spacing: 10) {
                                 //TODO: Optimise
                                 let pageTransactions = getTransactionsForPage(pageIndex: pageIndex, groupedTransactions: groupedAndSortedTransactions)
                                 
