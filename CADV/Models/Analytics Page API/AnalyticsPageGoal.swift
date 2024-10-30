@@ -7,13 +7,6 @@
 
 import Foundation
 
-struct Goals: Codable{
-    var Array: [Goal]
-    mutating func getGoals(){
-        self.Array = Goal.getGoalArray()
-    }
-}
-
 struct Goal: Codable, Identifiable, Hashable {
     var id: UUID = UUID()
     let CurrentState: Int
@@ -30,24 +23,25 @@ struct Goal: Codable, Identifiable, Hashable {
         case UserID = "user_id"
     }
     
-    static func getGoalArray() -> [Goal] {
-        var array: [Goal] = []
-        for _ in 1...100{
-            let randomNeed = Double.random(in: 1000...10000)
-            let randomGoal = UUID().uuidString
-            let randomLength = Int.random(in: 1...60)
-            let randomID = UUID().uuidString
-            let randomUserID = UUID().uuidString
-            
-            array.append(Goal(
-                CurrentState: randomLength,
-                GoalName: randomGoal,
-                ID: randomID,
-                Need: randomNeed,
-                UserID: randomUserID
-            ))
-        }
+}
 
-        return array
+func generateTestGoal() -> [Goal] {
+    var array: [Goal] = []
+    for _ in 1...100{
+        let randomNeed = Double.random(in: 1000...10000)
+        let randomGoal = UUID().uuidString
+        let randomLength = Int.random(in: 1...60)
+        let randomID = UUID().uuidString
+        let randomUserID = UUID().uuidString
+        
+        array.append(Goal(
+            CurrentState: randomLength,
+            GoalName: randomGoal,
+            ID: randomID,
+            Need: randomNeed,
+            UserID: randomUserID
+        ))
     }
+
+    return array
 }

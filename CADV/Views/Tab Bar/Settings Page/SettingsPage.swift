@@ -10,7 +10,7 @@ import SwiftUI
 struct SettingsPageView: View {
     @State private var selectedCategory: String = "Приложение"
     @State private var pageIndex: Int = 0
-    @State private var profile: ProfileInfo?
+    @State private var profile: ProfileInfo = ProfileInfo(Surname: "", Name: "", UserID: "", AvatarURL: "", ExpirationDate: "")
     
     @State private var selectedScreen: String? = nil
     @State private var isSheetPresented = false
@@ -19,7 +19,7 @@ struct SettingsPageView: View {
     var body: some View{
         VStack(spacing: 20){
             VStack(spacing: 20){
-                profileSection(isSheetPresented: self.$isSheetPresented, selectedScreen: self.$selectedScreen)
+                profileSection(isSheetPresented: self.$isSheetPresented, selectedScreen: self.$selectedScreen, profileInfo: $profile)
                 CategorySwitchButtons()
             }
             
@@ -40,43 +40,57 @@ struct SettingsPageView: View {
         .background(Color.white)
         .hideBackButton()
         .onAppear {
-            
+            self.profile = ProfileInfo.GetProfileInfo()
+        }
+        .onChange(of: selectedScreen) { newValue in
+            print("Selected screen changed to: \(String(describing: newValue))")
         }
         .sheet(isPresented: $isSheetPresented) {
             if let screen = selectedScreen {
-                switch screen {
-                case "Настроить профиль":
-                    Text("Настроить профиль")
-                        .foregroundStyle(.black)
-                case "Подключённые счета":
-                    Text("Подключённые счета")
-                        .foregroundStyle(.black)
-                case "Настройка категорий":
-                    Text("Настройка категорий")
-                        .foregroundStyle(.black)
-                case "Архив операций":
-                    Text("Архив операций")
-                        .foregroundStyle(.black)
-                case "Экспорт отчётности":
-                    Text("Экспорт отчётности")
-                        .foregroundStyle(.black)
-                case "Ваша подписка":
-                    Text("Ваша подписка")
-                        .foregroundStyle(.black)
-                case "Мы в соц сетях":
-                    Text("Мы в соц сетях")
-                        .foregroundStyle(.black)
-                case "Поддержка":
-                    Text("Поддержка")
-                        .foregroundStyle(.black)
-                case "Выйти из аккаунта":
-                    Text("Выйти из аккаунта")
-                        .foregroundStyle(.black)
-                default:
-                    Text("Ошибка: экран не найден")
-                        .foregroundStyle(.black)
-                }
+                            sheetContent(for: screen)
+            } else {
+                Text("Ошибка: экран не найден")
             }
+        }
+    }
+    
+    @ViewBuilder
+    private func sheetContent(for screen: String?) -> some View {
+        if let screen = screen {
+            switch screen {
+            case "Настроить профиль":
+                ProfileSettingsView(currentData: $profile)
+            case "Подключённые счета":
+                Text("Подключённые счета")
+                    .foregroundStyle(.black)
+            case "Настройка категорий":
+                Text("Настройка категорий")
+                    .foregroundStyle(.black)
+            case "Архив операций":
+                Text("Архив операций")
+                    .foregroundStyle(.black)
+            case "Экспорт отчётности":
+                Text("Экспорт отчётности")
+                    .foregroundStyle(.black)
+            case "Ваша подписка":
+                Text("Ваша подписка")
+                    .foregroundStyle(.black)
+            case "Мы в соц сетях":
+                Text("Мы в соц сетях")
+                    .foregroundStyle(.black)
+            case "Поддержка":
+                Text("Поддержка")
+                    .foregroundStyle(.black)
+            case "Выйти из аккаунта":
+                Text("Выйти из аккаунта")
+                    .foregroundStyle(.black)
+            default:
+                Text("Ошибка: экран не найден")
+                    .foregroundStyle(.black)
+            }
+        } else {
+            Text("Ошибка: экран не найден")
+                .foregroundStyle(.black)
         }
     }
     
@@ -119,11 +133,4 @@ struct SettingsPageView: View {
     }
     
 
-}
-
-struct SettingsView_Previews: PreviewProvider {
-    static var previews: some View {
-        SettingsPageView()
-            .preferredColorScheme(.light)
-    }
 }

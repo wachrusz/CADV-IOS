@@ -10,18 +10,17 @@ import SwiftUI
 struct profileSection: View{
     @Binding var isSheetPresented: Bool
     @Binding var selectedScreen: String?
-    var imageURL: String = ""
-    var expirationDate: String = "5 nojabrja"
+    @Binding var profileInfo: ProfileInfo
     var body: some View{
         HStack(alignment: .center, spacing: 20){
-            AsyncImage(url: URL(string: imageURL))
+            AsyncImage(url: URL(string: profileInfo.AvatarURL))
                 .frame(width: 45, height: 45)
                 .background(Color.gray)
                 .clipShape(Circle())
             VStack(alignment: .leading, spacing: 5){
                 Text("Настроить профиль")
                     .foregroundStyle(.black)
-                Text("Подписка до \(expirationDate)")
+                Text("Подписка до \(profileInfo.ExpirationDate)")
                     .foregroundStyle(.black.opacity(0.5))
             }
         }

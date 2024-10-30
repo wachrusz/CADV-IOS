@@ -24,6 +24,7 @@ struct AppNavigatingButtonsList: View {
     func handleButtonTap(_ screen: String) {
         selectedScreen = screen
         isSheetPresented = true
+        print(selectedScreen, isSheetPresented)
     }
     func AppNavigatingButton(image: String, text: String, description: String) -> some View {
         HStack {

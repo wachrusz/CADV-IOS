@@ -69,18 +69,29 @@ struct CustomTabBar: View {
 struct TabBarContentView: View {
     @State private var selectedTab = 0
     @State private var isAnalyticsLoaded = false
+    @State private var profile: ProfileInfo = test_fetchProfileInfo()
+    @State private var categorizedTransactions: [CategorizedTransaction] = []
+    @State private var goals: [Goal] = []
+    @State private var annualPayments: [AnnualPayment] = []
+    @State private var bankAccounts = BankAccounts(Array: [])
+    @State private var groupedAndSortedTransactions: [(date: Date, categorizedTransactions: [CategorizedTransaction])] = []
+    
+    init(){
+        UIPageControl.appearance().currentPageIndicatorTintColor = UIColor.purple
+        UIPageControl.appearance().pageIndicatorTintColor = UIColor.lightGray
+    }
     
     var body: some View {
         VStack(spacing: 0) {
             GeometryReader { geometry in
                 switch selectedTab {
                 case 0:
-                    MainPageView()
+                    MainPageView(profile: $profile, categorizedTransactions: $categorizedTransactions)
                         .frame(width: geometry.size.width, height: geometry.size.height)
                         .navigationBarBackButtonHidden(true)
                 case 1:
                     if isAnalyticsLoaded {
-                        AnalyticsPageView()
+                        AnalyticsPageView(profile: $profile, categorizedTransactions: $categorizedTransactions, goals: $goals, annualPayments: $annualPayments, bankAccounts: $bankAccounts, groupedAndSortedTransactions: $groupedAndSortedTransactions)
                             .frame(width: geometry.size.width, height: geometry.size.height)
                     } else {
                         ProgressView()
@@ -95,7 +106,7 @@ struct TabBarContentView: View {
                     SettingsPageView()
                         .frame(width: geometry.size.width, height: geometry.size.height)
                 default:
-                    MainPageView()
+                    MainPageView(profile: $profile,categorizedTransactions: $categorizedTransactions)
                         .frame(width: geometry.size.width, height: geometry.size.height)
                 }
             }
@@ -103,6 +114,9 @@ struct TabBarContentView: View {
         }
         .edgesIgnoringSafeArea(.bottom)
         .hideBackButton()
+        .onAppear(){
+            fetchData()
+        }
     }
     
     func loadAnalyticsPage() {
@@ -110,10 +124,13 @@ struct TabBarContentView: View {
             isAnalyticsLoaded = true
         }
     }
-}
-
-struct TabBarContentView_Previews: PreviewProvider {
-    static var previews: some View {
-        TabBarContentView()
+    
+    func fetchData(){
+        self.categorizedTransactions = generateTestTransactions(count: 10000)
+        self.annualPayments = generateTestAnnualPayments()
+        self.bankAccounts.generateBankAccounts()
+        self.goals = generateTestGoal()
+        self.groupedAndSortedTransactions = getGroupedTransactionsAndSortByDate(categorizedTransactions)
+        self.groupedAndSortedTransactions = filterTransactions(categorizedTransactions, gns: groupedAndSortedTransactions)
     }
 }
