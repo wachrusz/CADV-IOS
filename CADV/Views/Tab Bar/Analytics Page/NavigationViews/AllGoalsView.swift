@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct AllGoalsView: View {
-    @Binding var goals: Goals
+    @Binding var goals: [Goal]
     @State private var isLongPressing = false
     @State private var isEditing: Bool = false
     @State private var selectedGoal: Goal?
@@ -19,14 +19,14 @@ struct AllGoalsView: View {
         GridItem(.flexible())
     ]
     
-    init(goals: Binding<Goals>) {
+    init(goals: Binding<[Goal]>) {
             self._goals = goals
             UIPageControl.appearance().currentPageIndicatorTintColor = UIColor.purple
             UIPageControl.appearance().pageIndicatorTintColor = UIColor.lightGray
         }
     
     private var pages: [[Goal]] {
-        let goalsToShow = Array(goals.Array.dropFirst(2))
+        let goalsToShow = Array(goals.dropFirst(2))
         return stride(from: 0, to: goalsToShow.count, by: 6).map {
             Array(goalsToShow[$0..<min($0 + 6, goalsToShow.count)])
         }

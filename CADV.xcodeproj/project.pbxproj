@@ -7,6 +7,22 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3C4F0ECE2CCFA6CE008A8D14 /* ProfileSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C4F0ECD2CCFA6C7008A8D14 /* ProfileSettingsView.swift */; };
+		3C5385D22CCFE44100242054 /* CategorySettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C5385D12CCFE43B00242054 /* CategorySettings.swift */; };
+		3C5385D82CCFE56C00242054 /* CommonButtons.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C5385D72CCFE56900242054 /* CommonButtons.swift */; };
+		3C5385DA2CCFF58700242054 /* CommonSections.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C5385D92CCFF57A00242054 /* CommonSections.swift */; };
+		3C72E3012CD248AA00B7EA04 /* DragGoalsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C72E3002CD248A200B7EA04 /* DragGoalsView.swift */; };
+		3C72E3042CD24F9100B7EA04 /* GoalsSectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C72E3032CD24F8B00B7EA04 /* GoalsSectionView.swift */; };
+		3C72E3062CD24FDF00B7EA04 /* AddGoalButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C72E3052CD24FD700B7EA04 /* AddGoalButton.swift */; };
+		3C72E3082CD2500900B7EA04 /* GoalsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C72E3072CD2500600B7EA04 /* GoalsView.swift */; };
+		3C72E30A2CD2503B00B7EA04 /* AnnualPaymentsSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C72E3092CD2503300B7EA04 /* AnnualPaymentsSection.swift */; };
+		3C72E30C2CD2507300B7EA04 /* AnnualPaymentsItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C72E30B2CD2506F00B7EA04 /* AnnualPaymentsItem.swift */; };
+		3C72E3102CD2513800B7EA04 /* CategoryListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C72E30F2CD2513200B7EA04 /* CategoryListView.swift */; };
+		3C72E3142CD2521F00B7EA04 /* SummarySection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C72E3132CD2521800B7EA04 /* SummarySection.swift */; };
+		3C72E3162CD252D300B7EA04 /* TransactionElement.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C72E3152CD252CD00B7EA04 /* TransactionElement.swift */; };
+		3C72E3182CD2535E00B7EA04 /* BankAcoountList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C72E3172CD2535200B7EA04 /* BankAcoountList.swift */; };
+		3CC53A182CD0AF2D00C0B15E /* ErrorViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CC53A172CD0AF2100C0B15E /* ErrorViews.swift */; };
+		3CC53A1A2CD0B96000C0B15E /* CategorizedTransactions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CC53A192CD0B94A00C0B15E /* CategorizedTransactions.swift */; };
 		3CC743EA2C8DBC7F00F10E5E /* CustomButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CC743E92C8DBC7F00F10E5E /* CustomButton.swift */; };
 		3CC743EC2C8DBCBD00F10E5E /* CustomTextFields.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CC743EB2C8DBCBD00F10E5E /* CustomTextFields.swift */; };
 		3CC743F02C8DC49600F10E5E /* StartContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CC743EF2C8DC49600F10E5E /* StartContentView.swift */; };
@@ -33,6 +49,9 @@
 		3CD5C33B2CB80B6D0025EFDC /* AllGoalsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CD5C33A2CB80B6D0025EFDC /* AllGoalsView.swift */; };
 		3CD5C33D2CB83A1E0025EFDC /* AnalyticsPageTransactions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CD5C33C2CB83A1E0025EFDC /* AnalyticsPageTransactions.swift */; };
 		3CD5C33F2CB83A310025EFDC /* AnalyticsPageBankAccounts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CD5C33E2CB83A310025EFDC /* AnalyticsPageBankAccounts.swift */; };
+		3CE9FBB52CCA93540046CD22 /* ValuteSwitcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CE9FBB42CCA934D0046CD22 /* ValuteSwitcher.swift */; };
+		3CE9FBBA2CCAAB0E0046CD22 /* AppNavigatingButtonsList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CE9FBB92CCAAB010046CD22 /* AppNavigatingButtonsList.swift */; };
+		3CE9FBBD2CCAAD050046CD22 /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CE9FBBC2CCAAD020046CD22 /* ProfileView.swift */; };
 		3CF17A912C87812F00A601AC /* CADVApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CF17A902C87812F00A601AC /* CADVApp.swift */; };
 		3CF17A932C87812F00A601AC /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CF17A922C87812F00A601AC /* ContentView.swift */; };
 		3CF17A952C87813200A601AC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3CF17A942C87813200A601AC /* Assets.xcassets */; };
@@ -42,6 +61,7 @@
 		3CF17AA72C87813300A601AC /* CADVTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CF17AA62C87813300A601AC /* CADVTests.swift */; };
 		3CF17AB12C87813300A601AC /* CADVUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CF17AB02C87813300A601AC /* CADVUITests.swift */; };
 		3CF17AB32C87813300A601AC /* CADVUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CF17AB22C87813300A601AC /* CADVUITestsLaunchTests.swift */; };
+		3CF201032CCA742C00A5620A /* SettingsPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CF201022CCA742300A5620A /* SettingsPage.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -62,6 +82,22 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		3C4F0ECD2CCFA6C7008A8D14 /* ProfileSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileSettingsView.swift; sourceTree = "<group>"; };
+		3C5385D12CCFE43B00242054 /* CategorySettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategorySettings.swift; sourceTree = "<group>"; };
+		3C5385D72CCFE56900242054 /* CommonButtons.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommonButtons.swift; sourceTree = "<group>"; };
+		3C5385D92CCFF57A00242054 /* CommonSections.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommonSections.swift; sourceTree = "<group>"; };
+		3C72E3002CD248A200B7EA04 /* DragGoalsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DragGoalsView.swift; sourceTree = "<group>"; };
+		3C72E3032CD24F8B00B7EA04 /* GoalsSectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoalsSectionView.swift; sourceTree = "<group>"; };
+		3C72E3052CD24FD700B7EA04 /* AddGoalButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddGoalButton.swift; sourceTree = "<group>"; };
+		3C72E3072CD2500600B7EA04 /* GoalsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoalsView.swift; sourceTree = "<group>"; };
+		3C72E3092CD2503300B7EA04 /* AnnualPaymentsSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnnualPaymentsSection.swift; sourceTree = "<group>"; };
+		3C72E30B2CD2506F00B7EA04 /* AnnualPaymentsItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnnualPaymentsItem.swift; sourceTree = "<group>"; };
+		3C72E30F2CD2513200B7EA04 /* CategoryListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryListView.swift; sourceTree = "<group>"; };
+		3C72E3132CD2521800B7EA04 /* SummarySection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SummarySection.swift; sourceTree = "<group>"; };
+		3C72E3152CD252CD00B7EA04 /* TransactionElement.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionElement.swift; sourceTree = "<group>"; };
+		3C72E3172CD2535200B7EA04 /* BankAcoountList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BankAcoountList.swift; sourceTree = "<group>"; };
+		3CC53A172CD0AF2100C0B15E /* ErrorViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorViews.swift; sourceTree = "<group>"; };
+		3CC53A192CD0B94A00C0B15E /* CategorizedTransactions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategorizedTransactions.swift; sourceTree = "<group>"; };
 		3CC743E92C8DBC7F00F10E5E /* CustomButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomButton.swift; sourceTree = "<group>"; };
 		3CC743EB2C8DBCBD00F10E5E /* CustomTextFields.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTextFields.swift; sourceTree = "<group>"; };
 		3CC743EF2C8DC49600F10E5E /* StartContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartContentView.swift; sourceTree = "<group>"; };
@@ -88,6 +124,9 @@
 		3CD5C33A2CB80B6D0025EFDC /* AllGoalsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllGoalsView.swift; sourceTree = "<group>"; };
 		3CD5C33C2CB83A1E0025EFDC /* AnalyticsPageTransactions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalyticsPageTransactions.swift; sourceTree = "<group>"; };
 		3CD5C33E2CB83A310025EFDC /* AnalyticsPageBankAccounts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalyticsPageBankAccounts.swift; sourceTree = "<group>"; };
+		3CE9FBB42CCA934D0046CD22 /* ValuteSwitcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ValuteSwitcher.swift; sourceTree = "<group>"; };
+		3CE9FBB92CCAAB010046CD22 /* AppNavigatingButtonsList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppNavigatingButtonsList.swift; sourceTree = "<group>"; };
+		3CE9FBBC2CCAAD020046CD22 /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
 		3CF17A8D2C87812F00A601AC /* CADV.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CADV.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3CF17A902C87812F00A601AC /* CADVApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CADVApp.swift; sourceTree = "<group>"; };
 		3CF17A922C87812F00A601AC /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -100,6 +139,7 @@
 		3CF17AAC2C87813300A601AC /* CADVUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CADVUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		3CF17AB02C87813300A601AC /* CADVUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CADVUITests.swift; sourceTree = "<group>"; };
 		3CF17AB22C87813300A601AC /* CADVUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CADVUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		3CF201022CCA742300A5620A /* SettingsPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsPage.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -127,6 +167,84 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		3C4F0ECB2CCFA4DB008A8D14 /* CoreDataNavigationViews */ = {
+			isa = PBXGroup;
+			children = (
+				3C5385D12CCFE43B00242054 /* CategorySettings.swift */,
+			);
+			path = CoreDataNavigationViews;
+			sourceTree = "<group>";
+		};
+		3C4F0ECC2CCFA57C008A8D14 /* NavigationViews */ = {
+			isa = PBXGroup;
+			children = (
+				3C4F0ECD2CCFA6C7008A8D14 /* ProfileSettingsView.swift */,
+			);
+			path = NavigationViews;
+			sourceTree = "<group>";
+		};
+		3C5385D62CCFE56300242054 /* CommonViews */ = {
+			isa = PBXGroup;
+			children = (
+				3CC53A172CD0AF2100C0B15E /* ErrorViews.swift */,
+				3C5385D92CCFF57A00242054 /* CommonSections.swift */,
+				3C5385D72CCFE56900242054 /* CommonButtons.swift */,
+			);
+			path = CommonViews;
+			sourceTree = "<group>";
+		};
+		3C72E2FD2CD2486900B7EA04 /* NavigationViews */ = {
+			isa = PBXGroup;
+			children = (
+				3CD5C3342CAEB3880025EFDC /* CreateGoalView.swift */,
+				3CD5C3382CB6D1BC0025EFDC /* EditGoalView.swift */,
+				3CD5C33A2CB80B6D0025EFDC /* AllGoalsView.swift */,
+				3CD536262CC69A480099B111 /* CreateBankAccountView.swift */,
+				3CD5362B2CC7C8A00099B111 /* AddBankAccountView.swift */,
+			);
+			path = NavigationViews;
+			sourceTree = "<group>";
+		};
+		3C72E2FF2CD2489100B7EA04 /* SubViews */ = {
+			isa = PBXGroup;
+			children = (
+				3C72E3122CD251E500B7EA04 /* SummarySection */,
+				3C72E3022CD24F6800B7EA04 /* DragGoalsView */,
+			);
+			path = SubViews;
+			sourceTree = "<group>";
+		};
+		3C72E3022CD24F6800B7EA04 /* DragGoalsView */ = {
+			isa = PBXGroup;
+			children = (
+				3C72E30B2CD2506F00B7EA04 /* AnnualPaymentsItem.swift */,
+				3C72E3092CD2503300B7EA04 /* AnnualPaymentsSection.swift */,
+				3C72E3072CD2500600B7EA04 /* GoalsView.swift */,
+				3C72E3052CD24FD700B7EA04 /* AddGoalButton.swift */,
+				3C72E3032CD24F8B00B7EA04 /* GoalsSectionView.swift */,
+				3C72E3002CD248A200B7EA04 /* DragGoalsView.swift */,
+			);
+			path = DragGoalsView;
+			sourceTree = "<group>";
+		};
+		3C72E30E2CD2512B00B7EA04 /* SubViews */ = {
+			isa = PBXGroup;
+			children = (
+				3C72E30F2CD2513200B7EA04 /* CategoryListView.swift */,
+			);
+			path = SubViews;
+			sourceTree = "<group>";
+		};
+		3C72E3122CD251E500B7EA04 /* SummarySection */ = {
+			isa = PBXGroup;
+			children = (
+				3C72E3172CD2535200B7EA04 /* BankAcoountList.swift */,
+				3C72E3152CD252CD00B7EA04 /* TransactionElement.swift */,
+				3C72E3132CD2521800B7EA04 /* SummarySection.swift */,
+			);
+			path = SummarySection;
+			sourceTree = "<group>";
+		};
 		3CC743E82C8DBC6E00F10E5E /* Custom Fields */ = {
 			isa = PBXGroup;
 			children = (
@@ -158,6 +276,7 @@
 		3CD5C31D2CA2F83E0025EFDC /* Main Page */ = {
 			isa = PBXGroup;
 			children = (
+				3C72E30E2CD2512B00B7EA04 /* SubViews */,
 				3CD5C31E2CA2F8630025EFDC /* MainPageContentView.swift */,
 			);
 			path = "Main Page";
@@ -166,6 +285,8 @@
 		3CD5C3202CA2F9D60025EFDC /* Tab Bar */ = {
 			isa = PBXGroup;
 			children = (
+				3C5385D62CCFE56300242054 /* CommonViews */,
+				3CF201012CCA741A00A5620A /* Settings Page */,
 				3CD5C32C2CAC2CD10025EFDC /* Analytics Page */,
 				3CD5C31D2CA2F83E0025EFDC /* Main Page */,
 				3CD5C3212CA2F9E80025EFDC /* TabBar.swift */,
@@ -176,6 +297,7 @@
 		3CD5C3232CA2FB000025EFDC /* Main Page API */ = {
 			isa = PBXGroup;
 			children = (
+				3CC53A192CD0B94A00C0B15E /* CategorizedTransactions.swift */,
 				3CD5C3242CA2FB0D0025EFDC /* MainPageIncome.swift */,
 				3CD5C3262CA2FB370025EFDC /* MainPageExpense.swift */,
 				3CD5C3282CA2FB540025EFDC /* MainPageInvestments.swift */,
@@ -187,12 +309,9 @@
 		3CD5C32C2CAC2CD10025EFDC /* Analytics Page */ = {
 			isa = PBXGroup;
 			children = (
+				3C72E2FF2CD2489100B7EA04 /* SubViews */,
+				3C72E2FD2CD2486900B7EA04 /* NavigationViews */,
 				3CD5C32D2CAC2D0A0025EFDC /* Analytics Page.swift */,
-				3CD5C3342CAEB3880025EFDC /* CreateGoalView.swift */,
-				3CD5C3382CB6D1BC0025EFDC /* EditGoalView.swift */,
-				3CD5C33A2CB80B6D0025EFDC /* AllGoalsView.swift */,
-				3CD536262CC69A480099B111 /* CreateBankAccountView.swift */,
-				3CD5362B2CC7C8A00099B111 /* AddBankAccountView.swift */,
 			);
 			path = "Analytics Page";
 			sourceTree = "<group>";
@@ -207,6 +326,31 @@
 				3CD5C33E2CB83A310025EFDC /* AnalyticsPageBankAccounts.swift */,
 			);
 			path = "Analytics Page API";
+			sourceTree = "<group>";
+		};
+		3CE9FBB32CCA93420046CD22 /* CoreData */ = {
+			isa = PBXGroup;
+			children = (
+				3C4F0ECB2CCFA4DB008A8D14 /* CoreDataNavigationViews */,
+				3CE9FBB42CCA934D0046CD22 /* ValuteSwitcher.swift */,
+			);
+			path = CoreData;
+			sourceTree = "<group>";
+		};
+		3CE9FBB72CCAAADA0046CD22 /* ButtonsView */ = {
+			isa = PBXGroup;
+			children = (
+				3CE9FBB92CCAAB010046CD22 /* AppNavigatingButtonsList.swift */,
+			);
+			path = ButtonsView;
+			sourceTree = "<group>";
+		};
+		3CE9FBBB2CCAACF80046CD22 /* ProfileView */ = {
+			isa = PBXGroup;
+			children = (
+				3CE9FBBC2CCAAD020046CD22 /* ProfileView.swift */,
+			);
+			path = ProfileView;
 			sourceTree = "<group>";
 		};
 		3CF17A842C87812F00A601AC = {
@@ -289,6 +433,18 @@
 				3CC743E82C8DBC6E00F10E5E /* Custom Fields */,
 			);
 			path = Views;
+			sourceTree = "<group>";
+		};
+		3CF201012CCA741A00A5620A /* Settings Page */ = {
+			isa = PBXGroup;
+			children = (
+				3C4F0ECC2CCFA57C008A8D14 /* NavigationViews */,
+				3CE9FBBB2CCAACF80046CD22 /* ProfileView */,
+				3CE9FBB72CCAAADA0046CD22 /* ButtonsView */,
+				3CE9FBB32CCA93420046CD22 /* CoreData */,
+				3CF201022CCA742300A5620A /* SettingsPage.swift */,
+			);
+			path = "Settings Page";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -421,33 +577,53 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3C72E3012CD248AA00B7EA04 /* DragGoalsView.swift in Sources */,
 				3CD5C3292CA2FB540025EFDC /* MainPageInvestments.swift in Sources */,
+				3C72E30A2CD2503B00B7EA04 /* AnnualPaymentsSection.swift in Sources */,
 				3CD5C3142C9863CA0025EFDC /* ConfirmEmailContentView.swift in Sources */,
 				3CD5362C2CC7C8A00099B111 /* AddBankAccountView.swift in Sources */,
 				3CC743F22C8DC9C400F10E5E /* LoginContentView.swift in Sources */,
+				3C5385DA2CCFF58700242054 /* CommonSections.swift in Sources */,
 				3CD5C3372CB55BEB0025EFDC /* AnalyticsPageAnnualPayments.swift in Sources */,
+				3C72E3082CD2500900B7EA04 /* GoalsView.swift in Sources */,
 				3CD5C31F2CA2F8630025EFDC /* MainPageContentView.swift in Sources */,
 				3CD5C32E2CAC2D0A0025EFDC /* Analytics Page.swift in Sources */,
 				3CC743F42C94CA9200F10E5E /* RegisterContentView.swift in Sources */,
+				3C72E3062CD24FDF00B7EA04 /* AddGoalButton.swift in Sources */,
+				3C72E3162CD252D300B7EA04 /* TransactionElement.swift in Sources */,
+				3C4F0ECE2CCFA6CE008A8D14 /* ProfileSettingsView.swift in Sources */,
+				3CC53A182CD0AF2D00C0B15E /* ErrorViews.swift in Sources */,
 				3CD5C33F2CB83A310025EFDC /* AnalyticsPageBankAccounts.swift in Sources */,
+				3CE9FBB52CCA93540046CD22 /* ValuteSwitcher.swift in Sources */,
 				3CD5C3312CAC31B30025EFDC /* AnalyticsPageGoal.swift in Sources */,
+				3C72E3182CD2535E00B7EA04 /* BankAcoountList.swift in Sources */,
+				3C72E3142CD2521F00B7EA04 /* SummarySection.swift in Sources */,
 				3CD5C31C2C98788A0025EFDC /* ForgotPasswordContentView.swift in Sources */,
 				3CD5C3252CA2FB0D0025EFDC /* MainPageIncome.swift in Sources */,
 				3CD5C3392CB6D1BC0025EFDC /* EditGoalView.swift in Sources */,
 				3CD5C33D2CB83A1E0025EFDC /* AnalyticsPageTransactions.swift in Sources */,
+				3C72E3042CD24F9100B7EA04 /* GoalsSectionView.swift in Sources */,
 				3CD5C3162C9864E30025EFDC /* Utility.swift in Sources */,
 				3CC743EA2C8DBC7F00F10E5E /* CustomButton.swift in Sources */,
 				3CD5C3272CA2FB370025EFDC /* MainPageExpense.swift in Sources */,
+				3C72E30C2CD2507300B7EA04 /* AnnualPaymentsItem.swift in Sources */,
 				3CD5C32B2CA2FB600025EFDC /* MainPageProfile.swift in Sources */,
+				3CE9FBBA2CCAAB0E0046CD22 /* AppNavigatingButtonsList.swift in Sources */,
 				3CD536272CC69A480099B111 /* CreateBankAccountView.swift in Sources */,
 				3CF17A9A2C87813200A601AC /* Persistence.swift in Sources */,
 				3CC743F02C8DC49600F10E5E /* StartContentView.swift in Sources */,
 				3CD5C33B2CB80B6D0025EFDC /* AllGoalsView.swift in Sources */,
 				3CD5C3332CAC34AA0025EFDC /* AnalyticsPageFinHealth.swift in Sources */,
+				3CF201032CCA742C00A5620A /* SettingsPage.swift in Sources */,
+				3CE9FBBD2CCAAD050046CD22 /* ProfileView.swift in Sources */,
+				3C5385D22CCFE44100242054 /* CategorySettings.swift in Sources */,
 				3CD5C3222CA2F9E80025EFDC /* TabBar.swift in Sources */,
 				3CC743EC2C8DBCBD00F10E5E /* CustomTextFields.swift in Sources */,
 				3CF17A932C87812F00A601AC /* ContentView.swift in Sources */,
+				3C72E3102CD2513800B7EA04 /* CategoryListView.swift in Sources */,
+				3CC53A1A2CD0B96000C0B15E /* CategorizedTransactions.swift in Sources */,
 				3CF17A912C87812F00A601AC /* CADVApp.swift in Sources */,
+				3C5385D82CCFE56C00242054 /* CommonButtons.swift in Sources */,
 				3CF17A9D2C87813200A601AC /* CADV.xcdatamodeld in Sources */,
 				3CD5C3192C9873FF0025EFDC /* PopUpContentViews.swift in Sources */,
 				3CD5C3352CAEB3880025EFDC /* CreateGoalView.swift in Sources */,

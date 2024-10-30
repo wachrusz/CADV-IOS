@@ -28,8 +28,8 @@ struct BankAccounts: Sequence, RandomAccessCollection {
         return Array[position]
     }
     
-    mutating func getBankAccounts() {
-        self.Array = BankAccount.getBankAccounts()
+    mutating func generateBankAccounts() {
+        self.Array = BankAccount.generateBankAccounts()
     }
 }
 
@@ -49,7 +49,7 @@ struct BankAccount: Codable, Hashable, Identifiable {
         case name = "name"
     }
     
-    static func getBankAccounts() -> [BankAccount] {
+    static func generateBankAccounts() -> [BankAccount] {
         let names = ["Raiffeisen", "T-Bank", "Sber", "Gazprombank", "VTB"]
         var accounts: [BankAccount] = []
         
@@ -81,12 +81,10 @@ struct SubAccount: Codable, Hashable, Identifiable {
         case currency = "currency"
     }
     
-    // Генерация случайного количества субсчетов (от 1 до 5)
     static func getSubAccounts() -> [SubAccount] {
         let names = ["IIS", "Card", "Broker Account", "Savings"]
         var subAccounts: [SubAccount] = []
         
-        // Генерация случайного количества субсчетов
         let numberOfSubAccounts = Int.random(in: 1...5)
         let shuffledNames = names.shuffled().prefix(numberOfSubAccounts)
         

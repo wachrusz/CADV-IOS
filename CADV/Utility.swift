@@ -9,11 +9,10 @@ import Foundation
 import SwiftUI
 
 func textFieldValidatorEmail(_ string: String) -> Bool {
-    if string.count > 100 {
+    if string.count > 64 || string.isEmpty || string.count < 2 {
         return false
     }
-    let emailFormat = "(?:[\\p{L}0-9!#$%\\&'*+/=?\\^_`{|}~-]+(?:\\.[\\p{L}0-9!#$%\\&'*+/=?\\^_`{|}" + "~-]+)*|\"(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21\\x23-\\x5b\\x5d-\\" + "x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])*\")@(?:(?:[\\p{L}0-9](?:[a-" + "z0-9-]*[\\p{L}0-9])?\\.)+[\\p{L}0-9](?:[\\p{L}0-9-]*[\\p{L}0-9])?|\\[(?:(?:25[0-5" + "]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-" + "9][0-9]?|[\\p{L}0-9-]*[\\p{L}0-9]:(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21" + "-\\x5a\\x53-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])+)\\])"
-    //let emailFormat = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,64}"
+    let emailFormat = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,64}"
     let emailPredicate = NSPredicate(format:"SELF MATCHES %@", emailFormat)
     return emailPredicate.evaluate(with: string)
 }
@@ -67,5 +66,72 @@ extension View {
             }
             self
         }
+    }
+}
+
+func formattedTotalAmount(amount: Double) -> String {
+    let formatter = NumberFormatter()
+    formatter.numberStyle = .decimal
+    formatter.minimumFractionDigits = 0
+    formatter.maximumFractionDigits = 2
+    formatter.usesGroupingSeparator = true
+    formatter.groupingSeparator = "."
+    
+    if let formattedAmount = formatter.string(from: NSNumber(value: amount)) {
+        return formattedAmount
+    }
+    return "\(amount)"
+}
+
+func getNumberOfPages(itemsPerPage: Int = 20, itemsArray: [Any]) -> Int {
+    return (itemsArray.count + itemsPerPage - 1) / itemsPerPage
+}
+
+func getTransactionsForPage(pageIndex: Int, groupedTransactions: [(date: Date, transactions: [Transaction])]) -> [(date: Date, transactions: [Transaction])] {
+    let start = pageIndex * 5
+    let end = min(start + 5, groupedTransactions.count)
+    return Array(groupedTransactions[start..<end])
+}
+
+func getGroupedTransactions(_ transactions: [Transaction]) -> [(date: Date, transactions: [Transaction])] {
+    let dateFormatter = DateFormatter()
+    dateFormatter.dateFormat = "yyyy-MM-dd"
+
+    let grouped = Dictionary(grouping: transactions) { transaction -> Date in
+        if let date = dateFormatter.date(from: transaction.date) {
+            return Calendar.current.startOfDay(for: date)
+        } else {
+            return Date()
+        }
+    }
+    
+    return grouped.map { (key: Date, value: [Transaction]) in
+        (date: key, transactions: value)
+    }
+}
+
+func currencyCodeToSymbol(code: String) -> String{
+    switch code{
+    case "RUB":
+        return "₽"
+    case "EUR":
+        return "€"
+    case "USD":
+        return "$"
+    default:
+        return "₽"
+    }
+}
+
+func currencyCodeAndTypeToSymbol(type: TransactionType, code: String) -> String {
+    switch code{
+    case "RUB":
+        return "\(type.rawValue == "Доход" ? "+" : "-")₽"
+    case "EUR":
+        return "\(type.rawValue == "Доход" ? "+" : "-")€"
+    case "USD":
+        return "\(type.rawValue == "Доход" ? "+" : "-")$"
+    default:
+        return "\(type.rawValue == "Доход" ? "+" : "-")₽"
     }
 }

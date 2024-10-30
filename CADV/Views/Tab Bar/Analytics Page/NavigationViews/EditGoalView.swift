@@ -11,14 +11,14 @@ struct EditGoalView: View {
     @State private var goalName: String
     @State private var goalAmount: String
     @State private var goalTime: String
-    @Binding var goals: Goals
+    @Binding var goals: [Goal]
     var goal: Goal
 
     @Environment(\.presentationMode) var presentationMode
     @State private var showErrorPopup: Bool = false
     @State private var errorMessage: String = ""
 
-    init(goal: Goal, goals: Binding<Goals>) {
+    init(goal: Goal, goals: Binding<[Goal]>) {
         self.goal = goal
         self._goalName = State(initialValue: goal.GoalName)
         self._goalAmount = State(initialValue: String(goal.Need))
@@ -193,8 +193,8 @@ struct EditGoalView: View {
         }
 
         // Обновляем существующую цель
-        if let index = goals.Array.firstIndex(where: { $0.ID == goal.ID }) {
-            goals.Array[index] = Goal(CurrentState: time, GoalName: goalName, ID: goal.ID, Need: amount, UserID: goal.UserID)
+        if let index = goals.firstIndex(where: { $0.ID == goal.ID }) {
+            goals[index] = Goal(CurrentState: time, GoalName: goalName, ID: goal.ID, Need: amount, UserID: goal.UserID)
         }
 
         presentationMode.wrappedValue.dismiss()

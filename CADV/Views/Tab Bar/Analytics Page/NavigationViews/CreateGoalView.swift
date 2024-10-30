@@ -11,7 +11,7 @@ struct CreateGoalView: View {
     @State private var goalName: String = ""
     @State private var goalAmount: String = ""
     @State private var goalTime: String = ""
-    @Binding var goals: Goals
+    @Binding var goals: [Goal]
     
     @Environment(\.presentationMode) var presentationMode
     @State private var showErrorPopup: Bool = false
@@ -131,7 +131,7 @@ struct CreateGoalView: View {
                     }
                     .frame(maxWidth: .infinity, alignment: .center)
                 }
-                .offset(y: 20) // Move everything down by 20 pixels
+                .offset(y: 20)
             }
 
             if showErrorPopup {
@@ -180,7 +180,7 @@ struct CreateGoalView: View {
         }
 
         let newGoal = Goal(CurrentState: time, GoalName: goalName, ID: UUID().uuidString, Need: amount, UserID: UUID().uuidString)
-        goals.Array.append(newGoal)
+        goals.append(newGoal)
         presentationMode.wrappedValue.dismiss()
     }
 

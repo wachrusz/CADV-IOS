@@ -15,7 +15,7 @@ struct Transactions: Sequence{
     }
     
     mutating func getTransactions(){
-        self.Array = Transaction.getTransactions()
+        self.Array = Transaction.generateTestTransactions()
     }
 }
 
@@ -24,9 +24,10 @@ enum BankAccountsGroup: String, Codable, Hashable, CaseIterable{
     case bank = "Банк"
 }
 
-enum TransactionType: String, Codable, Hashable {
-    case income = "Доход"
-    case expense = "Расход"
+enum TransactionType: String, Codable, Hashable, CaseIterable {
+    case income = "Доходы"
+    case expense = "Расходы"
+    case wealthFund = "Фонд благосостояния"
 }
 
 enum CategoryType: String, Codable, Hashable {
@@ -53,6 +54,16 @@ enum CurrencyType: String, Codable, Hashable, CaseIterable {
     case dollar = "USD"
 }
 
+extension CurrencyType {
+    var currencySymbol: String {
+        switch self {
+        case .ruble: return "₽"
+        case .euro: return "€"
+        case .dollar: return "$"
+        }
+    }
+}
+
 struct Transaction: Codable, Identifiable, Hashable{
     var id = UUID()
     let amount: Double
@@ -77,7 +88,7 @@ struct Transaction: Codable, Identifiable, Hashable{
             return dateFormatter.date(from: date)
     }
     
-    static func getTransactions() -> [Transaction] {
+    static func generateTestTransactions() -> [Transaction] {
         let names = ["Salary", "Freelance", "Food", "Transport", "Entertainment", "Utilities", "Housing", "Healthcare", "Education", "Clothing", "Personal Care", "Other"]
         let categories: [CategoryType] = [.salary, .freelance, .food, .transportation, .entertainment, .utilities, .housing, .healthcare, .education, .clothing, .personalCare, .other]
         let types: [TransactionType] = [.income, .expense]
