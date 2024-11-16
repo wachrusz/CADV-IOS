@@ -13,6 +13,8 @@ struct goalsSectionView: View{
     @Binding var selectedGoal: Goal?
     @Binding var isEditing: Bool
     @Binding var showAllGoalsView: Bool
+    @Binding var currency: String
+    @Binding var tokenData: TokenData
     
     var body: some View {
         VStack(spacing: 5) {
@@ -28,7 +30,7 @@ struct goalsSectionView: View{
                         .lineSpacing(15)
                         .foregroundColor(.black)
                     
-                    NavigationLink(destination: CreateGoalView(goals: $goals)) {
+                    NavigationLink(destination: CreateGoalView(goals: $goals, currency: $currency, tokenData: $tokenData)) {
                         Image(systemName: "plus.circle.fill")
                             .font(.system(size: 30))
                             .foregroundColor(Color.black)
@@ -47,14 +49,16 @@ struct goalsSectionView: View{
             
             switch goals.count {
             case 0:
-                addGoalButton(goals: $goals)
+                addGoalButton(goals: $goals, currency: $currency, tokenData: $tokenData)
             default:
                 goalsView(
                     goals: $goals,
                     isLongPressing: $isLongPressing,
                     selectedGoal: $selectedGoal,
                     isEditing: $isEditing,
-                    showAllGoalsView: $showAllGoalsView
+                    showAllGoalsView: $showAllGoalsView,
+                    currency: $currency,
+                    tokenData: $tokenData
                 )
             }
         }

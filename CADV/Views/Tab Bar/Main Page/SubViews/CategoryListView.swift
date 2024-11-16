@@ -32,55 +32,65 @@ struct CategoryList: View{
         
         let groupedTransactions = Dictionary(grouping: filteredTransactions) { $0.category }
         
-        return VStack {
-            ForEach(groupedTransactions.keys.sorted(by: { $0 < $1 }), id: \.self) { category in
-                if let categoryTransactions = groupedTransactions[category] {
-                    let totalAmount = categoryTransactions.reduce(0) { $0 + $1.amount }
-                    let recentTransactions = categoryTransactions.prefix(3)
-                    
-                    HStack {
-                        Image(category.displayName)
-                            .resizable()
-                            .frame(width: 40, height: 40)
-                            .background(Color.gray.opacity(0.1))
-                            .cornerRadius(5)
-                        
-                        VStack(alignment: .leading, spacing: 5) {
-                            Text(category.displayName)
-                                .font(.custom("Gilroy", size: 14).weight(.semibold))
-                                .foregroundColor(Color.black)
+        if !transactions.isEmpty {
+                VStack {
+                    ScrollView{
+                    ForEach(groupedTransactions.keys.sorted(by: { $0 < $1 }), id: \.self) { category in
+                        if let categoryTransactions = groupedTransactions[category] {
+                            let totalAmount = categoryTransactions.reduce(0) { $0 + $1.amount }
+                            let recentTransactions = categoryTransactions.prefix(3)
                             
-                            ForEach(recentTransactions, id: \.id) { transaction in
-                                Text(transaction.name)
-                                    .font(.custom("Gilroy", size: 12))
-                                    .foregroundColor(Color.black.opacity(0.5))
+                            HStack {
+                                Image(category.displayName)
+                                    .resizable()
+                                    .frame(width: 40, height: 40)
+                                    .background(Color.gray.opacity(0.1))
+                                    .cornerRadius(5)
+                                
+                                VStack(alignment: .leading, spacing: 5) {
+                                    Text(category.displayName)
+                                        .font(.custom("Gilroy", size: 14).weight(.semibold))
+                                        .foregroundColor(Color.black)
+                                    
+                                    ForEach(recentTransactions, id: \.id) { transaction in
+                                        Text(transaction.name)
+                                            .font(.custom("Gilroy", size: 12))
+                                            .foregroundColor(Color.black.opacity(0.5))
+                                    }
+                                }
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                                
+                                VStack(alignment: .trailing, spacing: 5) {
+                                    Text("\(colorAndSign(for: category))\(formattedTotalAmount(amount: totalAmount))")
+                                        .font(.custom("Gilroy", size: 14).weight(.semibold))
+                                        .foregroundColor(
+                                            transactionType == .income ? Color.green :
+                                                transactionType == .expense ? Color.red :
+                                                Color.black
+                                        )
+                                    
+                                    ForEach(recentTransactions, id: \.id) { transaction in
+                                        Text(formattedTotalAmount(amount: transaction.amount))
+                                            .font(.custom("Gilroy", size: 12))
+                                            .foregroundColor(Color.black.opacity(0.5))
+                                    }
+                                }
+                                .frame(maxWidth: .infinity, alignment: .trailing)
                             }
+                            .padding()
+                            .background(Color.white)
+                            .cornerRadius(10)
+                            .shadow(radius: 1)
                         }
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        
-                        VStack(alignment: .trailing, spacing: 5) {
-                            Text("\(colorAndSign(for: category))\(formattedTotalAmount(amount: totalAmount))")
-                                .font(.custom("Gilroy", size: 14).weight(.semibold))
-                                .foregroundColor(
-                                    transactionType == .income ? Color.green :
-                                    transactionType == .expense ? Color.red :
-                                    Color.black
-                                )
-                            
-                            ForEach(recentTransactions, id: \.id) { transaction in
-                                Text(formattedTotalAmount(amount: transaction.amount))
-                                    .font(.custom("Gilroy", size: 12))
-                                    .foregroundColor(Color.black.opacity(0.5))
-                            }
-                        }
-                        .frame(maxWidth: .infinity, alignment: .trailing)
                     }
-                    .padding()
-                    .background(Color.white)
-                    .cornerRadius(10)
-                    .shadow(radius: 1)
                 }
             }
+        }else{
+            CustomText(
+                text: "Войдите через приложение банка, чтобы увидеть информацию о доходах, или внесите их вручную",
+                font: Font.custom("Inter", size: 12).weight(.semibold),
+                color: Color("sc2")
+            )
         }
     }
     private func colorAndSign(for category: CustomCategoryType) -> String {

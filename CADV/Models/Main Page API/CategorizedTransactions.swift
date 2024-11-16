@@ -19,7 +19,7 @@ protocol CategorizedTransactionsProtocol: Codable{
     var name: String { get }
 }
 
-struct CategorizedTransaction: CategorizedTransactionsProtocol, Identifiable, Equatable {
+struct CategorizedTransaction: CategorizedTransactionsProtocol, Identifiable, Equatable, Hashable {
     var id = UUID()
     let amount: Double
     let category: CustomCategoryType
@@ -35,6 +35,46 @@ struct CategorizedTransaction: CategorizedTransactionsProtocol, Identifiable, Eq
     var destinationAccount: String?
 }
 
+func image(for category: CustomCategoryType) -> String {
+    switch category {
+    case .income(let income):
+        switch income {
+            case .constant(let category):
+            switch category{
+            case .salary:
+                return "human"
+            case .guiding:
+                return "whale"
+            }
+            case .temporary(let category):
+            switch category{
+            case .savings:
+                return "money_bag"
+            case .gifts:
+                return "gift"
+            }
+        }
+    case .expense(let expense):
+        switch expense{
+            case .constant(let category):
+            switch category{
+            default:
+                return "ufo"
+            }
+        case .temporary(let category):
+            switch category{
+            default:
+                return "ufo"
+            }
+        }
+    case .wealthFund(let category):
+        switch category{
+        default:
+            return "ufo"
+        }
+    }
+}
+
 enum CustomCategoryType: CaseIterable, Codable, Hashable {
     static var allCases: [CustomCategoryType] {
         IncomeConstantCategory.allCases.map { CustomCategoryType.income(.constant($0)) } +
@@ -48,9 +88,34 @@ enum CustomCategoryType: CaseIterable, Codable, Hashable {
     case expense(ExpenseCategory)
     case wealthFund(WealthFundCategory)
 }
+
 extension CustomCategoryType: Comparable {
     static func < (lhs: CustomCategoryType, rhs: CustomCategoryType) -> Bool {
         return lhs.displayName < rhs.displayName
+    }
+    var displayCategory: String {
+        switch self {
+        case .income: return  "Доходы"
+        case .expense: return "Расходы"
+        case .wealthFund: return "Фонд благосостояния"
+        }
+    }
+    
+    var displayIsConstant: Bool {
+        switch self {
+        case .income(let category):
+            switch category {
+            case .constant: return true
+            default: return false
+            }
+        case .expense(let category):
+            switch category {
+            case .constant: return true
+            default: return false
+            }
+        case .wealthFund(_):
+            return false
+        }
     }
     
     var displayName: String {

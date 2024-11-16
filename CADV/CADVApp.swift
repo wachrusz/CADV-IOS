@@ -6,15 +6,22 @@
 //
 
 import SwiftUI
+import UserNotifications
 
 @main
 struct CADVApp: App {
     let persistenceController = PersistenceController.shared
-
+    
+    @StateObject private var notificationManager = NotificationManager()
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            SplashScreenView()
                 .environment(\.managedObjectContext, persistenceController.container.viewContext)
+                .preferredColorScheme(.light)
+                .onAppear {
+                    notificationManager.requestPermission()
+                    for family in UIFont.familyNames { print(family) }
+                }
         }
     }
 }

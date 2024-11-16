@@ -8,141 +8,99 @@
 import SwiftUI
 
 struct CreateBankAccountView: View {
-    @State private var bankAccountName: String = ""
-    @State private var bankAccountAmount: String = ""
-    @State private var selectedCategory: BankAccountsGroup? = nil
     @Binding var bankAccounts: BankAccounts
+    @Binding var currency: String
+    @Binding var tokenData: TokenData
     
     @Environment(\.presentationMode) var presentationMode
+    @State private var bankAccountName: String = ""
+    @State private var bankAccountAmount: String = ""
+    @State private var selectedCategory: BankAccountsGroup? = .bank
     @State private var showErrorPopup: Bool = false
     @State private var errorMessage: String = ""
+    @State private var showNameTextFieldError: Bool = false
+    @State private var showAmountTextFieldError: Bool = false
+    @State private var showTimeTextFieldError: Bool = false
+    @State private var isAmountFieldFine: Bool = false
+    @State private var isTimeFieldFine: Bool = false
+    @State private var isNameFieldFine: Bool = false
 
     var body: some View {
-        ZStack {
-            GeometryReader { geometry in
-                VStack(alignment: .leading,spacing: 20) {
-                    Text("Создать новый счет")
-                        .font(Font.custom("Gilroy", size: 16).weight(.semibold))
-                        .lineSpacing(20)
-                        .foregroundColor(.black)
-                        .frame(maxWidth: .infinity, alignment: .center)
-                        
-                        TextField("", text: $bankAccountName)
-                            .placeholder(when: bankAccountName.isEmpty) {
-                                Text("Название счета")
-                                    .foregroundColor(.black)
-                                    .font(Font.custom("Inter", size: 14).weight(.semibold))
+        NavigationView{
+            ZStack {
+                GeometryReader { geometry in
+                    VStack() {
+                        CustomText(
+                            text: "Создать новый счет",
+                            font: Font.custom("Gilroy", size: 16).weight(.semibold),
+                            color: Color("fg")
+                        )
+                        .padding(.vertical)
+                        VStack(alignment: .leading){
+                            CustomTextField(
+                                input: $bankAccountName,
+                                text: "Название счета",
+                                showTextFieldError: $showNameTextFieldError,
+                                isFine: $isNameFieldFine
+                            )
+                            
+                            HStack(alignment: .top, spacing: 10) {
+                                CustomText(
+                                    text: currencyCodeToSymbol(code: currency),
+                                    font: Font.custom("Inter", size: 14).weight(.semibold),
+                                    color: Color("sc2")
+                                )
+                                .padding()
+                                .frame(maxWidth: 60)
+                                .background(Color("bg2"))
+                                .cornerRadius(15)
+                                
+                                CustomTextField(
+                                    input: $bankAccountAmount,
+                                    text: "00.00",
+                                    showTextFieldError: $showAmountTextFieldError,
+                                    isFine: $isAmountFieldFine
+                                )
+                                .keyboardType(.decimalPad)
                             }
-                            .font(Font.custom("Inter", size: 14).weight(.semibold))
-                            .foregroundColor(.black)
-                            .padding(EdgeInsets(top: 10, leading: 15, bottom: 10, trailing: 15))
-                            .background(Color(red: 0.98, green: 0.98, blue: 0.98))
-                            .cornerRadius(10)
-                            .frame(width: 300, height: 40)
-                            .frame(maxWidth: .infinity, alignment: .center)
-                    
-                    HStack(alignment: .top, spacing: 10) {
-                        Text("₽")
-                            .font(Font.custom("Inter", size: 14).weight(.semibold))
-                            .foregroundColor(.black)
-                            .padding(EdgeInsets(top: 10, leading: 15, bottom: 10, trailing: 15))
-                            .background(Color(red: 0.94, green: 0.94, blue: 0.94))
-                            .cornerRadius(10)
-                            .frame(alignment: .center)
-                        
-                        TextField("", text: $bankAccountAmount)
-                            .placeholder(when: bankAccountName.isEmpty) {
-                                Text("00.00")
-                                    .foregroundColor(.black)
-                                    .font(Font.custom("Inter", size: 14).weight(.semibold))
+                            
+                            NavigationLink(destination: BankAccountCategorySelectionView(selectedCategory: $selectedCategory)) {
+                                HStack {
+                                    Text("Выберите группу счетов")
+                                        .foregroundColor(Color("fg"))
+                                    Spacer()
+                                    Text(selectedCategory?.rawValue ?? "")
+                                        .foregroundColor(Color.gray)
+                                }
+                                .padding()
+                                .background(Color("bg1"))
+                                .cornerRadius(15)
                             }
-                            .font(Font.custom("Inter", size: 14).weight(.semibold))
-                            .foregroundColor(.black)
-                            .padding(EdgeInsets(top: 10, leading: 15, bottom: 10, trailing: 15))
-                            .background(Color(red: 0.98, green: 0.98, blue: 0.98))
-                            .cornerRadius(10)
-                            .keyboardType(.decimalPad)
-                            .frame(width: 240, height: 40)
-                        
-                            .frame(maxWidth: .infinity, alignment: .center)
-                        Spacer()
-                    }
-                        Picker("Выберите категорию", selection: $selectedCategory) {
-                            ForEach(BankAccountsGroup.allCases, id: \.self) { category in
-                                Text(category.rawValue).tag(category as BankAccountsGroup?)
-                            }
-                        }
-                        .pickerStyle(MenuPickerStyle())
-                        .padding(EdgeInsets(top: 10, leading: 15, bottom: 10, trailing: 15))
-                        .background(Color(red: 0.98, green: 0.98, blue: 0.98))
-                        .cornerRadius(10)
-                        .frame(width: 300, height: 40)
-                        .frame(maxWidth: .infinity, alignment: .center)
-
-
-                    HStack(alignment: .top, spacing: 20) {
-                        Button(action: {
-                            presentationMode.wrappedValue.dismiss()
-                        }) {
-                            Text("Назад")
-                                .font(Font.custom("Gilroy", size: 16).weight(.semibold))
-                                .lineSpacing(20)
-                                .foregroundColor(.black)
-                        }
-                        .padding(EdgeInsets(top: 11, leading: 15, bottom: 9, trailing: 15))
-                        .frame(height: 40)
-                        .background(.white)
-                        .cornerRadius(10)
-                        .overlay(RoundedRectangle(cornerRadius: 10).stroke(.black, lineWidth: 1))
-
-                        Button(action: {
-                            validateAndAddGoal()
-                        }) {
-                            Text("Создать")
-                                .font(Font.custom("Gilroy", size: 16).weight(.semibold))
-                                .lineSpacing(20)
-                                .foregroundColor(.white)
-                        }
-                        .padding(EdgeInsets(top: 10, leading: 15, bottom: 10, trailing: 15))
-                        .frame(height: 40)
-                        .background(Color(red: 0.53, green: 0.19, blue: 0.53))
-                        .cornerRadius(10)
-                    }
-                    .frame(maxWidth: .infinity, alignment: .center)
-                }
-                .offset(y: 20)
-            }
-
-            if showErrorPopup {
-                VStack {
-                    Text(errorMessage)
-                        .font(Font.custom("Inter", size: 14).weight(.semibold))
-                        .padding()
-                        .background(Color.red.opacity(0.8))
-                        .cornerRadius(10)
-                        .overlay(RoundedRectangle(cornerRadius: 10).stroke(Color.red, lineWidth: 2))
-                        .scaleEffect(1.1)
-                        .transition(.scale)
-                        .animation(.spring(response: 0.5, dampingFraction: 0.6))
-                    Spacer()
-                }
-                .padding()
-                .onAppear {
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-                        withAnimation {
-                            showErrorPopup = false
+                            
+                            
+                            ActionDissmisButtons(
+                                action: validateAndAddBankAccount,
+                                actionTitle: "Создать"
+                            )
+                            
+                            
                         }
                     }
                 }
+                .padding(.horizontal)
+                
+                ErrorPopUp(
+                    showErrorPopup: $showErrorPopup,
+                    errorMessage: errorMessage
+                )
+                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
             }
         }
-        .padding(.leading)
-        .background(.white)
         .edgesIgnoringSafeArea(.bottom)
         .hideBackButton()
     }
 
-    private func validateAndAddGoal() {
+    private func validateAndAddBankAccount() {
         if bankAccountName.isEmpty {
             showError(message: "Название не должно быть пустым")
             return
@@ -158,8 +116,38 @@ struct CreateBankAccountView: View {
             return
         }
 
-        let newGoal = BankAccount(totalAmount: amount, name: bankAccountName, subAccounts: [])
-        bankAccounts.Array.append(newGoal)
+        let parameters = [
+            "account_number": generateRandomDate(),
+            "account_type": selectedCategory?.rawValue ?? "",
+            "bank_id": "0",
+            "id": "",
+            "user_id": ""
+        ]
+        
+        abstractFetchData(
+            endpoint: "v1/app/accounts",
+            method: "POST",
+            parameters: parameters,
+            headers: [
+                "accept" : "application/json",
+                "Content-Type": "application/json",
+                "Authorization" : tokenData.accessToken
+            ]
+        ){ result in
+            switch result {
+            case .success(let responseObject):
+                switch responseObject["status_code"] as? Int {
+                case 200:
+                    print(responseObject)
+                default:
+                    print("Failed to fetch goals.")
+                }
+                
+            case .failure(let error):
+                print("Another yet error: \(error)")
+            }
+        }
+        
         presentationMode.wrappedValue.dismiss()
     }
 
@@ -169,4 +157,9 @@ struct CreateBankAccountView: View {
             showErrorPopup = true
         }
     }
+}
+
+func generateRandomString(length: Int = 20) -> String {
+    let characters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789,.?/;:][{}+=-_<>?!@#$%^&*"
+    return String((0..<length).compactMap { _ in characters.randomElement() })
 }

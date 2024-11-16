@@ -12,23 +12,29 @@ struct annualPaymentsSection: View{
     var body: some View {
         VStack(spacing: 10) {
             HStack(spacing: 5) {
-                Text("Ежемесячные платежи")
-                    .font(Font.custom("Gilroy", size: 16).weight(.semibold))
-                    .lineSpacing(15)
-                    .foregroundColor(.black)
+                CustomText(
+                    text: "Ежемесячные платежи",
+                    font: Font.custom("Gilroy", size: 16).weight(.semibold),
+                    color: Color("fg"))
                 
-                Text("\(countCompleted(array: annualPayments))/\(annualPayments.count)")
-                    .font(Font.custom("Inter", size: 12).weight(.semibold))
-                    .tracking(1)
-                    .lineSpacing(15)
-                    .foregroundColor(Color(red: 0.60, green: 0.60, blue: 0.60))
+                CustomText(
+                    text: "\(countCompleted(array: annualPayments))/\(annualPayments.count)",
+                    font: Font.custom("Inter", size: 12).weight(.semibold),
+                    color: Color("bg1")
+                )
+                .tracking(1)
             }
             switch annualPayments.count {
             case 0:
-                Text("Информация о ежемесячных отчислениях для постоянного прогресса в достижении Ваших целей")
-                    .font(Font.custom("Inter", size: 12).weight(.semibold))
-                    .lineSpacing(15)
-                    .foregroundColor(Color(red: 0.60, green: 0.60, blue: 0.60))
+                VStack{
+                    Spacer()
+                    CustomText(
+                        text: "Информация о ежемесячных отчислениях для постоянного прогресса в достижении Ваших целей",
+                        font: Font.custom("Inter", size: 12).weight(.semibold),
+                        color: Color("sc2")
+                    )
+                    Spacer()
+                }
             default:
                 TabView {
                     ForEach(0..<getNumberOfPages(itemsArray: annualPayments), id: \.self) { pageIndex in

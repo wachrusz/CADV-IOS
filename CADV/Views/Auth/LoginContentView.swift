@@ -4,126 +4,188 @@
 //
 //  Created by Misha Vakhrushin on 08.09.2024.
 //
+import Foundation
 import SwiftUI
 
-struct LoginContentView: View {
-    @State private var keyboardHeight: CGFloat = 0
-    var body: some View {
-        NavigationView {
-            ZStack {
-                Color.white
-                    .edgesIgnoringSafeArea(.all)
+class URLSessionHelper: NSObject, URLSessionDelegate {
+    static let shared = URLSessionHelper()
 
-                VStack {
-                    VStack(spacing: 5) {
-                        Text("Авторизация")
-                            .font(Font.custom("Gilroy", size: 16).weight(.semibold))
-                            .foregroundColor(.black)
-                        HStack(spacing: 20) {
-                            StepView(number: "1", currentStep: 1, stepIndex: 1)
-                            StepView(number: "2", currentStep: 1, stepIndex: 2)
-                        }
-                        Text("Ввод данных аккаунта")
-                            .font(Font.custom("Inter", size: 12).weight(.semibold))
-                            .foregroundColor(.black)
+    func urlSession(_ session: URLSession, didReceive challenge: URLAuthenticationChallenge, completionHandler: @escaping (URLSession.AuthChallengeDisposition, URLCredential?) -> Void) {
+        if challenge.protectionSpace.authenticationMethod == NSURLAuthenticationMethodServerTrust {
+            let urlCredential = URLCredential(trust: challenge.protectionSpace.serverTrust!)
+            completionHandler(.useCredential, urlCredential)
+        } else {
+            completionHandler(.performDefaultHandling, nil)
+        }
+    }
+}
+
+struct LoginView: View{
+    @State private var email: String = ""
+    @State private var password: String = ""
+    @State private var showPassword: Bool = false
+    @State private var showPasswordReset: Bool = false
+    @State private var showEmailVerification: Bool = false
+    @State private var loginError: String = ""
+    @State private var token: String = ""
+    @State private var showErrorPopup: Bool = false
+    @State private var showTextFieldError: Bool = false
+    @State private var showSecureFieldError: Bool = false
+    @State private var isTextFieldFine: Bool = false
+    @State private var isSecureFieldFine: Bool = false
+    private var screenName: String = "Авторизация"
+    @State private var navigationPath = NavigationPath()
+
+    var body: some View{
+        ZStack{
+            NavigationStack(path: $navigationPath){
+                VStack{
+                    HStack(spacing: 20){
+                        StepView(number: "1", currentStep: 1, stepIndex: 1)
+                        StepView(number: "2", currentStep: 1, stepIndex: 2)
                     }
-                    Spacer().frame(minHeight: 10, idealHeight: 30, maxHeight: 40).fixedSize()
+                    .padding(.top)
+                    CustomText(
+                        text: "Ввод данных аккаунта",
+                        font: Font.custom("Inter", size: 12).weight(.semibold),
+                        color: Color("fg")
+                    )
+                    .padding(.bottom)
                     
-                    VStack(spacing: 40) {
-                        VStack(alignment: .leading, spacing: 10) {
-                            VStack(alignment: .leading, spacing: 5) {
-                                Text("Введите email")
-                                    .font(Font.custom("Inter", size: 14).weight(.semibold))
-                                    .lineSpacing(15)
-                                    .foregroundColor(.black)
-                                TextField("example@gmail.com", text: .constant(""))
-                                    .padding(EdgeInsets(top: 10, leading: 15, bottom: 10, trailing: 15))
-                                    .frame(maxWidth: .infinity, minHeight: 40, maxHeight: 40)
-                                    .background(Color(red: 0.98, green: 0.98, blue: 0.98))
-                                    .cornerRadius(10)
-                            }
-                            .padding()
+                    VStack(alignment: .leading, spacing: 10){
+                        CustomText(
+                            text: "Введите email",
+                            font: Font.custom("Inter", size: 14).weight(.semibold),
+                            color: Color("fg")
+                        )
+                        CustomTextField(
+                            input: $email,
+                            text: "example@example.com",
+                            showTextFieldError: $showTextFieldError ,
+                            isFine: $isTextFieldFine
+                        )
+                        .onChange(of: email) { newValue in
+                            validateEmail(newValue)
+                        }
+                        CustomText(
+                            text: "Введите пароль",
+                            font: Font.custom("Inter", size: 14).weight(.semibold),
+                            color: Color("fg")
+                        )
+                        CustomSecureField(
+                            input: $password,
+                            showSecureFieldError: $showSecureFieldError,
+                            isFine: $isSecureFieldFine,
+                            errorMessage: $loginError
+                        )
+                        .padding(.bottom)
+                        
+                        HStack{
+                            AuthActionButton(
+                                action: login,
+                                actionTitle: "Войти"
+                            )
+                            .frame(alignment: .leading)
                             
-                            VStack(alignment: .leading, spacing: 5) {
-                                Text("Введите пароль")
-                                    .font(Font.custom("Inter", size: 14).weight(.semibold))
-                                    .lineSpacing(15)
-                                    .foregroundColor(.black)
-                                SecureField("*********", text: .constant(""))
-                                    .padding(EdgeInsets(top: 10, leading: 15, bottom: 10, trailing: 15))
-                                    .frame(maxWidth: .infinity, minHeight: 40, maxHeight: 40)
-                                    .background(Color(red: 0.98, green: 0.98, blue: 0.98))
-                                    .cornerRadius(10)
-                            }
-                            .padding()
-                            
-                            HStack(alignment: .top, spacing: 20) {
-                                Spacer()
-                                NavigationLink(destination: EnterVerificationEmailCode()) {
-                                    Text("Войти")
-                                        .font(Font.custom("Gilroy", size: 16).weight(.semibold))
-                                        .lineSpacing(20)
-                                        .foregroundColor(.white)
-                                        .frame(width: 140, height: 40)
-                                        .background(Color.black)
-                                        .cornerRadius(10)
-                                }
-                                
-                                Spacer()
-                                
-                                Button(action: {
-                                    // Забыли пароль
-                                }) {
-                                    Text("Забыли пароль?")
-                                        .font(Font.custom("Inter", size: 14).weight(.semibold))
-                                        .foregroundColor(Color(red: 0.17, green: 0.21, blue: 0.61))
-                                }
-                                .frame(width: 140, height: 40)
-                                Spacer()
+                            CustomText(
+                                text: "Забыли пароль?",
+                                font: Font.custom("Inter", size: 14).weight(.semibold),
+                                color: Color("sm3")
+                            )
+                            .frame(maxWidth: .infinity, alignment: .trailing)
+                            .onTapGesture {
+                                showPasswordReset.toggle()
                             }
                         }
                     }
-                    Spacer(minLength: -keyboardHeight)
+                    .padding(.horizontal)
+                    Spacer()
+                    NavigationLink(
+                        destination: EnterVerificationEmailCode(
+                            email: $email,
+                            token: $token,
+                            isNew: false,
+                            previousScreenName: screenName
+                            ),
+                        isActive: $showEmailVerification,
+                        label: {EmptyView()}
+                    )
+                    NavigationLink(
+                        destination: PasswordResetView(),
+                        isActive: $showPasswordReset,
+                        label: {EmptyView()}
+                    )
                 }
-                .animation(.easeOut(duration: 0.3))
             }
-            .animation(.easeOut(duration: 0.3))
-        }
-        .frame(maxHeight: .infinity, alignment: .top)
-        .hideBackButton()
-        .onAppear {
-            NotificationCenter.default.addObserver(forName: UIResponder.keyboardWillShowNotification, object: nil, queue: .main) { notification in
-                if let keyboardFrame = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect {
-                    keyboardHeight = keyboardFrame.height
-                }
-            }
-
-            NotificationCenter.default.addObserver(forName: UIResponder.keyboardWillHideNotification, object: nil, queue: .main) { _ in
-                keyboardHeight = 0
-            }
-        }
-        .onDisappear {
-            NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillShowNotification, object: nil)
-            NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillHideNotification, object: nil)
-        }
-    }
-}
-
-struct StepView: View {
-    let number: String
-    let currentStep: Int
-    let stepIndex: Int
-    
-    var body: some View {
-        Text(number)
-            .font(Font.custom("Inter", size: 12).weight(.semibold))
-            .foregroundColor(stepIndex < currentStep ? .black : (stepIndex == currentStep ? Color(red: 0.22, green: 0.49, blue: 0.21) : .gray))
-            .padding(EdgeInsets(top: 0, leading: 10, bottom: 0, trailing: 10))
-            .frame(width: 35, height: 20)
-            .cornerRadius(10)
-            .overlay(
-                RoundedRectangle(cornerRadius: 10)
-                    .stroke(stepIndex == currentStep ? Color(red: 0.22, green: 0.49, blue: 0.21) : .gray, lineWidth: 0.75)
+            ErrorPopUp(
+                showErrorPopup: $showErrorPopup,
+                errorMessage: loginError
             )
+            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
+            .zIndex(1)
+        }
+        .navigationTitle(screenName)
+        .colorScheme(.light)
+        .frame(maxWidth: .infinity,maxHeight: .infinity)
+        .tint(.black)
+    }
+    
+    private func login() {
+        if isTextFieldFine && isSecureFieldFine {
+            let parameters = [
+                "email": email,
+                "password": password
+            ]
+            
+            abstractFetchData(
+                endpoint: "v1/auth/login",
+                parameters: parameters,
+                headers: ["Content-Type": "application/json", "accept" : "application/json"]
+            ) { result in
+                switch result {
+                case .success(let responseObject):
+                    print("Response body: \(responseObject)")
+                    switch responseObject["status_code"] as? Int {
+                    case 200:
+                        token = responseObject["token"] as? String ?? ""
+                        self.showEmailVerification = true
+                    case 401:
+                        self.loginError = "Кажется, Вы что-то не так ввели..."
+                        self.showErrorPopup = true
+                    default:
+                        self.loginError = "Упс... Что-то пошло не так..."
+                        self.showErrorPopup = true
+                    }
+                case .failure(let error):
+                    print("Request failed with error: \(error.localizedDescription)")
+                    DispatchQueue.main.async {
+                        self.loginError = "Упс... Что-то пошло не так..."
+                    }
+                }
+            }
+        }else{
+            showErrorPopup = true
+        }
+    }
+    private func validateEmail(_ email: String) {
+        if !email.isEmpty{
+            showTextFieldError = !isValidEmail(email)
+            isTextFieldFine = isValidEmail(email)
+        }else{
+            showTextFieldError = false
+            isTextFieldFine = false
+        }
+    }
+
+    func isValidEmail(_ email: String) -> Bool {
+        let emailRegex = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,64}"
+        if !NSPredicate(format: "SELF MATCHES %@", emailRegex).evaluate(with: email){
+            self.loginError = "Некорректный email"
+            return false
+        }
+        self.loginError = ""
+        return true
     }
 }
+
+

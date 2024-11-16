@@ -12,9 +12,9 @@ struct TransactionElement: View{
     
     var body: some View{
         HStack{
-            Image("education")
+            Image("")
                 .resizable()
-                .frame(width: 40,height: 40)
+                .frame(width: 40,height: 40, alignment: .leading)
             VStack(alignment: .leading, spacing: 5){
                 Text(transaction.name)
                     .font(.custom("Gilroy", size: 14).weight(.semibold))
@@ -36,10 +36,17 @@ struct TransactionElement: View{
     
     private func currencyAndAmountText(transaction: CategorizedTransaction) -> some View {
         HStack{
-            Text(currencyCodeAndTypeToSymbol(type: transaction.type, code: transaction.currency.rawValue))
-                .foregroundColor(transaction.type.rawValue == "Доходы" ? Color.green : Color.red)
-            Text(formattedTotalAmount(amount: transaction.amount))
-                .foregroundColor(Color.black)
+            CustomText(
+                text: transaction.currency.rawValue,
+                font: .custom("Inter", size: 16).weight(.semibold),
+                color: Color(transaction.type.rawValue == "Доходы" ? Color("sm2") : Color("sm1"))
+            )
+
+            CustomText(
+                text: formattedTotalAmount(amount: transaction.amount),
+                font: .custom("Inter", size: 16).weight(.semibold),
+                color: Color("fg")
+            )
         }
     }
 }

@@ -30,18 +30,25 @@ struct AppNavigatingButtonsList: View {
         HStack {
             Image(image)
                 .resizable()
-                .frame(width: 45,height: 45)
+                .frame(width: 45,height: 45, alignment: .leading)
+                .padding()
 
             VStack(alignment: .leading) {
-                Text(text)
-                    .foregroundStyle(.black)
+                CustomText(
+                    text: text,
+                    font: Font.custom("Gilroy", size: 16).weight(.semibold),
+                    color: Color("fg")
+                )
                 
-                Text(description)
-                    .foregroundStyle(.black.opacity(0.5))
+                CustomText(
+                    text: description,
+                    font: Font.custom("Inter", size: 12).weight(.semibold),
+                    color: Color("sc2")
+                )
             }
+            Spacer()
         }
         .frame(maxWidth: 300, maxHeight: 75)
-        .padding(.leading)
         .background(Color.gray.opacity(0.1))
         .cornerRadius(15)
     }
@@ -58,10 +65,10 @@ struct AppNavigatingButtonsList: View {
             return buttonsData
         case "Настройки":
             buttonsData = [
-                ("Ваша подписка", "Всё про цену и возможности сервиса", "Bank"),
-                ("Мы в соц сетях", "Наши полезные ресурсы", "CardDivider"),
-                ("Поддержка", "Задайте вопрос или предложите улучшение приложения", "WasteBasket"),
-                ("Выйти из аккаунта","", "Papers")
+                ("Ваша подписка", "Всё про цену и возможности сервиса", "subscription"),
+                ("Мы в соц сетях", "Наши полезные ресурсы", "social"),
+                ("Поддержка", "Задайте вопрос или предложите улучшение приложения", "supportRequest"),
+                ("Выйти из аккаунта","", "logout")
             ]
             return buttonsData
         default:

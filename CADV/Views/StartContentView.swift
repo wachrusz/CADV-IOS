@@ -7,10 +7,9 @@
 
 import SwiftUI
 
-
 struct Start: View {
     var body: some View {
-        NavigationView {
+        NavigationStack {
             ZStack {
                 Color.white
                     .edgesIgnoringSafeArea(.all)
@@ -19,22 +18,25 @@ struct Start: View {
                     VStack {
                         Spacer()
 
-                        Text("Cash Advisor")
-                            .font(Font.custom("Montserrat", size: 50).weight(.bold))
-                            .foregroundColor(.black)
-                            .padding(.bottom, 10)
-
-                        Text("Управляйте личными финансами эффективно")
-                            .font(Font.custom("Inter", size: 14).weight(.semibold))
-                            .foregroundColor(Color(red: 0.60, green: 0.60, blue: 0.60))
-                            .padding(.bottom, 50)
+                        CustomText(
+                            text: "Cash Advisor",
+                            font: Font.custom("Montserrat", size: 40).weight(.bold),
+                            color: Color("fg")
+                        )
+                        
+                        CustomText(
+                            text: "Управляйте личными финансами эффективно",
+                            font: Font.custom("Inter", size: 14).weight(.semibold),
+                            color: Color("sc2")
+                        )
 
                         Spacer()
 
-                        Text("Нажмите, чтобы продолжить")
-                            .font(Font.custom("Gilroy", size: 16).weight(.semibold))
-                            .foregroundColor(Color(red: 0.60, green: 0.60, blue: 0.60))
-                            .padding(.bottom, 50)
+                        CustomText(
+                            text: "Нажмите, чтобы продолжить",
+                            font: Font.custom("Gilroy", size: 16).weight(.semibold),
+                            color: Color("sc2")
+                        )
                     }
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
                 }
@@ -45,61 +47,124 @@ struct Start: View {
 }
 
 struct NewUser: View {
+    @State private var isVisible: Bool = false
+    @State private var startMovement: Bool = false
+    let hashTags: [String] = [
+        "#финздоровье",
+        "#акции",
+        "#дивиденды",
+        "#финграм",
+        "#благосостояние",
+        "#обязательства",
+        "#Cash Advisor",
+        "#активы",
+        "#инвестиции",
+        "#налоги",
+        "#банки",
+        "#сбережения",
+        "#планирование",
+        "#бюджет",
+        "#доходы"
+    ]
+    
     var body: some View {
         ZStack {
             Color.white
                 .edgesIgnoringSafeArea(.all)
-
-            VStack {
-                Text("#финздоровье\n#акции\n#дивиденды\n#финграм\n#благосостояние\n#обязательства\n#Cash Advisor\n#активы\n#инвестиции\n#налоги\n#банки\n#сбережения\n#планирование")
-                    .font(Font.custom("Montserrat", size: 40).weight(.bold))
-                    .foregroundColor(Color(red: 0.94, green: 0.94, blue: 0.94))
-                    .padding()
-
-                Spacer()
-
-                VStack(alignment: .center, spacing: 20) {
-                    HStack(spacing: 20) {
-                            NavigationLink(destination: RegisterContentView()){
-                                Text("Регистрация")
-                                    .font(Font.custom("Gilroy", size: 16).weight(.semibold))
-                                    .foregroundColor(.white)
-                                    .padding()
-                                    .frame(width: 140, height: 40)
-                                    .background(Color.black)
-                                    .cornerRadius(10)
+            
+            VStack(alignment: .leading) {
+                ForEach(hashTags, id: \.self) { tag in
+                    CustomText(
+                        text: tag,
+                        font: Font.custom("Montserrat", size: 40).weight(.bold),
+                        color: Color(tag == "#Cash Advisor" ? "fg" : "bg1")
+                    )
+                    .offset(x: isVisible ? 0 : (tag == "#Cash Advisor" ? -1500 : 250), y: 0)
+                    .opacity(isVisible ? 1 : 0)
+                    .animation(
+                        .easeOut(
+                            duration: tag == "#Cash Advisor" ? 2 : 1
+                        )
+                        .delay(
+                            Double(
+                                hashTags.firstIndex(of: tag) ?? 0) * 0.1
+                        ), value: isVisible
+                    )
+                    .onAppear {
+                        if tag == "#Cash Advisor" {
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3 * Double(hashTags.count)) {
+                                withAnimation {
+                                    self.isVisible = true
+                                }
                             }
-                            NavigationLink(destination: LoginContentView()) {
-                                Text("Вход")
-                                    .font(Font.custom("Gilroy", size: 16).weight(.semibold))
-                                    .foregroundColor(.black)
-                                    .padding()
-                                    .frame(width: 140, height: 40)
-                                    .background(Color.white)
-                                    .cornerRadius(10)
-                                    .overlay(
-                                        RoundedRectangle(cornerRadius: 10)
-                                            .stroke(Color.black, lineWidth: 1)
-                                    )
-                            .buttonStyle(PlainButtonStyle())
+                        } else {
+                            withAnimation {
+                                self.isVisible = true
+                            }
                         }
                     }
-                    
-                    Text("Зарегистрируйтесь, если у Вас нет аккаунта, \nили войдите, если аккаунт уже создан")
-                        .font(Font.custom("Inter", size: 12).weight(.semibold))
-                        .foregroundColor(Color(red: 0.60, green: 0.60, blue: 0.60))
-                        .multilineTextAlignment(.center)
-                        .padding(.top, 10)
                 }
-                .padding()
-                .background(Color.white)
-                .cornerRadius(15)
-                .shadow(radius: 8)
-
-                Spacer()
+            }
+            
+            VStack(alignment: .center, spacing: 10) {
+                HStack(spacing: 20) {
+                    NavigationLink(destination: RegisterView()){
+                        CustomText(
+                            text: "Регистрация",
+                            font: Font.custom("Gilroy", size: 16).weight(.semibold),
+                            color: .white
+                        )
+                        .frame(maxWidth: .infinity, maxHeight: 40)
+                        .background(Color.black)
+                        .cornerRadius(10)
+                        .padding()
+                    }
+                    NavigationLink(destination: LoginView()) {
+                        CustomText(
+                            text: "Вход",
+                            font: Font.custom("Gilroy", size: 16).weight(.semibold),
+                            color: Color("fg")
+                        )
+                        .frame(maxWidth: .infinity, maxHeight: 40)
+                        .background(Color("bg"))
+                        .cornerRadius(10)
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 10)
+                                .stroke(Color.black, lineWidth: 1)
+                        )
+                        .padding()
+                    }
+                }
+                
+                CustomText(
+                    text: "Зарегистрируйтесь, если у Вас нет аккаунта, \nили войдите, если аккаунт уже создан",
+                    font: Font.custom("Inter", size: 12).weight(.semibold),
+                    color: Color("sc2")
+                )
+                .multilineTextAlignment(.center)
+                .padding(.bottom)
+            }
+            .background(Color("bg"))
+            .cornerRadius(15)
+            .shadow(radius: 5)
+            .padding()
+            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottom)
+            
+            .offset(x: 0, y: startMovement ? 0 : 1500)
+            .animation(
+                .easeOut(
+                    duration: 2
+                )
+                .delay(0.6), value: startMovement
+            )
+            .onAppear {
+                withAnimation {
+                    self.startMovement.toggle()
+                }
             }
         }
-        .navigationBarBackButtonHidden(true)
+        //.navigationBarBackButtonHidden(true)
+        .navigationTitle("")
     }
 }
 
