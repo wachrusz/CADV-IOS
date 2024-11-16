@@ -9,11 +9,14 @@ import Foundation
 
 struct Goal: Codable, Identifiable, Hashable {
     var id: UUID = UUID()
-    let CurrentState: Int
+    let CurrentState: Double
+    let StartDate: String
+    let EndDate: String
     let GoalName: String
     let ID: String
     let Need: Double
     let UserID: String
+    let Currency: String
 
     enum CodingKeys: String, CodingKey {
         case CurrentState = "current_state"
@@ -21,10 +24,25 @@ struct Goal: Codable, Identifiable, Hashable {
         case ID = "id"
         case Need = "need"
         case UserID = "user_id"
+        case StartDate = "start_date"
+        case EndDate = "end_date"
+        case Currency = "currency"
     }
     
+    func toDictionary() -> [String: Any] {
+        return [
+            "current_state": self.CurrentState,
+            "start_date": self.StartDate,
+            "end_date": self.EndDate,
+            "goal": self.GoalName,
+            "id": self.ID,
+            "need": self.Need,
+            "user_id": self.UserID,
+            "currency": self.Currency
+        ]
+    }
 }
-
+/*
 func generateTestGoal() -> [Goal] {
     var array: [Goal] = []
     for _ in 1...100{
@@ -35,13 +53,16 @@ func generateTestGoal() -> [Goal] {
         let randomUserID = UUID().uuidString
         
         array.append(Goal(
-            CurrentState: randomLength,
+            CurrentState: 0,
             GoalName: randomGoal,
-            ID: randomID,
+            ID: "",
             Need: randomNeed,
-            UserID: randomUserID
+            UserID: "",
+            StartDate: Date(),
+            EndDate: Date().addingTimeInterval(TimeInterval(randomLength))
         ))
     }
 
     return array
 }
+*/

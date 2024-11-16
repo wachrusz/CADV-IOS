@@ -9,106 +9,34 @@ import SwiftUI
 
 struct AllGoalsView: View {
     @Binding var goals: [Goal]
+    @Binding var currency: String
+    @Binding var tokenData: TokenData
+    
     @State private var isLongPressing = false
     @State private var isEditing: Bool = false
     @State private var selectedGoal: Goal?
-    let feedbackGeneratorHard = UIImpactFeedbackGenerator(style: .heavy)
-
-    private let columns = [
-        GridItem(.flexible()),
-        GridItem(.flexible())
-    ]
     
-    init(goals: Binding<[Goal]>) {
-            self._goals = goals
-            UIPageControl.appearance().currentPageIndicatorTintColor = UIColor.purple
-            UIPageControl.appearance().pageIndicatorTintColor = UIColor.lightGray
-        }
-    
-    private var pages: [[Goal]] {
-        let goalsToShow = Array(goals.dropFirst(2))
-        return stride(from: 0, to: goalsToShow.count, by: 6).map {
-            Array(goalsToShow[$0..<min($0 + 6, goalsToShow.count)])
-        }
+    init(
+        goals: Binding<[Goal]>,
+        currency: Binding<String>,
+        tokenData: Binding<TokenData>
+    ) {
+        self._goals = goals
+        self._currency = currency
+        self._tokenData = tokenData
+        
+        UIPageControl.appearance().currentPageIndicatorTintColor = UIColor.purple
+        UIPageControl.appearance().pageIndicatorTintColor = UIColor.lightGray
     }
 
     var body: some View {
-            TabView {
-                ForEach(pages.indices, id: \.self) { pageIndex in
-                    LazyVGrid(columns: columns, spacing: 10) {
-                        ForEach(pages[pageIndex], id: \.self) { goal in
-                            VStack(spacing: 5) {
-                                HStack(spacing: 5) {
-                                    Rectangle()
-                                        .foregroundColor(.clear)
-                                        .frame(width: 25, height: 25)
-                                        .background(
-                                            Image("edu")
-                                        )
-                                    Text(goal.GoalName)
-                                        .font(Font.custom("Gilroy", size: 16).weight(.semibold))
-                                        .lineSpacing(20)
-                                        .foregroundColor(.black)
-                                }.frame(maxHeight: 25)
-                                HStack(spacing: 5) {
-                                    Text("Цель:")
-                                        .font(Font.custom("Gilroy", size: 12).weight(.semibold))
-                                        .foregroundColor(Color(red: 0.60, green: 0.60, blue: 0.60))
-                                    Text("₽ \(goal.Need, specifier: "%.2f")")
-                                        .font(Font.custom("Inter", size: 12).weight(.semibold))
-                                        .foregroundColor(Color(red: 0.60, green: 0.60, blue: 0.60))
-                                }
-                                
-                                ZStack {
-                                    Circle()
-                                        .stroke(
-                                            Color(red: 0.95, green: 0.91, blue: 0.95),
-                                            lineWidth: 10
-                                        )
-                                        .frame(width: 150, height: 150)
-                                    
-                                    Circle()
-                                        .trim(from: 0, to:  2 / CGFloat(goal.CurrentState))
-                                        .stroke(
-                                            Color(red: 0.53, green: 0.19, blue: 0.53),
-                                            lineWidth: 10
-                                        )
-                                        .rotationEffect(.degrees(-90))
-                                        .frame(width: 150, height: 150)
-                                    
-                                    Text("2/\(goal.CurrentState)")
-                                        .font(Font.custom("Inter", size: 36).weight(.semibold))
-                                        .foregroundColor(.black)
-                                }
-                                
-                                HStack(spacing: 5) {
-                                    Text("Платёж:")
-                                        .font(Font.custom("Gilroy", size: 12).weight(.semibold))
-                                        .foregroundColor(Color(red: 0.60, green: 0.60, blue: 0.60))
-                                    Text("₽ 5 000,00")
-                                        .font(Font.custom("Inter", size: 12).weight(.semibold))
-                                        .foregroundColor(Color(red: 0.53, green: 0.19, blue: 0.53))
-                                }
-                            }
-                            .padding(10)
-                            .background(Color(red: 0.98, green: 0.98, blue: 0.98))
-                            .cornerRadius(20)
-                            .frame(width: 150, height: 200)
-                            .simultaneousGesture(TapGesture().onEnded {
-                                print("Tapped on goal: \(goal.GoalName)")
-                            })
-                            .onLongPressGesture(minimumDuration: 0.5, pressing: { pressing in
-                                isLongPressing = pressing
-                            }, perform: {
-                                selectedGoal = goal
-                                isEditing = true
-                                feedbackGeneratorHard.impactOccurred()
-                            })
-                        }
-                        
-                    }
-                    .padding(.horizontal)
-                }
+        TabView {
+            GoalForEachTabView(
+                goals: $goals,
+                isLongPressing: $isLongPressing,
+                isEditing: $isEditing,
+                selectedGoal: $selectedGoal
+            )
         }
         .background(Color.white)
         .tabViewStyle(PageTabViewStyle())
@@ -120,10 +48,88 @@ struct AllGoalsView: View {
                 }
             })) {
             if let goal = selectedGoal {
-                EditGoalView(goal: goal, goals: $goals)
+                EditGoalView(
+                    goal: goal,
+                    goals: $goals,
+                    currency: $currency,
+                    tokenData: $tokenData
+                )
             } else {
                 Text("Ошибка: цель не выбрана.")
             }
         }
+    }
+}
+
+struct GoalForEachTabView: View{
+    let feedbackGeneratorHard = UIImpactFeedbackGenerator(style: .heavy)
+    
+    @Binding var goals: [Goal]
+    @Binding var isLongPressing: Bool
+    @Binding var isEditing: Bool
+    @Binding var selectedGoal: Goal?
+    
+    private let columns = [
+        GridItem(.flexible()),
+        GridItem(.flexible())
+    ]
+    
+    private var pages: [[Goal]] {
+        let goalsToShow = Array(goals.dropFirst(5))
+        return stride(from: 0, to: goalsToShow.count, by: 6).map {
+            Array(goalsToShow[$0..<min($0 + 6, goalsToShow.count)])
+        }
+    }
+    
+    var body: some View {
+        LazyVStack {
+            ForEach(pages, id: \.self) { page in
+                LazyVGrid(columns: columns, spacing: 10) {
+                    ForEach(page, id: \.self) { goal in
+                        GoalView(
+                            isLongPressing: $isLongPressing,
+                            isEditing: $isEditing,
+                            selectedGoal: $selectedGoal,
+                            goal: goal
+                        )
+                    }
+                }
+            }
+            .padding(.horizontal)
+        }
+    }
+}
+
+struct GoalLazyView: View {
+    @State private var isVisible = false
+    
+    @Binding var isLongPressing: Bool
+    @Binding var isEditing: Bool
+    @Binding var selectedGoal: Goal?
+    
+    let goal: Goal
+    var body: some View {
+        Group {
+            if isVisible {
+                GoalView(
+                    isLongPressing: $isLongPressing,
+                    isEditing: $isEditing,
+                    selectedGoal: $selectedGoal,
+                    goal: goal
+                )
+            } else {
+                Color.clear
+            }
+        }
+        .background(
+            GeometryReader { geometry in
+                Color.clear.onAppear {
+                    let isInScreen = geometry.frame(in: .global).intersects(UIScreen.main.bounds)
+                    if isInScreen {
+                        isVisible = true
+                    }
+                }
+            }
+        )
     }
 }

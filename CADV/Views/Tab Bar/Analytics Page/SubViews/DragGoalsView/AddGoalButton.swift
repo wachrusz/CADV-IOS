@@ -9,21 +9,32 @@ import SwiftUI
 
 struct addGoalButton: View{
     @Binding var goals: [Goal]
+    @Binding var currency: String
+    @Binding var tokenData: TokenData
     
     var body: some View {
-        NavigationLink(destination: CreateGoalView(goals: $goals)) {
+        NavigationLink(destination:
+                        CreateGoalView(
+                                goals: $goals,
+                                currency: $currency,
+                                tokenData: $tokenData
+                        )) {
             VStack(spacing: 10) {
                 Image("goalIcon")
                     .resizable()
                     .frame(width: 75, height: 75)
                 
-                Text("Создать новую цель")
-                    .font(Font.custom("Gilroy", size: 16).weight(.semibold))
-                    .foregroundColor(.black)
+                CustomText(
+                    text: "Создать новую цель",
+                    font: Font.custom("Gilroy", size: 16).weight(.semibold),
+                    color: Color("fg")
+                )
                 
-                Text("Нажмите, чтобы продолжить")
-                    .font(Font.custom("Inter", size: 12).weight(.semibold))
-                    .foregroundColor(Color(red: 0.60, green: 0.60, blue: 0.60))
+                CustomText(
+                    text: "Нажмите, чтобы продолжить",
+                    font: Font.custom("Inter", size: 12).weight(.semibold),
+                    color: Color("fg")
+                )
             }
             .frame(maxWidth: 200, maxHeight: 305)
             .background(Color(red: 0.98, green: 0.98, blue: 0.98))

@@ -12,21 +12,35 @@ struct ProfileInfo: Codable{
     var Name: String
     let UserID: String
     var AvatarURL: String
-    var ExpirationDate: String
+    var ExpirationDate: String = ""
     
     enum CodingKeys: String, CodingKey{
         case Surname = "surname"
         case Name = "name"
         case UserID = "user_id"
         case AvatarURL = "avatar_url"
-        case ExpirationDate = "expiration_date"
-    }
-    
-    static func GetProfileInfo() -> ProfileInfo{
-        return ProfileInfo(Surname: "Wachruszyn", Name: "Michał", UserID: "1", AvatarURL: "https://prikol.com/1", ExpirationDate: "5 nojabrja")
     }
 }
 
 func test_fetchProfileInfo() -> ProfileInfo{
-    return ProfileInfo(Surname: "Wachruszka", Name: "Miszka", UserID: "1", AvatarURL: "https://prikol.com/1", ExpirationDate: "5 nojabrja")
+    return ProfileInfo(Surname: "", Name: "", UserID: "", AvatarURL: "", ExpirationDate: "")
 }
+
+extension ProfileInfo {
+    static func fromDictionary(_ dictionary: [String: Any]) -> ProfileInfo? {
+        guard
+            let surname = dictionary["surname"] as? String,
+            let name = dictionary["name"] as? String,
+            let userID = dictionary["user_id"] as? String,
+            let avatarURL = dictionary["avatar_url"] as? String
+        else {
+            print("Error parsing ProfileInfo dictionary. Missing required keys.")
+            return nil
+        }
+
+        let expirationDate = dictionary["expiration_date"] as? String ?? ""
+        
+        return ProfileInfo(Surname: surname, Name: name, UserID: userID, AvatarURL: avatarURL, ExpirationDate: expirationDate)
+    }
+}
+

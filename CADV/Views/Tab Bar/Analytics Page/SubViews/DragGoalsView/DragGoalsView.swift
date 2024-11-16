@@ -16,6 +16,8 @@ struct DragGoalsView: View{
     @Binding var showAllGoalsView: Bool
     @Binding var showAnnualPayments: Bool
     @Binding var dragOffset: CGSize
+    @Binding var currency: String
+    @Binding var tokenData: TokenData
     let feedbackGeneratorMedium = UIImpactFeedbackGenerator(style: .medium)
     
     var body: some View {
@@ -25,7 +27,9 @@ struct DragGoalsView: View{
                 isLongPressing: $isLongPressing,
                 selectedGoal: $selectedGoal,
                 isEditing: $isEditing,
-                showAllGoalsView: $showAllGoalsView
+                showAllGoalsView: $showAllGoalsView,
+                currency: $currency,
+                tokenData: $tokenData
             )
             .offset(y: showAnnualPayments ? UIScreen.main.bounds.height + dragOffset.height : dragOffset.height)
             .opacity(showAnnualPayments ? 0 : 1)
@@ -35,10 +39,10 @@ struct DragGoalsView: View{
             annualPaymentsSection(
                 annualPayments: $annualPayments
             )
-                .offset(y: showAnnualPayments ? dragOffset.height : UIScreen.main.bounds.height + dragOffset.height)
-                .opacity(showAnnualPayments ? 1 : 0)
-                .zIndex(showAnnualPayments ? 1 : 0)
-                .animation(.easeInOut, value: dragOffset.height)
+            .offset(y: showAnnualPayments ? dragOffset.height : UIScreen.main.bounds.height + dragOffset.height)
+            .opacity(showAnnualPayments ? 1 : 0)
+            .zIndex(showAnnualPayments ? 1 : 0)
+            .animation(.easeInOut, value: dragOffset.height)
         }
         .gesture(
             DragGesture()

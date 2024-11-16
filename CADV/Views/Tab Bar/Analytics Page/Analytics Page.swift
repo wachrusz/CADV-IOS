@@ -16,6 +16,8 @@ struct AnalyticsPageView: View {
     @Binding var groupedAndSortedTransactions: [(
         date: Date, categorizedTransactions: [CategorizedTransaction]
     )]
+    @Binding var currency: String
+    @Binding var tokenData: TokenData
     
     @State private var isSummaryExpanded: Bool = false
     @State private var selectedCategory: String = "Состояние"
@@ -35,7 +37,7 @@ struct AnalyticsPageView: View {
     let feedbackGeneratorHard = UIImpactFeedbackGenerator(style: .heavy)
     
     var body: some View {
-        NavigationView{
+        NavigationStack{
             GeometryReader { geometry in
                 Color.white
                     .edgesIgnoringSafeArea(.all)
@@ -46,8 +48,6 @@ struct AnalyticsPageView: View {
                     CategorySwitchButtons(
                         selectedCategory: $selectedCategory,
                         pageIndex: $pageIndex,
-                        fontName: "Inter",
-                        fontSize: 14,
                         categories: ["Состояние", "Цели", "Финансовое Здоровье"]
                     )
                     switch selectedCategory{
@@ -61,8 +61,6 @@ struct AnalyticsPageView: View {
                         PlanSwitcherButtons(
                             selectedPlan: $selectedPlan,
                             pageIndex: $pageIndex,
-                            fontName: "Inter",
-                            fontSize: 14,
                             plans: ["Транзакции","Счета"]
                         )
                         
@@ -73,22 +71,20 @@ struct AnalyticsPageView: View {
                             contentHeight: $contentHeight,
                             isExpanded: $isExpanded)
                         
-                        if selectedPlan == "Счета"{
-                            ActionButtons(
-                                isFirstAction: $isAddingBank,
-                                isSecondAction: $isEnteringManually,
-                                firstButtonContent: AddBankAccountView(),
-                                secondButtonContent: CreateBankAccountView(
-                                    bankAccounts: $bankAccounts
-                                ),
-                                firstButtonText: "Добавить банк",
-                                secondButtonText: "Внести вручную",
-                                fontName: "Inter",
-                                fontSize: 14,
-                                firstButtonAction: {},
-                                secondButtonAction: {}
-                            )
-                        }
+                        ActionButtons(
+                            isFirstAction: $isAddingBank,
+                            isSecondAction: $isEnteringManually,
+                            firstButtonContent: AddBankAccountView(),
+                            secondButtonContent: CreateBankAccountView(
+                                bankAccounts: $bankAccounts,
+                                currency: $currency,
+                                tokenData: $tokenData
+                            ),
+                            firstButtonText: "Добавить банк",
+                            secondButtonText: "Внести вручную",
+                            firstButtonAction: {},
+                            secondButtonAction: {}
+                        )
                         
                     case "Цели":
                         DragGoalsView(
@@ -99,7 +95,9 @@ struct AnalyticsPageView: View {
                             isEditing: $isEditing,
                             showAllGoalsView: $showAllGoalsView,
                             showAnnualPayments: $showAnnualPayments,
-                            dragOffset: $dragOffset
+                            dragOffset: $dragOffset,
+                            currency: $currency,
+                            tokenData: $tokenData
                         )
                         
                     case "Финансовое Здоровье":
@@ -129,7 +127,12 @@ struct AnalyticsPageView: View {
                         }
                     })) {
                         if let goal = selectedGoal {
-                            EditGoalView(goal: goal, goals: $goals)
+                            EditGoalView(
+                                goal: goal,
+                                goals: $goals,
+                                currency: $currency,
+                                tokenData: $tokenData
+                            )
                         } else {
                             Text("Ошибка: цель не выбрана.")
                         }

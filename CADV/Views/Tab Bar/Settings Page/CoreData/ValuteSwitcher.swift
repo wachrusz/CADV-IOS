@@ -45,21 +45,64 @@ struct ValuteSwitcherView: View {
     @ObservedObject var currencyManager = CurrencyManager()
     
     var body: some View {
-        HStack(alignment: .center, spacing: 20) {
-            ForEach(["RUB", "USD", "EUR"], id: \.self) { currency in
-                Button(action: {
-                    currencyManager.selectedCurrency = currency
-                    currencyManager.saveCurrency(currency)
-                }) {
-                    Text(currency.uppercased())
-                        .foregroundColor(currencyManager.selectedCurrency == currency ? .white : .blue)
-                        .padding()
-                        .background(currencyManager.selectedCurrency == currency ? Color.blue : Color.clear)
-                        .cornerRadius(10)
-                }
-            }
+        HStack(alignment: .center, spacing: 0) {
+            ValuteButton(
+                text: "RUB",
+                currency: "RUB",
+                currencyManager: currencyManager
+            )
+            
+            Divider()
+                .frame(height: 20)
+                .foregroundStyle(Color("fg"))
+            
+            ValuteButton(
+                text: "USD",
+                currency: "USD",
+                currencyManager: currencyManager
+            )
+            
+            Divider()
+                .frame(height: 20)
+                .foregroundStyle(Color("fg"))
+            
+            ValuteButton(
+                text: "EUR",
+                currency: "EUR",
+                currencyManager: currencyManager
+            )
         }
-        .padding()
+        .background(Color("sc1"))
+        .frame(maxWidth: 300, maxHeight: 40)
+        .cornerRadius(5)
     }
 }
 
+struct ValuteButton: View {
+    let text: String
+    let font: Font = Font.custom("Gilroy", size: 14).weight(.semibold)
+    var currency: String
+    @ObservedObject var currencyManager: CurrencyManager
+
+    var body: some View {
+        Button(action: {
+            withAnimation(.spring(response: 0.3, dampingFraction: 0.5)) {
+                currencyManager.selectedCurrency = currency
+                currencyManager.saveCurrency(currency)
+            }
+        }) {
+            CustomText(
+                text: text,
+                font: font,
+                color: Color("fg")
+            )
+            .padding()
+            .frame(width: 100, height: currencyManager.selectedCurrency == currency ? 40 : 35)
+            .background(currencyManager.selectedCurrency == currency ? Color("bg2") : Color("sc1"))
+            .cornerRadius(5)
+            .scaleEffect(currencyManager.selectedCurrency == currency ? 0.9633 : 1.0)
+            .shadow(color: currencyManager.selectedCurrency == currency ? Color.black.opacity(0.2) : Color.clear, radius: 5, x: 1, y: 5)
+        }
+        .buttonStyle(PlainButtonStyle())
+    }
+}

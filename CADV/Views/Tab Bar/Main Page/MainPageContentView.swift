@@ -10,6 +10,7 @@ import SwiftUI
 struct MainPageView: View {
     @Binding var profile: ProfileInfo
     @Binding var categorizedTransactions: [CategorizedTransaction]
+    @Binding var tokenData: TokenData
     @State private var selectedCategory: String = "Доходы"
     @State private var selectedPlan: String = "Факт"
     
@@ -30,8 +31,6 @@ struct MainPageView: View {
                 CategorySwitchButtons(
                     selectedCategory: $selectedCategory,
                     pageIndex: $pageIndex,
-                    fontName: "Inter",
-                    fontSize: 14,
                     categories: ["Доходы", "Расходы", "Фонд благосостояния"]
                 )
                 
@@ -40,8 +39,6 @@ struct MainPageView: View {
                 PlanSwitcherButtons(
                     selectedPlan: $selectedPlan,
                     pageIndex: $pageIndex,
-                    fontName: "Inter",
-                    fontSize: 14,
                     plans: ["Факт","План"]
                 )
                 
@@ -62,11 +59,10 @@ struct MainPageView: View {
                     ),
                     firstButtonText: "Добавить банк",
                     secondButtonText: "Внести вручную",
-                    fontName: "Inter",
-                    fontSize: 14,
                     firstButtonAction: {},
                     secondButtonAction: {}
                 )
+                .cornerRadius(15)
             }
         }
         .padding(.bottom)

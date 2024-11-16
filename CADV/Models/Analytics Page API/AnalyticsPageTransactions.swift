@@ -22,6 +22,13 @@ struct Transactions: Sequence{
 enum BankAccountsGroup: String, Codable, Hashable, CaseIterable{
     case cash = "Наличные"
     case bank = "Банк"
+    
+    var returnImageName: String {
+        switch self {
+            case .cash: return "money_bag"
+            case .bank: return "Bank"
+        }
+    }
 }
 
 enum TransactionType: String, Codable, Hashable, CaseIterable {

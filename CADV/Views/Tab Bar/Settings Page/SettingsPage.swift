@@ -10,17 +10,25 @@ import SwiftUI
 struct SettingsPageView: View {
     @State private var selectedCategory: String = "Приложение"
     @State private var pageIndex: Int = 0
-    @State private var profile: ProfileInfo = ProfileInfo(Surname: "", Name: "", UserID: "", AvatarURL: "", ExpirationDate: "")
-    
+    @Binding var profile: ProfileInfo
     @State private var selectedScreen: String? = nil
     @State private var isSheetPresented = false
+    @Binding var tokenData: TokenData 
     
     @Environment(\.managedObjectContext) private var managedObjectContext
     var body: some View{
         VStack(spacing: 20){
-            VStack(spacing: 20){
-                profileSection(isSheetPresented: self.$isSheetPresented, selectedScreen: self.$selectedScreen, profileInfo: $profile)
-                CategorySwitchButtons()
+            VStack(alignment: .center, spacing: 20){
+                profileSection(
+                    isSheetPresented: self.$isSheetPresented,
+                    selectedScreen: self.$selectedScreen,
+                    profileInfo: $profile
+                )
+                CategorySwitchButtons(
+                    selectedCategory: $selectedCategory,
+                    pageIndex: $pageIndex,
+                    categories: ["Приложение","Настройки"]
+                )
             }
             
             switch selectedCategory {
@@ -39,12 +47,6 @@ struct SettingsPageView: View {
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(Color.white)
         .hideBackButton()
-        .onAppear {
-            self.profile = ProfileInfo.GetProfileInfo()
-        }
-        .onChange(of: selectedScreen) { newValue in
-            print("Selected screen changed to: \(String(describing: newValue))")
-        }
         .sheet(isPresented: $isSheetPresented) {
             if let screen = selectedScreen {
                             sheetContent(for: screen)
@@ -59,16 +61,17 @@ struct SettingsPageView: View {
         if let screen = screen {
             switch screen {
             case "Настроить профиль":
-                ProfileSettingsView(currentData: $profile)
+                ProfileSettingsView(
+                    currentData: $profile,
+                    tokenData: $tokenData
+                )
             case "Подключённые счета":
                 Text("Подключённые счета")
                     .foregroundStyle(.black)
             case "Настройка категорий":
-                Text("Настройка категорий")
-                    .foregroundStyle(.black)
+                CategorySettingsView()
             case "Архив операций":
-                Text("Архив операций")
-                    .foregroundStyle(.black)
+                OperationsArchiveView()
             case "Экспорт отчётности":
                 Text("Экспорт отчётности")
                     .foregroundStyle(.black)
@@ -79,11 +82,12 @@ struct SettingsPageView: View {
                 Text("Мы в соц сетях")
                     .foregroundStyle(.black)
             case "Поддержка":
-                Text("Поддержка")
-                    .foregroundStyle(.black)
+                SupportRequestView()
             case "Выйти из аккаунта":
-                Text("Выйти из аккаунта")
-                    .foregroundStyle(.black)
+                LogoutScreen(
+                    tokenData: $tokenData
+                )
+                .opacity(0.0)
             default:
                 Text("Ошибка: экран не найден")
                     .foregroundStyle(.black)
@@ -106,31 +110,49 @@ struct SettingsPageView: View {
             AppNavigatingButtonsList(selectedCategory: self.$selectedCategory, selectedScreen: self.$selectedScreen, isSheetPresented: self.$isSheetPresented)
         }
     }
+}
+
+struct LogoutScreen: View{
+    @Binding var tokenData: TokenData
     
-    private func CategorySwitchButtons() -> some View {
-        HStack(alignment: .center, spacing: 10) {
-            ForEach(["Приложение", "Настройки"], id: \.self) { category in
-                CategorySwitchButton(text: category, isSelected: selectedCategory == category)
-                    .onTapGesture {
-                        selectedCategory = category
-                        pageIndex = 0
-                    }
+    @Environment(\.dismiss) var dismiss
+    
+    var body: some View{
+        VStack{
+        }
+        .onAppear{
+            logout()
+        }
+    }
+    private func logout(){
+        abstractFetchData(
+            endpoint: "v1/auth/logout",
+            method: "POST",
+            headers: [
+                "accept" : "application/json",
+                "Content-Type": "application/json",
+                "Authorization" : tokenData.accessToken
+            ]
+        ){ result in
+            switch result {
+            case .success(let responseObject):
+                switch responseObject["status_code"] as? Int {
+                case 200:
+                    print(responseObject)
+                    tokenData = TokenData(
+                        accessToken: "",
+                        refreshToken: "",
+                        accessTokenExpiresAt: Date(),
+                        refreshTokenExpiresAt: Date()
+                    )
+                    dismiss()
+                default:
+                    print("Failed to fetch goals.")
+                }
+                
+            case .failure(let error):
+                print("Another yet error: \(error)")
             }
         }
-        .padding(.horizontal)
     }
-    
-    
-    
-    private func CategorySwitchButton(text: String, isSelected: Bool) -> some View {
-        Text(text)
-            .font(.custom("Gilroy", size: 14).weight(.semibold))
-            .foregroundColor(isSelected ? .white : .black)
-            .padding()
-            .frame(maxWidth: .infinity, maxHeight: 40)
-            .background(isSelected ? .black : Color(red: 0.98, green: 0.98, blue: 0.98))
-            .cornerRadius(15)
-    }
-    
-
 }
