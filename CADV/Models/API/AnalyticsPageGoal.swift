@@ -13,7 +13,7 @@ struct Goal: Codable, Identifiable, Hashable {
     let StartDate: String
     let EndDate: String
     let GoalName: String
-    let ID: String
+    let ID: Int
     let Need: Double
     let UserID: String
     let Currency: String

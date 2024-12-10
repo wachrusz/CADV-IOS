@@ -12,7 +12,7 @@ struct CreateBankAccountView: View {
     @Binding var currency: String
     @Binding var tokenData: TokenData
     
-    @Environment(\.presentationMode) var presentationMode
+    @Environment(\.dismiss) var dismiss
     @State private var bankAccountName: String = ""
     @State private var bankAccountAmount: String = ""
     @State private var selectedCategory: BankAccountsGroup? = .bank
@@ -82,8 +82,6 @@ struct CreateBankAccountView: View {
                                 action: validateAndAddBankAccount,
                                 actionTitle: "Создать"
                             )
-                            
-                            
                         }
                     }
                 }
@@ -100,7 +98,7 @@ struct CreateBankAccountView: View {
         .hideBackButton()
     }
 
-    private func validateAndAddBankAccount() {
+    private func validateAndAddBankAccount() async{
         if bankAccountName.isEmpty {
             showError(message: "Название не должно быть пустым")
             return
@@ -123,32 +121,27 @@ struct CreateBankAccountView: View {
             "id": "",
             "user_id": ""
         ]
-        
-        abstractFetchData(
-            endpoint: "v1/app/accounts",
-            method: "POST",
-            parameters: parameters,
-            headers: [
-                "accept" : "application/json",
-                "Content-Type": "application/json",
-                "Authorization" : tokenData.accessToken
-            ]
-        ){ result in
-            switch result {
-            case .success(let responseObject):
-                switch responseObject["status_code"] as? Int {
-                case 200:
-                    print(responseObject)
-                default:
-                    print("Failed to fetch goals.")
-                }
-                
-            case .failure(let error):
-                print("Another yet error: \(error)")
+        do{
+            let response = try await abstractFetchData(
+                endpoint: "v1/app/accounts",
+                method: "POST",
+                parameters: parameters,
+                headers: [
+                    "accept" : "application/json",
+                    "Content-Type": "application/json",
+                    "Authorization" : tokenData.accessToken
+                ]
+            )
+            switch response["status_code"] as? Int{
+            case 201:
+                dismiss()
+            default:
+                print(response)
+                //showError(message: "oioioi")
             }
+        }catch{
+            showError(message: "Упс... что-то пошло не так")
         }
-        
-        presentationMode.wrappedValue.dismiss()
     }
 
     private func showError(message: String) {

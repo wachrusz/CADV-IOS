@@ -78,7 +78,7 @@ struct ChangePasswordView: View {
             }
         }
     }
-    private func resetPassword() {
+    private func resetPassword() async{
         guard !password.isEmpty else {
             showErrorPopup.toggle()
             errorMessage = "Пароль не может быть пустым"
@@ -94,36 +94,28 @@ struct ChangePasswordView: View {
             ]
             
             print("Parameters being sent: \(parameters)")
-            
-            abstractFetchData(
-                endpoint: "v1/auth/password",
-                method: "PUT",
-                parameters: parameters,
-                headers: ["Content-Type": "application/json", "accept" : "application/json"]
-            ) { result in
-                switch result {
-                case .success(let responseObject):
-                    switch responseObject["status_code"] as? Int{
-                    case 200:
-                        print(responseObject)
-                        self.isCompleted = true
-                    case 400:
-                        errorMessage = "Кажется, Вы что-то не так ввели"
-                        showErrorPopup = true
-                    default:
-                        errorMessage = "Упс... Что-то пошло не так..."
-                        showErrorPopup = true
-                    }
-                    
-                case .failure(let error):
-                    DispatchQueue.main.async {
-                        print("Request error: \(error.localizedDescription)")
-                        errorMessage = "Упс... Что-то пошло не так..."
-                        showErrorPopup = true
-                    }
+            do{
+                let response = try await abstractFetchData(
+                    endpoint: "v1/auth/password",
+                    method: "PUT",
+                    parameters: parameters,
+                    headers: ["Content-Type": "application/json", "accept" : "application/json"]
+                )
+                switch response["status_code"] as? Int{
+                case 200:
+                    print(response)
+                    self.isCompleted = true
+                case 400:
+                    errorMessage = "Кажется, Вы что-то не так ввели"
+                    showErrorPopup = true
+                default:
+                    errorMessage = "Упс... Что-то пошло не так..."
+                    showErrorPopup = true
                 }
             }
+            catch{
+                
+            }
         }
-        
     }
 }

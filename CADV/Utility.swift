@@ -7,6 +7,7 @@
 
 import Foundation
 import SwiftUI
+import CoreData
 
 func textFieldValidatorEmail(_ string: String) -> Bool {
     if string.count > 64 || string.isEmpty || string.count < 2 {
@@ -141,10 +142,9 @@ func abstractFetchData(
     endpoint: String,
     method: String = "POST",
     parameters: [String: Any] = [:],
-    headers: [String: String] = [:],
-    completion: @escaping (Result<[String: Any], Error>) -> Void
-) {
-    var urlString = "HOST/\(endpoint)"
+    headers: [String: String] = [:]
+) async throws -> [String: Any] {
+    var urlString = "https://HOSTHOSTHOST/\(endpoint)"
     
     if method == "GET", !parameters.isEmpty {
         let queryItems = parameters.map { URLQueryItem(name: $0.key, value: "\($0.value)") }
@@ -154,12 +154,12 @@ func abstractFetchData(
     }
     
     guard let url = URL(string: urlString) else {
-        print("Invalid URL")
-        return
+        throw NSError(domain: "abstractFetchData", code: -1, userInfo: [NSLocalizedDescriptionKey: "Invalid URL"])
     }
     
     var request = URLRequest(url: url)
     request.httpMethod = method
+    request.timeoutInterval = 30
     
     for (key, value) in headers {
         request.setValue(value, forHTTPHeaderField: key)
@@ -169,45 +169,29 @@ func abstractFetchData(
         do {
             request.httpBody = try JSONSerialization.data(withJSONObject: parameters)
         } catch {
-            print("Failed to encode JSON")
-            return
+            throw NSError(domain: "abstractFetchData", code: -2, userInfo: [NSLocalizedDescriptionKey: "Failed to encode JSON"])
         }
     }
     
-    let sessionConfig = URLSessionConfiguration.default
-    let session = URLSession(configuration: sessionConfig, delegate: URLSessionHelper.shared, delegateQueue: nil)
+    let session = URLSession(configuration: .default, delegate: URLSessionHelper.shared, delegateQueue: nil)
     
-    let task = session.dataTask(with: request) { data, response, error in
-        if let error = error {
-            print("Request failed with error: \(error.localizedDescription)")
-            DispatchQueue.main.async {
-                completion(.failure(error))
-            }
-            return
+    do {
+        let (data, response) = try await session.data(for: request)
+        guard let httpResponse = response as? HTTPURLResponse else {
+            throw NSError(domain: "abstractFetchData", code: -3, userInfo: [NSLocalizedDescriptionKey: "Invalid response"])
         }
         
-        if let response = response as? HTTPURLResponse, let data = data {
-            do {
-                let responseObject = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any]
-                
-                switch response.statusCode {
-                case 200:
-                    completion(.success(responseObject ?? [:]))
-                case 401:
-                    completion(.success(responseObject ?? [:]))
-                case 500:
-                    completion(.success(responseObject ?? [:]))
-                default:
-                    let error = NSError(domain: "", code: response.statusCode, userInfo: ["response": responseObject ?? [:]])
-                    completion(.failure(error))
-                }
-            } catch {
-                print("Failed to parse JSON response")
-                completion(.failure(error))
-            }
+        let responseObject = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] ?? [:]
+        
+        switch httpResponse.statusCode {
+        case 200, 201, 401, 429, 500:
+            return responseObject
+        default:
+            throw NSError(domain: "abstractFetchData", code: httpResponse.statusCode, userInfo: ["response": responseObject])
         }
+    } catch {
+        throw error
     }
-    task.resume()
 }
 
 func stringToDate(_ dateString: String) -> Date? {
@@ -246,3 +230,26 @@ func monthsPassedInts(from startDateString: String, to endDateString: String) ->
     
     return (monthsPassed, monthsTotal)
 }
+
+func deleteAllEntities(context: NSManagedObjectContext) {
+    let persistentStoreCoordinator = context.persistentStoreCoordinator
+
+    do {
+        if let entities = persistentStoreCoordinator?.managedObjectModel.entities {
+            for entity in entities {
+                if let entityName = entity.name {
+                    let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: entityName)
+                    let deleteRequest = NSBatchDeleteRequest(fetchRequest: fetchRequest)
+                    
+                    do {
+                        try context.execute(deleteRequest)
+                        print("Удалены данные для сущности: \(entityName)")
+                    } catch {
+                        print("Ошибка при удалении данных для сущности \(entityName): \(error.localizedDescription)")
+                    }
+                }
+            }
+        }
+    }
+}
+

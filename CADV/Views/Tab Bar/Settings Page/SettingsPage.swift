@@ -84,10 +84,7 @@ struct SettingsPageView: View {
             case "Поддержка":
                 SupportRequestView()
             case "Выйти из аккаунта":
-                LogoutScreen(
-                    tokenData: $tokenData
-                )
-                .opacity(0.0)
+                EmptyView()
             default:
                 Text("Ошибка: экран не найден")
                     .foregroundStyle(.black)
@@ -101,58 +98,13 @@ struct SettingsPageView: View {
     private func LocalSettingsView() -> some View {
         VStack{
             ValuteSwitcherView()
-            AppNavigatingButtonsList(selectedCategory: self.$selectedCategory, selectedScreen: self.$selectedScreen, isSheetPresented: self.$isSheetPresented)
+            AppNavigatingButtonsList(selectedCategory: self.$selectedCategory, selectedScreen: self.$selectedScreen, isSheetPresented: self.$isSheetPresented, tokenData: self.$tokenData)
         }
     }
     
     private func GlobalSettingsView() -> some View {
         VStack{
-            AppNavigatingButtonsList(selectedCategory: self.$selectedCategory, selectedScreen: self.$selectedScreen, isSheetPresented: self.$isSheetPresented)
-        }
-    }
-}
-
-struct LogoutScreen: View{
-    @Binding var tokenData: TokenData
-    
-    @Environment(\.dismiss) var dismiss
-    
-    var body: some View{
-        VStack{
-        }
-        .onAppear{
-            logout()
-        }
-    }
-    private func logout(){
-        abstractFetchData(
-            endpoint: "v1/auth/logout",
-            method: "POST",
-            headers: [
-                "accept" : "application/json",
-                "Content-Type": "application/json",
-                "Authorization" : tokenData.accessToken
-            ]
-        ){ result in
-            switch result {
-            case .success(let responseObject):
-                switch responseObject["status_code"] as? Int {
-                case 200:
-                    print(responseObject)
-                    tokenData = TokenData(
-                        accessToken: "",
-                        refreshToken: "",
-                        accessTokenExpiresAt: Date(),
-                        refreshTokenExpiresAt: Date()
-                    )
-                    dismiss()
-                default:
-                    print("Failed to fetch goals.")
-                }
-                
-            case .failure(let error):
-                print("Another yet error: \(error)")
-            }
+            AppNavigatingButtonsList(selectedCategory: self.$selectedCategory, selectedScreen: self.$selectedScreen, isSheetPresented: self.$isSheetPresented, tokenData: self.$tokenData)
         }
     }
 }

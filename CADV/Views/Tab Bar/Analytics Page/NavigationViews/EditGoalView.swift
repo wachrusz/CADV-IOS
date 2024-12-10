@@ -129,7 +129,7 @@ struct EditGoalView: View {
         .hideBackButton()
     }
     
-    private func validateAndUpdateGoal() {
+    private func validateAndUpdateGoal() async {
         if goalName.isEmpty {
             showError(message: "Название не должно быть пустым")
             return
@@ -156,41 +156,36 @@ struct EditGoalView: View {
         let endDateString = dateFormatter.string(from: endDate)
         
         let goalNameString = goalName.replacingOccurrences(of: " ", with: "")
-        
-        abstractFetchData(
-            endpoint: "v1/tracker/goal",
-            method: "PUT",
-            parameters: Goal(
-                CurrentState: goal.CurrentState,
-                StartDate: startDateString,
-                EndDate: endDateString,
-                GoalName: goalName,
-                ID: goal.ID,
-                Need: amount,
-                UserID: goal.UserID,
-                Currency: currency
-            ).toDictionary(),
-            headers: [
-                "accept" : "application/json",
-                "Content-Type": "application/json",
-                "Authorization" : tokenData.accessToken
-            ]
-        ){ result in
-            switch result {
-            case .success(let responseObject):
-                switch responseObject["status_code"] as? Int {
-                case 200:
-                    print(responseObject)
-                default:
-                    print("Failed to fetch goals.")
-                }
-                
-            case .failure(let error):
-                print("Another yet error: \(error)")
+        do{
+            let response = try await abstractFetchData(
+                endpoint: "v1/tracker/goal",
+                method: "PUT",
+                parameters: Goal(
+                    CurrentState: goal.CurrentState,
+                    StartDate: startDateString,
+                    EndDate: endDateString,
+                    GoalName: goalName,
+                    ID: goal.ID,
+                    Need: amount,
+                    UserID: goal.UserID,
+                    Currency: currency
+                ).toDictionary(),
+                headers: [
+                    "accept" : "application/json",
+                    "Content-Type": "application/json",
+                    "Authorization" : tokenData.accessToken
+                ]
+            )
+            switch response["status_code"] as? Int {
+            case 200:
+                print(response)
+                presentationMode.wrappedValue.dismiss()
+            default:
+                print("Failed to fetch goals.")
             }
+        }catch{
+            showError(message: "Упс... что-то пошло не так")
         }
-
-        presentationMode.wrappedValue.dismiss()
     }
 
     private func showError(message: String) {

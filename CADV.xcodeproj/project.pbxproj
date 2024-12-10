@@ -7,8 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		3C0C2C932CE67F910040B886 /* CreateTransactionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C0C2C922CE67F890040B886 /* CreateTransactionView.swift */; };
+		3C0C2C932CE67F910040B886 /* CreateTransactionAnalyticsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C0C2C922CE67F890040B886 /* CreateTransactionAnalyticsView.swift */; };
 		3C0C2C952CE695D70040B886 /* BankAccountCategorySelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C0C2C942CE695CC0040B886 /* BankAccountCategorySelectionView.swift */; };
+		3C21A7662D0869FD00452DF3 /* LocalAuthView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C21A7652D0869F100452DF3 /* LocalAuthView.swift */; };
+		3C21A7692D086B7600452DF3 /* LocalAuthKeychain.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C21A7682D086B7300452DF3 /* LocalAuthKeychain.swift */; };
 		3C4F0ECE2CCFA6CE008A8D14 /* ProfileSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C4F0ECD2CCFA6C7008A8D14 /* ProfileSettingsView.swift */; };
 		3C5385D82CCFE56C00242054 /* CommonButtons.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C5385D72CCFE56900242054 /* CommonButtons.swift */; };
 		3C5385DA2CCFF58700242054 /* CommonSections.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C5385D92CCFF57A00242054 /* CommonSections.swift */; };
@@ -31,6 +33,8 @@
 		3C72E3142CD2521F00B7EA04 /* SummarySection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C72E3132CD2521800B7EA04 /* SummarySection.swift */; };
 		3C72E3162CD252D300B7EA04 /* TransactionElement.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C72E3152CD252CD00B7EA04 /* TransactionElement.swift */; };
 		3C72E3182CD2535E00B7EA04 /* BankAcoountList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C72E3172CD2535200B7EA04 /* BankAcoountList.swift */; };
+		3CA28B452CEB3C9400AD1D33 /* CreateTransactionMain.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CA28B442CEB3C8100AD1D33 /* CreateTransactionMain.swift */; };
+		3CA28B472CEB649600AD1D33 /* CreateTransactionMainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CA28B462CEB648F00AD1D33 /* CreateTransactionMainView.swift */; };
 		3CC53A182CD0AF2D00C0B15E /* ErrorViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CC53A172CD0AF2100C0B15E /* ErrorViews.swift */; };
 		3CC53A1A2CD0B96000C0B15E /* CategorizedTransactions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CC53A192CD0B94A00C0B15E /* CategorizedTransactions.swift */; };
 		3CC743F02C8DC49600F10E5E /* StartContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CC743EF2C8DC49600F10E5E /* StartContentView.swift */; };
@@ -95,8 +99,10 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		3C0C2C922CE67F890040B886 /* CreateTransactionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateTransactionView.swift; sourceTree = "<group>"; };
+		3C0C2C922CE67F890040B886 /* CreateTransactionAnalyticsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateTransactionAnalyticsView.swift; sourceTree = "<group>"; };
 		3C0C2C942CE695CC0040B886 /* BankAccountCategorySelectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BankAccountCategorySelectionView.swift; sourceTree = "<group>"; };
+		3C21A7652D0869F100452DF3 /* LocalAuthView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalAuthView.swift; sourceTree = "<group>"; };
+		3C21A7682D086B7300452DF3 /* LocalAuthKeychain.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalAuthKeychain.swift; sourceTree = "<group>"; };
 		3C4F0ECD2CCFA6C7008A8D14 /* ProfileSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileSettingsView.swift; sourceTree = "<group>"; };
 		3C5385D72CCFE56900242054 /* CommonButtons.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommonButtons.swift; sourceTree = "<group>"; };
 		3C5385D92CCFF57A00242054 /* CommonSections.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommonSections.swift; sourceTree = "<group>"; };
@@ -119,6 +125,8 @@
 		3C72E3132CD2521800B7EA04 /* SummarySection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SummarySection.swift; sourceTree = "<group>"; };
 		3C72E3152CD252CD00B7EA04 /* TransactionElement.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionElement.swift; sourceTree = "<group>"; };
 		3C72E3172CD2535200B7EA04 /* BankAcoountList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BankAcoountList.swift; sourceTree = "<group>"; };
+		3CA28B442CEB3C8100AD1D33 /* CreateTransactionMain.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateTransactionMain.swift; sourceTree = "<group>"; };
+		3CA28B462CEB648F00AD1D33 /* CreateTransactionMainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateTransactionMainView.swift; sourceTree = "<group>"; };
 		3CC53A172CD0AF2100C0B15E /* ErrorViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorViews.swift; sourceTree = "<group>"; };
 		3CC53A192CD0B94A00C0B15E /* CategorizedTransactions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategorizedTransactions.swift; sourceTree = "<group>"; };
 		3CC743EF2C8DC49600F10E5E /* StartContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartContentView.swift; sourceTree = "<group>"; };
@@ -194,6 +202,22 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		3C21A7672D086B0900452DF3 /* LocalAuth */ = {
+			isa = PBXGroup;
+			children = (
+				3C21A7652D0869F100452DF3 /* LocalAuthView.swift */,
+			);
+			path = LocalAuth;
+			sourceTree = "<group>";
+		};
+		3C21A76A2D086BC200452DF3 /* KeyChain */ = {
+			isa = PBXGroup;
+			children = (
+				3C21A7682D086B7300452DF3 /* LocalAuthKeychain.swift */,
+			);
+			path = KeyChain;
+			sourceTree = "<group>";
+		};
 		3C4F0ECB2CCFA4DB008A8D14 /* CoreDataNavigationViews */ = {
 			isa = PBXGroup;
 			children = (
@@ -262,7 +286,7 @@
 			isa = PBXGroup;
 			children = (
 				3C0C2C942CE695CC0040B886 /* BankAccountCategorySelectionView.swift */,
-				3C0C2C922CE67F890040B886 /* CreateTransactionView.swift */,
+				3C0C2C922CE67F890040B886 /* CreateTransactionAnalyticsView.swift */,
 				3CD5C3342CAEB3880025EFDC /* CreateGoalView.swift */,
 				3CD5C3382CB6D1BC0025EFDC /* EditGoalView.swift */,
 				3CD5C33A2CB80B6D0025EFDC /* AllGoalsView.swift */,
@@ -312,6 +336,15 @@
 			path = SummarySection;
 			sourceTree = "<group>";
 		};
+		3CA28B432CEB3C7600AD1D33 /* NavigationViews */ = {
+			isa = PBXGroup;
+			children = (
+				3CA28B462CEB648F00AD1D33 /* CreateTransactionMainView.swift */,
+				3CA28B442CEB3C8100AD1D33 /* CreateTransactionMain.swift */,
+			);
+			path = NavigationViews;
+			sourceTree = "<group>";
+		};
 		3CC743E82C8DBC6E00F10E5E /* Custom Elements */ = {
 			isa = PBXGroup;
 			children = (
@@ -333,6 +366,7 @@
 		3CD5C31A2C9877C30025EFDC /* Auth */ = {
 			isa = PBXGroup;
 			children = (
+				3C21A7672D086B0900452DF3 /* LocalAuth */,
 				3C5617412CE13231008BA8A1 /* ChangePasswordView.swift */,
 				3CF4C16A2CDD3E7F007F6990 /* PasswordResetView.swift */,
 				3CC743F12C8DC9C400F10E5E /* LoginContentView.swift */,
@@ -345,6 +379,7 @@
 		3CD5C31D2CA2F83E0025EFDC /* Main Page */ = {
 			isa = PBXGroup;
 			children = (
+				3CA28B432CEB3C7600AD1D33 /* NavigationViews */,
 				3C72E30E2CD2512B00B7EA04 /* SubViews */,
 				3CD5C31E2CA2F8630025EFDC /* MainPageContentView.swift */,
 			);
@@ -362,7 +397,7 @@
 			path = "Tab Bar";
 			sourceTree = "<group>";
 		};
-		3CD5C3232CA2FB000025EFDC /* Main Page API */ = {
+		3CD5C3232CA2FB000025EFDC /* API */ = {
 			isa = PBXGroup;
 			children = (
 				3CC53A192CD0B94A00C0B15E /* CategorizedTransactions.swift */,
@@ -370,8 +405,13 @@
 				3CD5C3262CA2FB370025EFDC /* MainPageExpense.swift */,
 				3CD5C3282CA2FB540025EFDC /* MainPageInvestments.swift */,
 				3CD5C32A2CA2FB600025EFDC /* MainPageProfile.swift */,
+				3CD5C3302CAC31B30025EFDC /* AnalyticsPageGoal.swift */,
+				3CD5C3322CAC34AA0025EFDC /* AnalyticsPageFinHealth.swift */,
+				3CD5C3362CB55BEB0025EFDC /* AnalyticsPageAnnualPayments.swift */,
+				3CD5C33C2CB83A1E0025EFDC /* AnalyticsPageTransactions.swift */,
+				3CD5C33E2CB83A310025EFDC /* AnalyticsPageBankAccounts.swift */,
 			);
-			path = "Main Page API";
+			path = API;
 			sourceTree = "<group>";
 		};
 		3CD5C32C2CAC2CD10025EFDC /* Analytics Page */ = {
@@ -382,18 +422,6 @@
 				3CD5C32D2CAC2D0A0025EFDC /* Analytics Page.swift */,
 			);
 			path = "Analytics Page";
-			sourceTree = "<group>";
-		};
-		3CD5C32F2CAC31170025EFDC /* Analytics Page API */ = {
-			isa = PBXGroup;
-			children = (
-				3CD5C3302CAC31B30025EFDC /* AnalyticsPageGoal.swift */,
-				3CD5C3322CAC34AA0025EFDC /* AnalyticsPageFinHealth.swift */,
-				3CD5C3362CB55BEB0025EFDC /* AnalyticsPageAnnualPayments.swift */,
-				3CD5C33C2CB83A1E0025EFDC /* AnalyticsPageTransactions.swift */,
-				3CD5C33E2CB83A310025EFDC /* AnalyticsPageBankAccounts.swift */,
-			);
-			path = "Analytics Page API";
 			sourceTree = "<group>";
 		};
 		3CE9FBB32CCA93420046CD22 /* CoreData */ = {
@@ -488,8 +516,8 @@
 		3CF17ABF2C8783DF00A601AC /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				3CD5C3232CA2FB000025EFDC /* Main Page API */,
-				3CD5C32F2CAC31170025EFDC /* Analytics Page API */,
+				3C21A76A2D086BC200452DF3 /* KeyChain */,
+				3CD5C3232CA2FB000025EFDC /* API */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -666,6 +694,7 @@
 				3C72E3012CD248AA00B7EA04 /* DragGoalsView.swift in Sources */,
 				3CD5C3292CA2FB540025EFDC /* MainPageInvestments.swift in Sources */,
 				3C72E30A2CD2503B00B7EA04 /* AnnualPaymentsSection.swift in Sources */,
+				3CA28B452CEB3C9400AD1D33 /* CreateTransactionMain.swift in Sources */,
 				3C0C2C952CE695D70040B886 /* BankAccountCategorySelectionView.swift in Sources */,
 				3CD5C3142C9863CA0025EFDC /* ConfirmEmailContentView.swift in Sources */,
 				3CD5362C2CC7C8A00099B111 /* AddBankAccountView.swift in Sources */,
@@ -673,6 +702,7 @@
 				3C5385DA2CCFF58700242054 /* CommonSections.swift in Sources */,
 				3CD5C3372CB55BEB0025EFDC /* AnalyticsPageAnnualPayments.swift in Sources */,
 				3C72E3082CD2500900B7EA04 /* GoalsView.swift in Sources */,
+				3C21A7692D086B7600452DF3 /* LocalAuthKeychain.swift in Sources */,
 				3CD5C31F2CA2F8630025EFDC /* MainPageContentView.swift in Sources */,
 				3CD5C32E2CAC2D0A0025EFDC /* Analytics Page.swift in Sources */,
 				3CC743F42C94CA9200F10E5E /* RegisterContentView.swift in Sources */,
@@ -691,8 +721,10 @@
 				3CD5C3252CA2FB0D0025EFDC /* MainPageIncome.swift in Sources */,
 				3CD5C3392CB6D1BC0025EFDC /* EditGoalView.swift in Sources */,
 				3CD5C33D2CB83A1E0025EFDC /* AnalyticsPageTransactions.swift in Sources */,
+				3C21A7662D0869FD00452DF3 /* LocalAuthView.swift in Sources */,
 				3C72E3042CD24F9100B7EA04 /* GoalsSectionView.swift in Sources */,
 				3CD5C3162C9864E30025EFDC /* Utility.swift in Sources */,
+				3CA28B472CEB649600AD1D33 /* CreateTransactionMainView.swift in Sources */,
 				3C5617542CE236F9008BA8A1 /* CustomText.swift in Sources */,
 				3CD5C3272CA2FB370025EFDC /* MainPageExpense.swift in Sources */,
 				3C72E30C2CD2507300B7EA04 /* AnnualPaymentsItem.swift in Sources */,
@@ -710,7 +742,7 @@
 				3CE9FBBD2CCAAD050046CD22 /* ProfileView.swift in Sources */,
 				3CF4C1652CDD24B9007F6990 /* OperationsArchive.swift in Sources */,
 				3CD5C3222CA2F9E80025EFDC /* TabBar.swift in Sources */,
-				3C0C2C932CE67F910040B886 /* CreateTransactionView.swift in Sources */,
+				3C0C2C932CE67F910040B886 /* CreateTransactionAnalyticsView.swift in Sources */,
 				3CF4C1672CDD2781007F6990 /* SupportRequestView.swift in Sources */,
 				3CF17A932C87812F00A601AC /* ContentView.swift in Sources */,
 				3C72E3102CD2513800B7EA04 /* CategoryListView.swift in Sources */,
