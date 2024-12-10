@@ -113,38 +113,30 @@ struct RegisterView: View{
         .navigationTitle(screenName)
     }
     
-    private func register(){
+    private func register() async{
         let parameters = [
             "email": email,
             "password": password
         ]
-        
-        abstractFetchData(
-            endpoint: "v1/auth/register",
-            parameters: parameters,
-            headers: ["Content-Type": "application/json", "accept" : "application/json"]
-        ) { result in
-            switch result {
-            case .success(let responseObject):
-                switch responseObject["status_code"] as? Int{
-                case 200:
-                    token = responseObject["token"] as? String ?? ""
-                    self.showEmailVerification = true
-                case 400:
-                    errorMessage = "Кажется, Вы что-то не так ввели"
-                    showErrorPopup = true
-                default:
-                    errorMessage = "Упс... Что-то пошло не так..."
-                    showErrorPopup = true
-                }
-                
-            case .failure(let error):
-                DispatchQueue.main.async {
-                    print("Request error: \(error.localizedDescription)")
-                    errorMessage = "Упс... Что-то пошло не так..."
-                    showErrorPopup = true
-                }
+        do{
+            let response = try await abstractFetchData(
+                endpoint: "v1/auth/register",
+                parameters: parameters,
+                headers: ["Content-Type": "application/json", "accept" : "application/json"]
+            )
+            switch response["status_code"] as? Int{
+            case 200:
+                token = response["token"] as? String ?? ""
+                self.showEmailVerification = true
+            case 400:
+                errorMessage = "Кажется, Вы что-то не так ввели"
+                showErrorPopup = true
+            default:
+                errorMessage = "Упс... Что-то пошло не так..."
+                showErrorPopup = true
             }
+        }catch{
+            
         }
     }
 }

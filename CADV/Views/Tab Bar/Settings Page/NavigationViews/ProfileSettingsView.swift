@@ -95,7 +95,7 @@ struct ProfileSettingsView: View{
         
     }
     
-    private func updateName() {
+    private func updateName() async{
         let name = newData.Name
         let surname = newData.Surname
         
@@ -103,33 +103,27 @@ struct ProfileSettingsView: View{
             "name": name,
             "surname": surname
         ]
-        
-        abstractFetchData(
-            endpoint: "v1/profile/name",
-            method: "PUT",
-            parameters: parameters,
-            headers: [
-                "accept" : "application/json",
-                "Content-Type": "application/json",
-                "Authorization" : tokenData.accessToken
-            ]
-        ){ result in
-            print(result as Any)
-            switch result {
-            case .success(let responseObject):
-                switch responseObject["status_code"] as? Int {
-                case 200:
-                    print(responseObject)
-                default:
-                    print("Failed to update Profile.")
-                }
-                
-            case .failure(let error):
-                print("Another yet error: \(error)")
+        do{
+            let response = try await abstractFetchData(
+                endpoint: "v1/profile/name",
+                method: "PUT",
+                parameters: parameters,
+                headers: [
+                    "accept" : "application/json",
+                    "Content-Type": "application/json",
+                    "Authorization" : tokenData.accessToken
+                ]
+            )
+            switch response["status_code"] as? Int{
+            case 200:
+                presentationMode.wrappedValue.dismiss()
+            default:
+                errorMessage = "Something went wrong"
             }
         }
-        
-        presentationMode.wrappedValue.dismiss()
+        catch let error{
+            print(error)
+        }
     }
 }
 

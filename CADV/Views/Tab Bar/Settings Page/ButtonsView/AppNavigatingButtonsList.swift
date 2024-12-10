@@ -8,16 +8,27 @@
 import SwiftUI
 
 struct AppNavigatingButtonsList: View {
+    @Environment(\.managedObjectContext) private var managedObjectContext
+    
     @Binding var selectedCategory: String
     @Binding var selectedScreen: String?
     @Binding var isSheetPresented: Bool
+    
+    @Binding var tokenData: TokenData
     var body: some View{
         VStack {
             ForEach(getButtonsData(), id: \.0) { button in
-                AppNavigatingButton(image: button.2, text: button.0, description: button.1)
-                    .onTapGesture {
-                        handleButtonTap(button.0)
-                    }
+                if button.0 == "Выход из аккаунта"{
+                    AppNavigatingButton(image: button.2, text: button.0, description: button.1)
+                        .onTapGesture {
+                            handleLogout()
+                        }
+                }else{
+                    AppNavigatingButton(image: button.2, text: button.0, description: button.1)
+                        .onTapGesture {
+                            handleButtonTap(button.0)
+                        }
+                }
             }
         }
     }
@@ -26,6 +37,13 @@ struct AppNavigatingButtonsList: View {
         isSheetPresented = true
         print(selectedScreen, isSheetPresented)
     }
+    
+    func handleLogout(){
+        Task{
+            await logout()
+        }
+    }
+    
     func AppNavigatingButton(image: String, text: String, description: String) -> some View {
         HStack {
             Image(image)
@@ -75,8 +93,33 @@ struct AppNavigatingButtonsList: View {
             return buttonsData
         }
     }
+    
+    private func logout() async{
+        do{
+            let response = try await abstractFetchData(
+                endpoint: "v1/auth/logout",
+                method: "POST",
+                headers: [
+                    "accept" : "application/json",
+                    "Content-Type": "application/json",
+                    "Authorization" : tokenData.accessToken
+                ]
+            )
+            switch response["status_code"] as? Int{
+            case 200:
+                tokenData = TokenData(
+                    accessToken: "",
+                    refreshToken: "",
+                    accessTokenExpiresAt: Date(),
+                    refreshTokenExpiresAt: Date()
+                )
+                deleteAllEntities(context: managedObjectContext)
+            default:
+                print("Failed to fetch goals.")
+            }
+        }catch{
+            
+        }
+    }
+
 }
-
-
-
-

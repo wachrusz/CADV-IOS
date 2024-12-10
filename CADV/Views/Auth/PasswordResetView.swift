@@ -78,39 +78,31 @@ struct PasswordResetView: View {
         .frame(maxWidth: .infinity,maxHeight: .infinity)
         .navigationTitle(screenName)
     }
-    private func send(){
+    private func send() async{
         if !email.isEmpty{
             let parameters = [
                 "email": email
             ]
-            
-            abstractFetchData(
-                endpoint: "v1/auth/password",
-                parameters: parameters,
-                headers: ["Content-Type": "application/json", "accept" : "application/json"]
-            ) { result in
-                switch result {
-                case .success(let responseObject):
-                    switch responseObject["status_code"] as? Int {
-                    case 200:
-                        token = responseObject["token"] as? String ?? ""
-                        self.showEmailVerification = true
-                    case 401:
-                        self.sendError = "Кажется, Вы что-то не так ввели..."
-                        //self.showErrorPopup = true
-                    default:
-                        self.sendError = "Упс... Что-то пошло не так..."
-                        //self.showErrorPopup = true
-                    }
-                    
-                case .failure(let error):
-                    print("Request failed with error: \(error.localizedDescription)")
-                    DispatchQueue.main.async {
-                        self.sendError = "Request error: \(error.localizedDescription)"
-                    }
+            do{
+                let response = try await abstractFetchData(
+                    endpoint: "v1/auth/password",
+                    parameters: parameters,
+                    headers: [
+                        "Content-Type": "application/json",
+                        "accept" : "application/json"
+                    ]
+                )
+                switch response["status_code"] as? Int{
+                case 200:
+                    showEmailVerification = true
+                default:
+                    print("s")
+                    //showError(message: "oioioi")
                 }
+            }catch{
+                //showError(message: "Упс... что-то пошло не так")
             }
+            return
         }
-        return
     }
 }

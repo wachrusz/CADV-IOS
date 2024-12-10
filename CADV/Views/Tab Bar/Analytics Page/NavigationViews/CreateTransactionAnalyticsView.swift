@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct CreateTransactionView: View{
+struct CreateTransactionAnalyticsView: View{
     var body: some View{
         VStack{
             ActionDissmisButtons(

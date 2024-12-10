@@ -74,6 +74,16 @@ struct TokenData{
     var refreshTokenExpiresAt: Date
 }
 
+extension TokenData {
+    init(from entity: AccessEntity) {
+        self.accessToken = entity.accessToken ?? ""
+        self.refreshToken = entity.refreshToken ?? ""
+        self.accessTokenExpiresAt = entity.accessTokenExpiresAt ?? Date()
+        self.refreshTokenExpiresAt = Date().addingTimeInterval(TimeInterval(entity.refreshTokenLifeTime))
+    }
+}
+
+
 struct TabBarContentView: View {
     @Environment(\.managedObjectContext) private var viewContext
     @State public var tokenData: TokenData = TokenData(
@@ -120,7 +130,7 @@ struct TabBarContentView: View {
                             currency: $currency,
                             tokenData: $tokenData
                         )
-                            .frame(width: geometry.size.width, height: geometry.size.height)
+                        .frame(width: geometry.size.width, height: geometry.size.height)
                     } else {
                         ProgressView()
                             .frame(width: geometry.size.width, height: geometry.size.height)
@@ -135,7 +145,7 @@ struct TabBarContentView: View {
                         profile: $profile,
                         tokenData: $tokenData
                     )
-                        .frame(width: geometry.size.width, height: geometry.size.height)
+                    .frame(width: geometry.size.width, height: geometry.size.height)
                 default:
                     MainPageView(
                         profile: $profile,
@@ -183,9 +193,11 @@ struct TabBarContentView: View {
     func fetchData(){
         fetchCurrency()
         fetchTokenData()
-        fetchProfileData()
-        fetchTracker()
-        fetchMain()
+        Task{
+            await   fetchProfileData()
+            await   fetchTracker()
+            await   fetchMain()
+        }
         
         self.groupedAndSortedTransactions = getGroupedTransactionsAndSortByDate(categorizedTransactions)
         self.groupedAndSortedTransactions = filterTransactions(categorizedTransactions, gns: groupedAndSortedTransactions)
@@ -195,184 +207,115 @@ struct TabBarContentView: View {
         let fetchRequest: NSFetchRequest<CurrencyEntity> = CurrencyEntity.fetchRequest()
         do{
             let currency = try viewContext.fetch(fetchRequest)
-            self.currency = currency[0].currency ?? ""
+            if !currency.isEmpty{
+                self.currency = currency[0].currency ?? ""
+            }
         }catch{
             print(error)
         }
     }
     
-    func fetchMain(){
-        print("----------------------------------------\nFetchingMain")
-            abstractFetchData(
+    func fetchMain() async{
+        do{
+            let response = try await abstractFetchData(
                 endpoint: "v1/profile/analytics?limit=20&offset=0",
                 method: "GET",
                 headers: ["accept" : "application/json", "Authorization" : tokenData.accessToken, "X-Currency": self.currency]
-            ){ result in
-                switch result {
-                case .success(let responseObject):
-                    switch responseObject["status_code"] as? Int {
-                    case 200:
-                        print(responseObject)
-                    default:
-                        print("Failed to fetch goals.")
-                    }
-                    
-                case .failure(let error):
-                    print("Another yet error: \(error)")
-                }
+            )
+            switch response["status_code"] as? Int {
+            case 200:
+                print(response)
+            default:
+                print("Failed to fetch goals.")
             }
-        print("----------------------------------------\nFetchingMain")
+        }catch{
+            
+        }
     }
     
-    func fetchTracker(){
-        print("----------------------------------------\nFetchingTracker")
-            abstractFetchData(
+    func fetchTracker() async{
+        do {
+            let response = try await abstractFetchData(
                 endpoint: "v1/profile/tracker?limit=20&offset=0",
                 method: "GET",
                 headers: ["accept" : "application/json", "Authorization" : tokenData.accessToken, "X-Currency": self.currency]
-            ){ result in
-                switch result {
-                case .success(let responseObject):
-                    switch responseObject["status_code"] as? Int {
-                    case 200:
-                        print(responseObject)
+            )
+            switch response["status_code"] as? Int {
+            case 200:
+                print(response)
+                
+                guard
+                    let tracker = response["tracker"] as? [String: Any],
+                    let goalArray = tracker["goal"] as? [[String: Any]]
+                else {
+                    print("Error: Could not find or parse 'goal' as an array of dictionaries")
+                    return
+                }
+                
+                do {
+                    let newGoalsData = try JSONSerialization.data(withJSONObject: goalArray, options: [])
+                    let newGoals = try JSONDecoder().decode([Goal].self, from: newGoalsData)
+                    self.goals = newGoals
+                    print("Goals decoded successfully: \(self.goals)")
+                } catch {
+                    print("Error decoding goals: \(error)")
+                }
+                
+            default:
+                print("Failed to fetch goals.")
+            }
+        }catch{
+            
+        }
 
-                        guard
-                            let tracker = responseObject["tracker"] as? [String: Any],
-                            let goalArray = tracker["goal"] as? [[String: Any]]
-                        else {
-                            print("Error: Could not find or parse 'goal' as an array of dictionaries")
-                            return
+    }
+    
+    func fetchProfileData(attemptsLeft: Int = 3) async{
+        do{
+            let response = try await abstractFetchData(
+                endpoint: "v1/profile",
+                method: "GET",
+                headers: ["accept" : "application/json", "Authorization": tokenData.accessToken]
+            )
+            switch response["status_code"] as? Int {
+            case 200:
+                print(response)
+                guard let profileData = try? JSONSerialization.data(withJSONObject: response["profile"] ?? [:], options: []) else {
+                    print("Error: Could not serialize profile data")
+                    return
+                }
+                
+                do {
+                    let profile = try JSONDecoder().decode(ProfileInfo.self, from: profileData)
+                    self.profile = profile
+                    print("Profile decoded successfully: \(profile)")
+                } catch {
+                    print("Error decoding profile: \(error)")
+                }
+            case 401:
+                refreshTokenIfNeeded(tokenData, viewCtx: viewContext){ success in
+                    if success {
+                        print("Token refreshed successfully, rechecking...")
+                        Task{
+                            await self.fetchProfileData(attemptsLeft: attemptsLeft - 1)
                         }
-
-                        do {
-                            let newGoalsData = try JSONSerialization.data(withJSONObject: goalArray, options: [])
-                            let newGoals = try JSONDecoder().decode([Goal].self, from: newGoalsData)
-                            self.goals = newGoals
-                            print("Goals decoded successfully: \(self.goals)")
-                        } catch {
-                            print("Error decoding goals: \(error)")
+                    } else {
+                        print("Failed to refresh token, attempts left: \(attemptsLeft - 1)")
+                        Task{
+                            await self.fetchProfileData(attemptsLeft: attemptsLeft - 1)
                         }
-
-                    default:
-                        print("Failed to fetch goals.")
                     }
-                    
-                case .failure(let error):
-                    print("Another yet error: \(error)")
                 }
+            default:
+                let errorMessage = response["error"] as? String
+                print("Error: \(errorMessage ?? "Unknown error case")")
             }
-        print("----------------------------------------\nFetchingTracker")
-    }
-    
-    func fetchProfileData() {
-        print("----------------------------------------\nProfileFetch")
-        abstractFetchData(
-            endpoint: "v1/profile",
-            method: "GET",
-            headers: ["accept" : "application/json", "Authorization": tokenData.accessToken]
-        ) { result in
-            switch result {
-            case .success(let responseObject):
-                switch responseObject["status_code"] as? Int {
-                case 200:
-                    print(responseObject)
-                    guard let profileData = try? JSONSerialization.data(withJSONObject: responseObject["profile"] ?? [:], options: []) else {
-                        print("Error: Could not serialize profile data")
-                        return
-                    }
-                    
-                    do {
-                        let profile = try JSONDecoder().decode(ProfileInfo.self, from: profileData)
-                        self.profile = profile
-                        print("Profile decoded successfully: \(profile)")
-                    } catch {
-                        print("Error decoding profile: \(error)")
-                    }
-                case 401:
-                    refreshTokenIfNeeded()
-                default:
-                    let errorMessage = responseObject["error"] as? String
-                    print("Error: \(errorMessage ?? "Unknown error case")")
-                }
-                
-            case .failure(let error):
-                DispatchQueue.main.async {
-                    print(error.localizedDescription)
-                }
-            }
+        }catch let error{
+            print(error)
         }
-        print("----------------------------------------\nProfileFetch")
     }
 
-    
-    func refreshTokenIfNeeded() {
-        if tokenData.accessTokenExpiresAt < Date(timeIntervalSinceNow: 60){
-            refreshToken(tokenData.refreshToken)
-        }
-    }
-    
-    func refreshToken(_ refreshToken: String?) {
-        print("----------------------------------------\nRefreshingToken")
-        
-        abstractFetchData(
-            endpoint: "v1/auth/refresh",
-            method: "POST",
-            parameters: ["refresh_token": tokenData.refreshToken],
-            headers: ["Content-Type" : "application/json", "Authorization": tokenData.accessToken]
-        ) { result in
-            switch result {
-            case .success(let responseObject):
-                switch responseObject["status_code"] as? Int {
-                case 200:
-                    let newToken = responseObject["access_token"] as? String
-                    let newRefreshToken = responseObject["refresh_token"] as? String
-                    
-                    if let token = newToken, let refreshToken = newRefreshToken {
-                        self.saveNewTokens(token: token, refreshToken: refreshToken)
-                    }
-                default:
-                    let errorMessage = responseObject["error"] as? String
-                    print("Error: \(errorMessage ?? "Unknown error case")")
-                }
-                
-            case .failure(let error):
-                DispatchQueue.main.async {
-                    print(error.localizedDescription)
-                }
-            }
-        }
-        print("----------------------------------------\nRefreshingToken")
-    }
-
-    func saveNewTokens(token: String, refreshToken: String) {
-        print("----------------------------------------\nSavingNewTokens")
-        let fetchRequest: NSFetchRequest<AccessEntity> = AccessEntity.fetchRequest()
-        do {
-            let tokens = try viewContext.fetch(fetchRequest)
-            if let existingToken = tokens.first {
-                existingToken.accessToken = token
-                existingToken.refreshToken = refreshToken
-                existingToken.accessTokenExpiresAt = Date().addingTimeInterval(900)
-                
-                self.tokenData = TokenData(
-                    accessToken: token,
-                    refreshToken: refreshToken,
-                    refreshTokenExpiresAt: Date().addingTimeInterval(
-                        TimeInterval(existingToken.refreshTokenLifeTime)
-                    )
-                )
-                
-                try viewContext.save()
-                print("Token refreshed and saved.")
-            }
-        } catch {
-            print("Failed to fetch or save refreshed token: \(error.localizedDescription)")
-        }
-        print("----------------------------------------\nSavingNewTokens")
-    }
-    
-    func createSubscription() {
+    func createSubscription() async{
         print("----------------------------------------\nCreatingSubscription")
         let parameters = [
             "end_date": "20-01-2025",
@@ -380,29 +323,91 @@ struct TabBarContentView: View {
             "start_date": "\(Date().formatted(.iso8601))",
             "user_id": ""
         ] as [String : Any]
-        
-        abstractFetchData(
+        do {
+        let response = try await abstractFetchData(
             endpoint: "v1/settings/subscription",
             method: "POST",
             parameters: parameters,
             headers: ["Content-Type" : "application/json", "Authorization": tokenData.accessToken]
-        ) { result in
-            switch result {
-            case .success(let responseObject):
-                switch responseObject["status_code"] as? Int {
-                case 200:
-                    print(responseObject["message"] as Any)
-                default:
-                    let errorMessage = responseObject["error"] as? String
-                    print("Error: \(errorMessage ?? "Unknown error case")")
-                }
-                
-            case .failure(let error):
-                DispatchQueue.main.async {
-                    print(error.localizedDescription)
-                }
+        )
+            switch response["status_code"] as? Int {
+            case 200:
+                print(response["message"] as Any)
+            default:
+                let errorMessage = response["error"] as? String
+                print("Error: \(errorMessage ?? "Unknown error case")")
             }
+        }catch{
+            
         }
-        print("----------------------------------------\nCreatingSubscription")
     }
+    
+    public mutating func setTokenData(_ tokenData: TokenData){
+        self.tokenData = tokenData
+    }
+}
+
+
+func refreshTokenIfNeeded(
+    _ tokenData: TokenData,
+    viewCtx: NSManagedObjectContext,
+    completion: @escaping (Bool) -> Void
+) {
+    if tokenData.accessTokenExpiresAt < Date(timeIntervalSinceNow: 10) {
+        Task {
+            let success = await refreshToken(tokenData, viewCtx: viewCtx)
+            completion(success)
+        }
+    } else {
+        completion(true)
+    }
+}
+
+func refreshToken(_ tokenData: TokenData, viewCtx: NSManagedObjectContext) async -> Bool {
+    print("Started refresh")
+    do {
+        let response = try await abstractFetchData(
+            endpoint: "v1/auth/refresh",
+            method: "POST",
+            parameters: ["refresh_token": tokenData.refreshToken],
+            headers: ["Content-Type": "application/json", "Authorization": tokenData.accessToken]
+        )
+        switch response["status_code"] as? Int {
+        case 200:
+            if let newToken = response["access_token"] as? String,
+               let newRefreshToken = response["refresh_token"] as? String {
+                saveNewTokens(token: newToken, refreshToken: newRefreshToken, viewCtx: viewCtx)
+                print("Token refreshed successfully")
+                return true
+            }
+        default:
+            let errorMessage = response["error"] as? String
+            print("Error refreshing token: \(errorMessage ?? "Unknown error case")")
+        }
+    } catch {
+        print("Failed to refresh token: \(error.localizedDescription)")
+    }
+    return false
+}
+
+func saveNewTokens(
+    token: String,
+    refreshToken: String,
+    viewCtx: NSManagedObjectContext
+){
+    print("----------------------------------------\nSavingNewTokens")
+    let fetchRequest: NSFetchRequest<AccessEntity> = AccessEntity.fetchRequest()
+    do {
+        let tokens = try viewCtx.fetch(fetchRequest)
+        if let existingToken = tokens.first {
+            existingToken.accessToken = token
+            existingToken.refreshToken = refreshToken
+            existingToken.accessTokenExpiresAt = Date().addingTimeInterval(60)
+            
+            try viewCtx.save()
+        }
+    } catch {
+        print("Failed to fetch or save refreshed token: \(error.localizedDescription)")
+    }
+    print("----------------------------------------\nSavingNewTokens")
 }

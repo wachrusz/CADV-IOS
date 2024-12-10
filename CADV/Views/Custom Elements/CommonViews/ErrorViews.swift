@@ -25,7 +25,6 @@ struct ErrorScreenView: View{
         .padding(.leading)
         .background(.white)
         .edgesIgnoringSafeArea(.bottom)
-        .hideBackButton()
     }
 }
 

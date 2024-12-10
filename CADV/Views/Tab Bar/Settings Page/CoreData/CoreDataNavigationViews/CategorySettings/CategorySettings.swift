@@ -85,7 +85,7 @@ struct CategorySettingsList: View {
             predicate = NSPredicate(format: "categoryType == %@", "Доходы")
         case "Расходы":
             predicate = NSPredicate(format: "categoryType == %@", "Расходы")
-        case "Фонд Благосостояния":
+        case "Фонд благосостояния":
             predicate = NSPredicate(format: "categoryType == %@", "Фонд благосостояния")
         default:
             predicate = NSPredicate(value: true)
@@ -151,7 +151,6 @@ struct CategorySettingsList: View {
                                 imageName: imageName
                             )
                             .onAppear(){
-                                print("-------------\n\(category.name)\n\(category.categoryType)")
                             }
                         }
                     }
@@ -185,17 +184,22 @@ struct CategorySettingsList: View {
 struct CategoryRow: View {
     let categoryName: String
     let imageName: String
+    let font: Font = Font.custom("Gilroy", size: 16).weight(.semibold)
 
     var body: some View {
-        HStack{
+        HStack(alignment: .center, spacing: 5){
             Image(imageName)
                 .resizable()
                 .frame(width: 40,height: 40)
-            Text(categoryName)
-                .padding()
-                .background(Color.gray.opacity(0.2))
-                .cornerRadius(8)
+            CustomText(
+                text: categoryName,
+                font: font,
+                color: Color("fg")
+            )
+            Spacer()
         }
-        
+        .background(Color("bg1"))
+        .padding(.horizontal)
+        .cornerRadius(15)
     }
 }

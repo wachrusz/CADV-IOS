@@ -33,9 +33,10 @@ struct LoginView: View{
     @State private var showSecureFieldError: Bool = false
     @State private var isTextFieldFine: Bool = false
     @State private var isSecureFieldFine: Bool = false
+    @State private var isLoading: Bool = false
     private var screenName: String = "Авторизация"
     @State private var navigationPath = NavigationPath()
-
+    
     var body: some View{
         ZStack{
             NavigationStack(path: $navigationPath){
@@ -86,6 +87,7 @@ struct LoginView: View{
                                 actionTitle: "Войти"
                             )
                             .frame(alignment: .leading)
+                            .disabled(isLoading)
                             
                             CustomText(
                                 text: "Забыли пароль?",
@@ -96,6 +98,7 @@ struct LoginView: View{
                             .onTapGesture {
                                 showPasswordReset.toggle()
                             }
+                            .disabled(isLoading)
                         }
                     }
                     .padding(.horizontal)
@@ -106,7 +109,7 @@ struct LoginView: View{
                             token: $token,
                             isNew: false,
                             previousScreenName: screenName
-                            ),
+                        ),
                         isActive: $showEmailVerification,
                         label: {EmptyView()}
                     )
@@ -130,41 +133,39 @@ struct LoginView: View{
         .tint(.black)
     }
     
-    private func login() {
+    private func login() async{
+        isLoading = true
         if isTextFieldFine && isSecureFieldFine {
             let parameters = [
                 "email": email,
                 "password": password
             ]
-            
-            abstractFetchData(
-                endpoint: "v1/auth/login",
-                parameters: parameters,
-                headers: ["Content-Type": "application/json", "accept" : "application/json"]
-            ) { result in
-                switch result {
-                case .success(let responseObject):
-                    print("Response body: \(responseObject)")
-                    switch responseObject["status_code"] as? Int {
-                    case 200:
-                        token = responseObject["token"] as? String ?? ""
-                        self.showEmailVerification = true
-                    case 401:
-                        self.loginError = "Кажется, Вы что-то не так ввели..."
-                        self.showErrorPopup = true
-                    default:
-                        self.loginError = "Упс... Что-то пошло не так..."
-                        self.showErrorPopup = true
-                    }
-                case .failure(let error):
-                    print("Request failed with error: \(error.localizedDescription)")
-                    DispatchQueue.main.async {
-                        self.loginError = "Упс... Что-то пошло не так..."
-                    }
+            do{
+                let response = try await abstractFetchData(
+                    endpoint: "v1/auth/login",
+                    parameters: parameters,
+                    headers: ["Content-Type": "application/json",
+                              "accept" : "application/json"]
+                )
+                switch response["status_code"] as? Int{
+                case 200:
+                    token = response["token"] as? String ?? ""
+                    self.showEmailVerification = true
+                case 401:
+                    self.loginError = "Кажется, Вы что-то не так ввели..."
+                    self.showErrorPopup = true
+                    self.isLoading = false
+                default:
+                    self.loginError = "Упс... Что-то пошло не так..."
+                    self.showErrorPopup = true
+                    self.isLoading = false
                 }
+            }catch let error{
+                print(error)
+                self.loginError = "error"
+                self.showErrorPopup = true
+                self.isLoading = false
             }
-        }else{
-            showErrorPopup = true
         }
     }
     private func validateEmail(_ email: String) {
@@ -176,7 +177,7 @@ struct LoginView: View{
             isTextFieldFine = false
         }
     }
-
+    
     func isValidEmail(_ email: String) -> Bool {
         let emailRegex = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,64}"
         if !NSPredicate(format: "SELF MATCHES %@", emailRegex).evaluate(with: email){
@@ -187,5 +188,3 @@ struct LoginView: View{
         return true
     }
 }
-
-

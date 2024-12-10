@@ -8,13 +8,15 @@
 import SwiftUI
 //Auth only
 struct AuthActionButton: View{
-    var action: () -> Void
+    var action: () async -> Void
     var actionTitle: String
     let font: Font = Font.custom("Gilroy", size: 16).weight(.semibold)
     
     var body: some View{
         Button(action: {
-            action()
+            Task{
+                await action()
+            }
         }) {
             CustomText(
                 text: actionTitle,
@@ -34,7 +36,7 @@ struct AuthActionButton: View{
 //ONLY IN NAVIGATED SCREENS
 struct ActionDissmisButtons: View{
     @Environment(\.dismiss) var dismiss
-    var action: () -> Void
+    var action: () async -> Void
     var actionTitle: String
     let font: Font = Font.custom("Inter", size: 16).weight(.semibold)
     
@@ -56,7 +58,9 @@ struct ActionDissmisButtons: View{
             .overlay(RoundedRectangle(cornerRadius: 15).stroke(.black, lineWidth: 1))
 
             Button(action: {
-                action()
+                Task{
+                    await action()
+                }
             }) {
                 CustomText(
                     text: actionTitle,
@@ -157,7 +161,7 @@ struct PlanSwitcherButton: View{
 }
 
 //IDK HOW TO NAME
-struct ActionButtons<FirstContent: View, SecondContent: View>: View{
+struct ActionButtons<FirstContent: View, SecondContent: View>: View {
     @Binding var isFirstAction: Bool
     @Binding var isSecondAction: Bool
     var firstButtonContent: FirstContent
@@ -167,32 +171,36 @@ struct ActionButtons<FirstContent: View, SecondContent: View>: View{
     let firstButtonAction: () -> Void
     let secondButtonAction: () -> Void
     
-    var body: some View{
+    var body: some View {
         HStack(spacing: 20) {
-            ActionButton(
-                text: firstButtonText,
-                textColor: .white,
-                backgroundColor: .black,
-                action: {
-                    firstButtonAction()
-                    isFirstAction = true
-                }
-            )
-            .sheet(isPresented: $isFirstAction){
-                firstButtonContent
+            NavigationLink(
+                destination: firstButtonContent,
+                isActive: $isFirstAction
+            ) {
+                ActionButton(
+                    text: firstButtonText,
+                    textColor: .white,
+                    backgroundColor: .black,
+                    action: {
+                        firstButtonAction()
+                        isFirstAction = true
+                    }
+                )
             }
             
-            ActionButton(
-                text: secondButtonText,
-                textColor: .black,
-                backgroundColor: Color("bg2"),
-                action: {
-                    secondButtonAction()
-                    isSecondAction = true
-                }
-            )
-            .sheet(isPresented: $isSecondAction) {
-                secondButtonContent
+            NavigationLink(
+                destination: secondButtonContent,
+                isActive: $isSecondAction
+            ) {
+                ActionButton(
+                    text: secondButtonText,
+                    textColor: .black,
+                    backgroundColor: Color("bg2"),
+                    action: {
+                        secondButtonAction()
+                        isSecondAction = true
+                    }
+                )
             }
         }
         .padding(.horizontal)

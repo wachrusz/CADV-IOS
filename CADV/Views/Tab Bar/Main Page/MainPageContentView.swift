@@ -20,57 +20,56 @@ struct MainPageView: View {
     @State private var isInCreateButton = false
 
     var body: some View {
-        GeometryReader { geometry in
-            Color.white
-                .edgesIgnoringSafeArea(.all)
-            VStack(spacing: 30) {
-                UserProfileSection(
-                    profile: $profile
-                )
-                
-                CategorySwitchButtons(
-                    selectedCategory: $selectedCategory,
-                    pageIndex: $pageIndex,
-                    categories: ["Доходы", "Расходы", "Фонд благосостояния"]
-                )
-                
-                TotalAmountView(text: totalAmount(for: selectedCategory))
-                
-                PlanSwitcherButtons(
-                    selectedPlan: $selectedPlan,
-                    pageIndex: $pageIndex,
-                    plans: ["Факт","План"]
-                )
-                
-                CategoryList(
-                    transactions: $categorizedTransactions,
-                    selectedCategory: $selectedCategory,
-                    selectedPlan: $selectedPlan
-                )
-                
-                ActionButtons(
-                    isFirstAction: $isInAddButton,
-                    isSecondAction: $isInCreateButton,
-                    firstButtonContent: ErrorScreenView(
-                        image: "tech", text: "Упс... Этого нет"
-                    ),
-                    secondButtonContent: ErrorScreenView(
-                        image: "tech", text: "Упс.. Этого нет"
-                    ),
-                    firstButtonText: "Добавить банк",
-                    secondButtonText: "Внести вручную",
-                    firstButtonAction: {},
-                    secondButtonAction: {}
-                )
-                .cornerRadius(15)
+        NavigationStack{
+            GeometryReader { geometry in
+                Color.white
+                    .edgesIgnoringSafeArea(.all)
+                VStack(spacing: 30) {
+                    UserProfileSection(
+                        profile: $profile
+                    )
+                    
+                    CategorySwitchButtons(
+                        selectedCategory: $selectedCategory,
+                        pageIndex: $pageIndex,
+                        categories: ["Доходы", "Расходы", "Фонд благосостояния"]
+                    )
+                    
+                    TotalAmountView(text: totalAmount(for: selectedCategory))
+                    
+                    PlanSwitcherButtons(
+                        selectedPlan: $selectedPlan,
+                        pageIndex: $pageIndex,
+                        plans: ["Факт","План"]
+                    )
+                    
+                    CategoryList(
+                        transactions: $categorizedTransactions,
+                        selectedCategory: $selectedCategory,
+                        selectedPlan: $selectedPlan
+                    )
+                    
+                    ActionButtons(
+                        isFirstAction: $isInAddButton,
+                        isSecondAction: $isInCreateButton,
+                        firstButtonContent: ErrorScreenView(
+                            image: "tech", text: "Упс... Этого нет"
+                        ),
+                        secondButtonContent: CreateTransactionSelectCategory(
+                            selectedCategory: $selectedCategory,
+                            selectedPlan: $selectedPlan
+                        ),
+                        firstButtonText: "Добавить банк",
+                        secondButtonText: "Внести вручную",
+                        firstButtonAction: {},
+                        secondButtonAction: {}
+                    )
+                    .cornerRadius(15)
+                }
             }
         }
         .padding(.bottom)
-        .background(Color.white)
         .hideBackButton()
-        .onAppear {
-            print("Hellooooooooooo")
-        }
     }
     
     private func totalAmount(for category: String) -> String {

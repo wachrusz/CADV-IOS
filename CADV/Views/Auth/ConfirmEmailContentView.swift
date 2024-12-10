@@ -138,8 +138,10 @@ struct EnterVerificationEmailCode: View {
                                                 focusedField = index + 1 < 4 ? index + 1 : nil
                                             }
                                             if index == 3 && newValue.count == 1 {
-                                                focusedField = 0
-                                                validateCode()
+                                                Task{
+                                                    focusedField = 0
+                                                    await validateCode()
+                                                }
                                             }
                                         }
                                     ),
@@ -195,14 +197,13 @@ struct EnterVerificationEmailCode: View {
                             }
                     }else{
                         NavigationLink(
-                            destination: TabBarContentView(),
+                            destination: LocalAuthView(),
                             isActive: $isNavigationActive) {
                                 EmptyView()
                             }
                     }
                 }.onAppear {
                     notificationManager.requestPermission()
-                    sendConfirmationCode()
                 }
                 
                 if showErrorView {
@@ -235,50 +236,44 @@ struct EnterVerificationEmailCode: View {
         }
     }
     
-    private func validateCode() {
+    private func validateCode() async{
         let enteredCode = code.joined()
         let parameters = [
             "code": enteredCode,
             "token": token
         ]
-        
-        abstractFetchData(
+        do {
+        let response = try await abstractFetchData(
             endpoint: isReset ? "v1/auth/password/confirm" : (isNew ? "v1/auth/register/confirm" : "v1/auth/login/confirm"),
             parameters: parameters,
             headers: ["Content-Type": "application/json", "accept" : "application/json"]
-        ) { result in
-            switch result {
-            case .success(let responseObject):
-                if !isReset {
-                    switch responseObject["status_code"] as? Int {
-                    case 200:
-                        saveTokenData(responseObject: responseObject)
-                        self.isNavigationActive = true
-                        return
-                    case 400:
-                        let errorMessage = responseObject["error"] as? String ?? ""
-                        self.confirmationError = errorMessage
-                        return
-                    default:
-                        let errorMessage = responseObject["error"] as? String ?? ""
-                        self.confirmationError = errorMessage
-                        return
-                    }
-                }
-                
-                let resetTokenDetails = responseObject["token_details"] as? [String : Any] ?? [:]
-                print("token_details: \(resetTokenDetails)")
-                self.resetToken = resetTokenDetails["reset_token"] as? String ?? ""
-                print("reset_token: ",self.resetToken)
-                self.isNavigationActive = true
-                print("Response body: \(responseObject)")
-                
-            case .failure(let error):
-                print("Request failed with error: \(error.localizedDescription)")
-                DispatchQueue.main.async {
-                    self.confirmationError = "Request error: \(error.localizedDescription)"
+        )
+            if !isReset {
+                switch response["status_code"] as? Int {
+                case 200:
+                    print("case 200")
+                    saveTokenData(responseObject: response)
+                    self.isNavigationActive = true
+                    return
+                case 400:
+                    print("case 400")
+                    let errorMessage = response["error"] as? String ?? ""
+                    self.confirmationError = errorMessage
+                    return
+                default:
+                    let errorMessage = response["error"] as? String ?? ""
+                    print(errorMessage)
+                    self.confirmationError = errorMessage
+                    return
                 }
             }
+            
+            let resetTokenDetails = response["token_details"] as? [String : Any] ?? [:]
+            self.resetToken = resetTokenDetails["reset_token"] as? String ?? ""
+            self.isNavigationActive = true
+        }
+        catch let error{
+            print(error)
         }
     }
     
@@ -287,10 +282,10 @@ struct EnterVerificationEmailCode: View {
     
     func saveTokenData(responseObject: [String: Any]) {
         print("------------\nResponse Object: \(responseObject)")
-
+        
         let fetchRequest: NSFetchRequest<NSFetchRequestResult> = AccessEntity.fetchRequest()
         let deleteRequest = NSBatchDeleteRequest(fetchRequest: fetchRequest)
-
+        
         do {
             try viewContext.execute(deleteRequest)
             print("Deleted old tokens")
@@ -300,10 +295,11 @@ struct EnterVerificationEmailCode: View {
         
         guard
             let deviceID = responseObject["device_id"] as? String,
-            let refreshTokenLifeTime = responseObject["refresh_token_life_time"] as? Int,
+            let accessTokenLifeTime = responseObject["access_token_life_time"] as? Int,
             let tokenDetails = responseObject["token_details"] as? [String: Any],
             let accessToken = tokenDetails["access_token"] as? String,
-            let refreshToken = tokenDetails["refresh_token"] as? String
+            let refreshToken = tokenDetails["refresh_token"] as? String,
+            let refreshTokenExpiresAt = tokenDetails["expires_at"] as? Int64
         else {
             print("Error: Missing or incorrect data structure in responseObject.")
             return
@@ -311,11 +307,11 @@ struct EnterVerificationEmailCode: View {
         
         let token = AccessEntity(context: viewContext)
         token.deviceID = deviceID
-        token.refreshTokenLifeTime = Int64(refreshTokenLifeTime)
+        token.refreshTokenLifeTime = Int64(30*24*60*60)
         token.accessToken = accessToken
         token.refreshToken = refreshToken
-        token.accessTokenExpiresAt = Date().addingTimeInterval(Double(refreshTokenLifeTime))
-
+        token.accessTokenExpiresAt = Date().addingTimeInterval(60)//Double(accessTokenLifeTime))
+        print(token)
         do {
             try viewContext.save()
             print("Token data saved successfully.")
@@ -324,42 +320,6 @@ struct EnterVerificationEmailCode: View {
         }
     }
     
-    func sendConfirmationCode() {
-        guard !email.isEmpty else {
-            errorMessage = "Email cannot be empty."
-            print(errorMessage)
-            return
-        }
-        
-        abstractFetchData(
-            endpoint: "v1/dev/confirmation-code/get?email=\(email)",
-            method: "GET",
-            headers: ["Content-Type": "application/json", "accept" : "application/json"]
-        ) { result in
-            switch result {
-            case .success(let responseObject):
-                if let confirmationCode = responseObject["code"] as? String {
-                        DispatchQueue.main.async {
-                            self.isCodeSent = true
-                            self.errorMessage = ""
-                            notificationManager.sendLocalNotification(withCode: confirmationCode)
-                        }
-                    } else {
-                        DispatchQueue.main.async {
-                            self.errorMessage = "Confirmation code not found in response."
-                        }
-                        print("Confirmation code not found in response.")
-                    }
-                
-            case .failure(let error):
-                print("Request failed with error: \(error.localizedDescription)")
-                DispatchQueue.main.async {
-                    self.confirmationError = "Request error: \(error.localizedDescription)"
-                }
-            }
-        }
-    }
-
     func requestNotificationPermission() {
         UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge]) { granted, error in
             if let error = error {

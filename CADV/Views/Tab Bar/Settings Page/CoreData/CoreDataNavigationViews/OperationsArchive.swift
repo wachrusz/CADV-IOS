@@ -23,6 +23,7 @@ struct OperationsArchiveView: View {
                 ForEach(operationsArchive, id: \.self){ operation in TransactionElement(transaction: operation)
                 }
             }
+            Spacer()
         }
     }
 }

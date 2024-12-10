@@ -109,7 +109,7 @@ struct CreateGoalView: View {
         .hideBackButton()
     }
 
-    private func validateAndAddGoal() {
+    private func validateAndAddGoal() async {
         if goalName.isEmpty {
             showError(message: "Название не должно быть пустым")
             return
@@ -136,37 +136,36 @@ struct CreateGoalView: View {
         let endDateString = dateFormatter.string(from: endDate)
         
         let parameters: [String: Any] = [
-            "goal": goalName,
-            "need": amount,
-            "currency": currency,
-            "current_state": 0,
-            "start_date": startDateString,
-            "end_date": endDateString
-        ]
-        
-        presentationMode.wrappedValue.dismiss()
-        abstractFetchData(
-            endpoint: "v1/tracker/goal",
-            method: "POST",
-            parameters: parameters,
-            headers: [
-                "accept" : "application/json",
-                "Content-Type": "application/json",
-                "Authorization" : tokenData.accessToken
+            "goal":[
+                "goal": goalName,
+                "need": amount,
+                "currency": currency,
+                "current_state": 0,
+                "start_date": startDateString,
+                "end_date": endDateString
             ]
-        ){ result in
-            switch result {
-            case .success(let responseObject):
-                switch responseObject["status_code"] as? Int {
-                case 200:
-                    print(responseObject)
-                default:
-                    print("Failed to fetch goals.")
-                }
-                
-            case .failure(let error):
-                print("Another yet error: \(error)")
+        ]
+        do{
+            let response = try await abstractFetchData(
+                endpoint: "v1/tracker/goal",
+                method: "POST",
+                parameters: parameters,
+                headers: [
+                    "accept" : "application/json",
+                    "Content-Type": "application/json",
+                    "Authorization" : tokenData.accessToken
+                ]
+            )
+            switch response["status_code"] as? Int {
+            case 201:
+                print(response)
+                presentationMode.wrappedValue.dismiss()
+            default:
+                print("Failed to fetch goals.")
             }
+        }catch let error{
+            print(error, separator: "\n", terminator: "\n")
+            showError(message: "Упс, что-то пошло не так")
         }
     }
 
