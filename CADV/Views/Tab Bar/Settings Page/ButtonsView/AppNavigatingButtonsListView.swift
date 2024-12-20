@@ -14,7 +14,7 @@ struct AppNavigatingButtonsList: View {
     @Binding var selectedScreen: String?
     @Binding var isSheetPresented: Bool
     
-    @Binding var tokenData: TokenData
+    @Binding var urlElements: URLElements?
     var body: some View{
         VStack {
             ForEach(getButtonsData(), id: \.0) { button in
@@ -44,7 +44,11 @@ struct AppNavigatingButtonsList: View {
         }
     }
     
-    func AppNavigatingButton(image: String, text: String, description: String) -> some View {
+    func AppNavigatingButton(
+        image: String,
+        text: String,
+        description: String
+    ) -> some View {
         HStack {
             Image(image)
                 .resizable()
@@ -96,24 +100,14 @@ struct AppNavigatingButtonsList: View {
     
     private func logout() async{
         do{
-            let response = try await abstractFetchData(
+            let response = try await urlElements?.fetchData(
                 endpoint: "v1/auth/logout",
                 method: "POST",
-                headers: [
-                    "accept" : "application/json",
-                    "Content-Type": "application/json",
-                    "Authorization" : tokenData.accessToken
-                ]
+                needsAuthorization: true
             )
-            switch response["status_code"] as? Int{
+            switch response?["status_code"] as? Int{
             case 200:
-                tokenData = TokenData(
-                    accessToken: "",
-                    refreshToken: "",
-                    accessTokenExpiresAt: Date(),
-                    refreshTokenExpiresAt: Date()
-                )
-                deleteAllEntities(context: managedObjectContext)
+                urlElements?.deleteAllEntities()
             default:
                 print("Failed to fetch goals.")
             }

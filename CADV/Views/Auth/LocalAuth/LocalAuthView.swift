@@ -9,6 +9,8 @@ import SwiftUI
 import LocalAuthentication
 
 struct LocalAuthView: View {
+    @Environment(\.managedObjectContext) var viewContext
+    @Binding var urlElements: URLElements?
     @State private var codeExists:       Bool    = true
     @State private var enteredCode:      String  = ""
     @State private var isCodeValid:      Bool    = false
@@ -114,7 +116,9 @@ struct LocalAuthView: View {
                 .padding(.bottom, 40)
                 
                 NavigationLink(
-                    destination: TabBarContentView(),
+                    destination: TabBarContentView(
+                        urlElements: $urlElements
+                    ),
                     isActive: $isCodeValid
                 ) {
                     EmptyView()

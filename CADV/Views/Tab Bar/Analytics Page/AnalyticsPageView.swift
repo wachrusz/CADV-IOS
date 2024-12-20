@@ -17,7 +17,7 @@ struct AnalyticsPageView: View {
         date: Date, categorizedTransactions: [CategorizedTransaction]
     )]
     @Binding var currency: String
-    @Binding var tokenData: TokenData
+    @Binding var urlElements: URLElements?
     
     @State private var isSummaryExpanded: Bool = false
     @State private var selectedCategory: String = "Состояние"
@@ -78,7 +78,7 @@ struct AnalyticsPageView: View {
                             secondButtonContent: CreateBankAccountView(
                                 bankAccounts: $bankAccounts,
                                 currency: $currency,
-                                tokenData: $tokenData
+                                urlElements: $urlElements
                             ),
                             firstButtonText: "Добавить банк",
                             secondButtonText: "Внести вручную",
@@ -97,13 +97,13 @@ struct AnalyticsPageView: View {
                             showAnnualPayments: $showAnnualPayments,
                             dragOffset: $dragOffset,
                             currency: $currency,
-                            tokenData: $tokenData
+                            urlElements: $urlElements
                         )
                         
                     case "Финансовое Здоровье":
                         ErrorScreenView(
                             image: "tech",
-                            text: "Упс... Этого пока нет"
+                            text: "Этого пока нет"
                         )
                         
                     default:
@@ -131,7 +131,7 @@ struct AnalyticsPageView: View {
                                 goal: goal,
                                 goals: $goals,
                                 currency: $currency,
-                                tokenData: $tokenData
+                                urlElements: $urlElements
                             )
                         } else {
                             Text("Ошибка: цель не выбрана.")
@@ -152,38 +152,4 @@ struct ContentHeightKey: PreferenceKey {
     static func reduce(value: inout CGFloat, nextValue: () -> CGFloat) {
         value = nextValue()
     }
-}
-
-func getGroupedTransactionsAndSortByDate(_ categorizedTransactions: [CategorizedTransaction]) -> [(date: Date, categorizedTransactions: [CategorizedTransaction])] {
-    let groupedTransactions = Dictionary(
-        grouping: categorizedTransactions,
-        by: { Calendar.current.startOfDay(for: $0.date) }
-    )
-    
-    let sortedTransactions = groupedTransactions.keys.sorted(by: >).map { date in
-        let transactions = groupedTransactions[date]!
-        let count = transactions.count
-        print("date: \(date), ctgTrz: \(count)")
-        return (date: date, categorizedTransactions: transactions)
-    }
-    
-    return sortedTransactions
-}
-
-func filterTransactions(
-    _ categorizedTransactions: [CategorizedTransaction],
-    gns: [(date: Date, categorizedTransactions: [CategorizedTransaction])]
-) -> [(date: Date, categorizedTransactions: [CategorizedTransaction])] {
-    let filteredTransactions = gns
-        .map { (date: $0.date, categorizedTransactions: $0.categorizedTransactions.filter { transaction in
-            switch transaction.category {
-            case .wealthFund:
-                return false
-            default:
-                return true
-            }
-        })}
-        .filter { !$0.categorizedTransactions.isEmpty }
-    
-    return filteredTransactions
 }

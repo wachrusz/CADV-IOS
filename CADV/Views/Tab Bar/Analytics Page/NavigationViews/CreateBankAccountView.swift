@@ -10,7 +10,7 @@ import SwiftUI
 struct CreateBankAccountView: View {
     @Binding var bankAccounts: BankAccounts
     @Binding var currency: String
-    @Binding var tokenData: TokenData
+    @Binding var urlElements: URLElements?
     
     @Environment(\.dismiss) var dismiss
     @State private var bankAccountName: String = ""
@@ -26,7 +26,7 @@ struct CreateBankAccountView: View {
     @State private var isNameFieldFine: Bool = false
 
     var body: some View {
-        NavigationView{
+        NavigationStack{
             ZStack {
                 GeometryReader { geometry in
                     VStack() {
@@ -114,30 +114,32 @@ struct CreateBankAccountView: View {
             return
         }
 
+        print(amount)
+        
         let parameters = [
-            "account_number": generateRandomDate(),
-            "account_type": selectedCategory?.rawValue ?? "",
-            "bank_id": "0",
-            "id": "",
-            "user_id": ""
-        ]
+            "account": [
+                "account_number": generateRandomString(),
+                "account_type": group.rawValue,
+                "id": "",
+                "bank_id": "0",
+                "user_id": "",
+                "account_state": amount
+            ]
+        ] as [String : Any]
+        print(parameters)
         do{
-            let response = try await abstractFetchData(
+            let response = try await urlElements?.fetchData(
                 endpoint: "v1/app/accounts",
                 method: "POST",
                 parameters: parameters,
-                headers: [
-                    "accept" : "application/json",
-                    "Content-Type": "application/json",
-                    "Authorization" : tokenData.accessToken
-                ]
+                needsAuthorization: true
             )
-            switch response["status_code"] as? Int{
+            switch response?["status_code"] as? Int{
             case 201:
                 dismiss()
             default:
-                print(response)
-                //showError(message: "oioioi")
+                print(response as Any)
+                showError(message: "pogodite pzh")
             }
         }catch{
             showError(message: "Упс... что-то пошло не так")

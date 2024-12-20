@@ -13,7 +13,7 @@ struct CreateGoalView: View {
     @State private var goalTime: String = ""
     @Binding var goals: [Goal]
     @Binding var currency: String
-    @Binding var tokenData: TokenData
+    @Binding var urlElements: URLElements?
     
     @Environment(\.presentationMode) var presentationMode
     @State private var showErrorPopup: Bool = false
@@ -146,17 +146,13 @@ struct CreateGoalView: View {
             ]
         ]
         do{
-            let response = try await abstractFetchData(
+            let response = try await urlElements?.fetchData(
                 endpoint: "v1/tracker/goal",
                 method: "POST",
                 parameters: parameters,
-                headers: [
-                    "accept" : "application/json",
-                    "Content-Type": "application/json",
-                    "Authorization" : tokenData.accessToken
-                ]
+                needsAuthorization: true
             )
-            switch response["status_code"] as? Int {
+            switch response?["status_code"] as? Int {
             case 201:
                 print(response)
                 presentationMode.wrappedValue.dismiss()

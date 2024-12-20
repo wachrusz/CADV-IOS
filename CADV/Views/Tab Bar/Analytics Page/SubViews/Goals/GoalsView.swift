@@ -14,7 +14,7 @@ struct goalsView: View{
     @Binding var isEditing: Bool
     @Binding var showAllGoalsView: Bool
     @Binding var currency: String
-    @Binding var tokenData: TokenData
+    @Binding var urlElements: URLElements?
     
     var body: some View {
         VStack{
@@ -53,7 +53,7 @@ struct goalsView: View{
                 AllGoalsView(
                     goals: $goals,
                     currency: $currency,
-                    tokenData: $tokenData
+                    urlElements: $urlElements
                 )
             }
             Spacer()

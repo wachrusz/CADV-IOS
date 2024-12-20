@@ -10,6 +10,7 @@ import SwiftUI
 struct ChangePasswordView: View {
     @Binding var email: String
     @Binding var token: String
+    @Binding var urlElements: URLElements?
     
     @State private var showErrorPopup: Bool = false
     @State private var errorMessage: String = ""
@@ -95,13 +96,12 @@ struct ChangePasswordView: View {
             
             print("Parameters being sent: \(parameters)")
             do{
-                let response = try await abstractFetchData(
+                let response = try await self.urlElements?.fetchData(
                     endpoint: "v1/auth/password",
                     method: "PUT",
-                    parameters: parameters,
-                    headers: ["Content-Type": "application/json", "accept" : "application/json"]
+                    parameters: parameters
                 )
-                switch response["status_code"] as? Int{
+                switch response?["status_code"] as? Int{
                 case 200:
                     print(response)
                     self.isCompleted = true
@@ -113,8 +113,8 @@ struct ChangePasswordView: View {
                     showErrorPopup = true
                 }
             }
-            catch{
-                
+            catch let error{
+                print(error)
             }
         }
     }

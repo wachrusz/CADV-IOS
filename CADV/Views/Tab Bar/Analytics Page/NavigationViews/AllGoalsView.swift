@@ -10,7 +10,7 @@ import SwiftUI
 struct AllGoalsView: View {
     @Binding var goals: [Goal]
     @Binding var currency: String
-    @Binding var tokenData: TokenData
+    @Binding var urlElements: URLElements?
     
     @State private var isLongPressing = false
     @State private var isEditing: Bool = false
@@ -19,11 +19,11 @@ struct AllGoalsView: View {
     init(
         goals: Binding<[Goal]>,
         currency: Binding<String>,
-        tokenData: Binding<TokenData>
+        urlElements: Binding<URLElements?>
     ) {
         self._goals = goals
         self._currency = currency
-        self._tokenData = tokenData
+        self._urlElements = urlElements
         
         UIPageControl.appearance().currentPageIndicatorTintColor = UIColor.purple
         UIPageControl.appearance().pageIndicatorTintColor = UIColor.lightGray
@@ -52,7 +52,7 @@ struct AllGoalsView: View {
                     goal: goal,
                     goals: $goals,
                     currency: $currency,
-                    tokenData: $tokenData
+                    urlElements: $urlElements
                 )
             } else {
                 Text("Ошибка: цель не выбрана.")

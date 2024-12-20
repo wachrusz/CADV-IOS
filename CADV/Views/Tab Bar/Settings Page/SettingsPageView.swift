@@ -13,7 +13,7 @@ struct SettingsPageView: View {
     @Binding var profile: ProfileInfo
     @State private var selectedScreen: String? = nil
     @State private var isSheetPresented = false
-    @Binding var tokenData: TokenData 
+    @Binding var urlElements: URLElements?
     
     @Environment(\.managedObjectContext) private var managedObjectContext
     var body: some View{
@@ -63,7 +63,7 @@ struct SettingsPageView: View {
             case "Настроить профиль":
                 ProfileSettingsView(
                     currentData: $profile,
-                    tokenData: $tokenData
+                    urlElements: $urlElements
                 )
             case "Подключённые счета":
                 Text("Подключённые счета")
@@ -98,13 +98,23 @@ struct SettingsPageView: View {
     private func LocalSettingsView() -> some View {
         VStack{
             ValuteSwitcherView()
-            AppNavigatingButtonsList(selectedCategory: self.$selectedCategory, selectedScreen: self.$selectedScreen, isSheetPresented: self.$isSheetPresented, tokenData: self.$tokenData)
+            AppNavigatingButtonsList(
+                selectedCategory: self.$selectedCategory,
+                selectedScreen: self.$selectedScreen,
+                isSheetPresented: self.$isSheetPresented,
+                urlElements: self.$urlElements
+            )
         }
     }
     
     private func GlobalSettingsView() -> some View {
         VStack{
-            AppNavigatingButtonsList(selectedCategory: self.$selectedCategory, selectedScreen: self.$selectedScreen, isSheetPresented: self.$isSheetPresented, tokenData: self.$tokenData)
+            AppNavigatingButtonsList(
+                selectedCategory: self.$selectedCategory,
+                selectedScreen: self.$selectedScreen,
+                isSheetPresented: self.$isSheetPresented,
+                urlElements: self.$urlElements
+            )
         }
     }
 }

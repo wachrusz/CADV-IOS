@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct RegisterView: View{
+    @Binding public var urlElements: URLElements?
     @State var email: String = ""
     @State var password: String = ""
     @State var repeatPassword: String = ""
@@ -20,6 +21,10 @@ struct RegisterView: View{
     @State private var showErrorPopup: Bool = false
     @State private var errorMessage: String = ""
     private var screenName: String = "Регистрация"
+    
+    init(urlElements: Binding<URLElements?>){
+        self._urlElements = urlElements
+    }
     
     var body: some View{
         NavigationStack{
@@ -96,7 +101,8 @@ struct RegisterView: View{
                             email: $email,
                             token: $token,
                             isNew: true,
-                            previousScreenName: screenName
+                            previousScreenName: screenName,
+                            urlElements: $urlElements
                         ),
                         isActive: $showEmailVerification,
                         label: {EmptyView()}
@@ -119,14 +125,13 @@ struct RegisterView: View{
             "password": password
         ]
         do{
-            let response = try await abstractFetchData(
+            let response = try await self.urlElements?.fetchData(
                 endpoint: "v1/auth/register",
-                parameters: parameters,
-                headers: ["Content-Type": "application/json", "accept" : "application/json"]
+                parameters: parameters
             )
-            switch response["status_code"] as? Int{
+            switch response?["status_code"] as? Int{
             case 200:
-                token = response["token"] as? String ?? ""
+                token = response?["token"] as? String ?? ""
                 self.showEmailVerification = true
             case 400:
                 errorMessage = "Кажется, Вы что-то не так ввели"
