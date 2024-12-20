@@ -14,7 +14,7 @@ struct EditGoalView: View {
     @Binding var goals: [Goal]
     var goal: Goal
     @Binding var currency: String
-    @Binding var tokenData: TokenData
+    @Binding var urlElements: URLElements?
 
     @Environment(\.presentationMode) var presentationMode
     @State private var showErrorPopup: Bool = false
@@ -29,7 +29,7 @@ struct EditGoalView: View {
     init(goal: Goal,
          goals: Binding<[Goal]>,
          currency: Binding<String>,
-         tokenData: Binding<TokenData>
+         urlElements: Binding<URLElements?>
     ) {
         self.goal = goal
         self._goalName = State(initialValue: goal.GoalName)
@@ -42,7 +42,7 @@ struct EditGoalView: View {
         }
         self._goals = goals
         self._currency = currency
-        self._tokenData = tokenData
+        self._urlElements = urlElements
         print(".sheet, goal: \(goal)")
     }
 
@@ -157,7 +157,7 @@ struct EditGoalView: View {
         
         let goalNameString = goalName.replacingOccurrences(of: " ", with: "")
         do{
-            let response = try await abstractFetchData(
+            let response = try await self.urlElements?.fetchData(
                 endpoint: "v1/tracker/goal",
                 method: "PUT",
                 parameters: Goal(
@@ -170,15 +170,12 @@ struct EditGoalView: View {
                     UserID: goal.UserID,
                     Currency: currency
                 ).toDictionary(),
-                headers: [
-                    "accept" : "application/json",
-                    "Content-Type": "application/json",
-                    "Authorization" : tokenData.accessToken
-                ]
+                needsAuthorization: true,
+                needsCurrency: true
             )
-            switch response["status_code"] as? Int {
+            switch response?["status_code"] as? Int {
             case 200:
-                print(response)
+                print(response ?? [:])
                 presentationMode.wrappedValue.dismiss()
             default:
                 print("Failed to fetch goals.")

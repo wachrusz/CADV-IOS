@@ -22,26 +22,66 @@ struct CADVApp: App {
             print("Authentication status changed: \(isAuthenticated)")
         }
     }
-    
+    @State private var urlElements: URLElements?
     
     var body: some Scene {
         WindowGroup {
-            if isAuthenticated{
-                LocalAuthView()
-                    .environment(\.managedObjectContext, persistenceController.container.viewContext)
-                    .preferredColorScheme(.light)
+            if let _ = urlElements {
+                if isAuthenticated {
+                    LocalAuthView(urlElements: $urlElements)
+                        .environment(\.managedObjectContext, persistenceController.container.viewContext)
+                        .preferredColorScheme(.light)
+                } else {
+                    SplashScreenView(urlElements: $urlElements)
+                        .environment(\.managedObjectContext, persistenceController.container.viewContext)
+                        .preferredColorScheme(.light)
+                        .onAppear {
+                            notificationManager.requestPermission()
+                            checkToken()
+                        }
+                }
+            } else {
+                ProgressView("Loading...")
                     .onAppear {
+                        initializeURLElements()
                     }
             }
-            else{
-                SplashScreenView()
-                    .environment(\.managedObjectContext, persistenceController.container.viewContext)
-                    .preferredColorScheme(.light)
-                    .onAppear {
-                        notificationManager.requestPermission()
-                        checkToken()
-                    }
+        }
+    }
+    
+    private func initializeURLElements() {
+        let context = persistenceController.container.viewContext
+        let fetchRequest: NSFetchRequest<AccessEntity> = AccessEntity.fetchRequest()
+        
+        do {
+            let tokens = try context.fetch(fetchRequest)
+            if tokens.isEmpty {
+                print("Core Data is empty, creating default token")
+                createDefaultToken()
+                urlElements = URLElements(
+                    tokenData: TokenData(from: AccessEntity(context: context)),
+                    viewCtx: context
+                )
+                isAuthenticated = false
+                print(urlElements as Any)
+            } else if let entity = tokens.first {
+                let tokenData = TokenData(from: entity)
+                urlElements = URLElements(tokenData: tokenData, viewCtx: context)
+                isAuthenticated = isValid(token: tokenData)
+                print(urlElements as Any)
+            } else {
+                print("No token found, initializing default URL elements")
+                urlElements = URLElements(
+                    tokenData: TokenData(from: AccessEntity(context: context)),
+                    viewCtx: context
+                )
+                isAuthenticated = false
+                print(urlElements as Any)
             }
+        } catch {
+            print("Error fetching token: \(error)")
+            isAuthenticated = false
+            print(urlElements as Any)
         }
     }
     
@@ -75,9 +115,10 @@ struct CADVApp: App {
                     print("Token is invalid")
                     
                     if attemptsLeft > 0 {
-                        refreshTokenIfNeeded(tokenData, viewCtx: context) { success in
+                        urlElements?.refreshTokenIfNeeded() { success in
                             if success {
                                 print("Token refreshed successfully, rechecking...")
+                                self.initializeURLElements()
                                 self.checkToken(attemptsLeft: attemptsLeft - 1)
                             } else {
                                 print("Failed to refresh token, attempts left: \(attemptsLeft - 1)")

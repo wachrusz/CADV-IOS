@@ -9,7 +9,9 @@ import SwiftUI
 import CoreData
 
 struct ContentView: View {
-    init() {
+    @Binding var urlElements: URLElements?
+    init(urlElements: Binding<URLElements?>) {
+        self._urlElements = urlElements
         let appearance = UINavigationBarAppearance()
         appearance.titleTextAttributes = [.foregroundColor: UIColor.black]
         appearance.largeTitleTextAttributes = [.foregroundColor: UIColor.black]
@@ -22,13 +24,6 @@ struct ContentView: View {
         UINavigationBar.appearance().scrollEdgeAppearance = appearance
     }
     var body: some View {
-        StartContentView()
-        //TabBarContentView()
-    }
-}
-
-struct ContentView_Previews: PreviewProvider {
-    static var previews: some View {
-        ContentView()
+        StartView(urlElements: $urlElements)
     }
 }

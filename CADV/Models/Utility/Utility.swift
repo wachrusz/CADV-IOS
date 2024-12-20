@@ -137,63 +137,6 @@ func currencyCodeAndTypeToSymbol(type: TransactionType, code: String) -> String 
     }
 }
 
-
-func abstractFetchData(
-    endpoint: String,
-    method: String = "POST",
-    parameters: [String: Any] = [:],
-    headers: [String: String] = [:]
-) async throws -> [String: Any] {
-    var urlString = "https://HOSTHOSTHOST/\(endpoint)"
-    
-    if method == "GET", !parameters.isEmpty {
-        let queryItems = parameters.map { URLQueryItem(name: $0.key, value: "\($0.value)") }
-        var urlComponents = URLComponents(string: urlString)
-        urlComponents?.queryItems = queryItems
-        urlString = urlComponents?.url?.absoluteString ?? urlString
-    }
-    
-    guard let url = URL(string: urlString) else {
-        throw NSError(domain: "abstractFetchData", code: -1, userInfo: [NSLocalizedDescriptionKey: "Invalid URL"])
-    }
-    
-    var request = URLRequest(url: url)
-    request.httpMethod = method
-    request.timeoutInterval = 30
-    
-    for (key, value) in headers {
-        request.setValue(value, forHTTPHeaderField: key)
-    }
-    
-    if method == "POST" || method == "PUT" {
-        do {
-            request.httpBody = try JSONSerialization.data(withJSONObject: parameters)
-        } catch {
-            throw NSError(domain: "abstractFetchData", code: -2, userInfo: [NSLocalizedDescriptionKey: "Failed to encode JSON"])
-        }
-    }
-    
-    let session = URLSession(configuration: .default, delegate: URLSessionHelper.shared, delegateQueue: nil)
-    
-    do {
-        let (data, response) = try await session.data(for: request)
-        guard let httpResponse = response as? HTTPURLResponse else {
-            throw NSError(domain: "abstractFetchData", code: -3, userInfo: [NSLocalizedDescriptionKey: "Invalid response"])
-        }
-        
-        let responseObject = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] ?? [:]
-        
-        switch httpResponse.statusCode {
-        case 200, 201, 401, 429, 500:
-            return responseObject
-        default:
-            throw NSError(domain: "abstractFetchData", code: httpResponse.statusCode, userInfo: ["response": responseObject])
-        }
-    } catch {
-        throw error
-    }
-}
-
 func stringToDate(_ dateString: String) -> Date? {
     let dateFormatter = ISO8601DateFormatter()
     
@@ -229,27 +172,5 @@ func monthsPassedInts(from startDateString: String, to endDateString: String) ->
     let monthsPassed = monthsBetween(startDate: startDate, endDate: Date()) ?? 1
     
     return (monthsPassed, monthsTotal)
-}
-
-func deleteAllEntities(context: NSManagedObjectContext) {
-    let persistentStoreCoordinator = context.persistentStoreCoordinator
-
-    do {
-        if let entities = persistentStoreCoordinator?.managedObjectModel.entities {
-            for entity in entities {
-                if let entityName = entity.name {
-                    let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: entityName)
-                    let deleteRequest = NSBatchDeleteRequest(fetchRequest: fetchRequest)
-                    
-                    do {
-                        try context.execute(deleteRequest)
-                        print("Удалены данные для сущности: \(entityName)")
-                    } catch {
-                        print("Ошибка при удалении данных для сущности \(entityName): \(error.localizedDescription)")
-                    }
-                }
-            }
-        }
-    }
 }
 

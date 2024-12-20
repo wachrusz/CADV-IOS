@@ -92,6 +92,7 @@ struct EnterVerificationEmailCode: View {
     var isReset: Bool {
         previousScreenName == "Восстановление пароля"
     }
+    @Binding var urlElements: URLElements?
     
     
     var body: some View {
@@ -190,14 +191,15 @@ struct EnterVerificationEmailCode: View {
                         NavigationLink(
                             destination: ChangePasswordView(
                                 email: $email,
-                                token: $resetToken
+                                token: $resetToken,
+                                urlElements: $urlElements
                             ),
                             isActive: $isNavigationActive) {
                                 EmptyView()
                             }
                     }else{
                         NavigationLink(
-                            destination: LocalAuthView(),
+                            destination: LocalAuthView(urlElements: $urlElements),
                             isActive: $isNavigationActive) {
                                 EmptyView()
                             }
@@ -243,32 +245,31 @@ struct EnterVerificationEmailCode: View {
             "token": token
         ]
         do {
-        let response = try await abstractFetchData(
+            let response = try await self.urlElements?.fetchData(
             endpoint: isReset ? "v1/auth/password/confirm" : (isNew ? "v1/auth/register/confirm" : "v1/auth/login/confirm"),
-            parameters: parameters,
-            headers: ["Content-Type": "application/json", "accept" : "application/json"]
+            parameters: parameters
         )
             if !isReset {
-                switch response["status_code"] as? Int {
+                switch response?["status_code"] as? Int {
                 case 200:
                     print("case 200")
-                    saveTokenData(responseObject: response)
+                    urlElements?.saveTokenData(responseObject: response ?? [:])
                     self.isNavigationActive = true
                     return
                 case 400:
                     print("case 400")
-                    let errorMessage = response["error"] as? String ?? ""
+                    let errorMessage = response?["error"] as? String ?? ""
                     self.confirmationError = errorMessage
                     return
                 default:
-                    let errorMessage = response["error"] as? String ?? ""
+                    let errorMessage = response?["error"] as? String ?? ""
                     print(errorMessage)
                     self.confirmationError = errorMessage
                     return
                 }
             }
             
-            let resetTokenDetails = response["token_details"] as? [String : Any] ?? [:]
+            let resetTokenDetails = response?["token_details"] as? [String : Any] ?? [:]
             self.resetToken = resetTokenDetails["reset_token"] as? String ?? ""
             self.isNavigationActive = true
         }
@@ -279,46 +280,6 @@ struct EnterVerificationEmailCode: View {
     
     @State var errorMessage: String = ""
     @State var isCodeSent: Bool = false
-    
-    func saveTokenData(responseObject: [String: Any]) {
-        print("------------\nResponse Object: \(responseObject)")
-        
-        let fetchRequest: NSFetchRequest<NSFetchRequestResult> = AccessEntity.fetchRequest()
-        let deleteRequest = NSBatchDeleteRequest(fetchRequest: fetchRequest)
-        
-        do {
-            try viewContext.execute(deleteRequest)
-            print("Deleted old tokens")
-        } catch {
-            print("Failed to delete old tokens: \(error)")
-        }
-        
-        guard
-            let deviceID = responseObject["device_id"] as? String,
-            let accessTokenLifeTime = responseObject["access_token_life_time"] as? Int,
-            let tokenDetails = responseObject["token_details"] as? [String: Any],
-            let accessToken = tokenDetails["access_token"] as? String,
-            let refreshToken = tokenDetails["refresh_token"] as? String,
-            let refreshTokenExpiresAt = tokenDetails["expires_at"] as? Int64
-        else {
-            print("Error: Missing or incorrect data structure in responseObject.")
-            return
-        }
-        
-        let token = AccessEntity(context: viewContext)
-        token.deviceID = deviceID
-        token.refreshTokenLifeTime = Int64(30*24*60*60)
-        token.accessToken = accessToken
-        token.refreshToken = refreshToken
-        token.accessTokenExpiresAt = Date().addingTimeInterval(60)//Double(accessTokenLifeTime))
-        print(token)
-        do {
-            try viewContext.save()
-            print("Token data saved successfully.")
-        } catch {
-            print("Failed to save token data: \(error.localizedDescription)")
-        }
-    }
     
     func requestNotificationPermission() {
         UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge]) { granted, error in

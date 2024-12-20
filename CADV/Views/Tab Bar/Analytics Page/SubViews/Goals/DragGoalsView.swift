@@ -17,7 +17,7 @@ struct DragGoalsView: View{
     @Binding var showAnnualPayments: Bool
     @Binding var dragOffset: CGSize
     @Binding var currency: String
-    @Binding var tokenData: TokenData
+    @Binding var urlElements: URLElements?
     let feedbackGeneratorMedium = UIImpactFeedbackGenerator(style: .medium)
     
     var body: some View {
@@ -29,7 +29,7 @@ struct DragGoalsView: View{
                 isEditing: $isEditing,
                 showAllGoalsView: $showAllGoalsView,
                 currency: $currency,
-                tokenData: $tokenData
+                urlElements: $urlElements
             )
             .offset(y: showAnnualPayments ? UIScreen.main.bounds.height + dragOffset.height : dragOffset.height)
             .opacity(showAnnualPayments ? 0 : 1)

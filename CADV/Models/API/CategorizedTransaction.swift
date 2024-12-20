@@ -35,6 +35,29 @@ struct CategorizedTransaction: CategorizedTransactionsProtocol, Identifiable, Eq
     var destinationAccount: String?
 }
 
+extension CategorizedTransaction {
+    init(from json: [String: Any]) throws {
+        self.id = UUID(uuidString: json["id"] as? String ?? "") ?? UUID()
+        self.amount = json["amount"] as? Double ?? 0.0
+        
+        guard let categoryId = json["category_id"] as? String,
+              let category = CustomCategoryType(from: categoryId) else {
+            throw NSError(domain: "Invalid category_id", code: 1)
+        }
+        self.category = category
+        
+        self.currency = CurrencyType(rawValue: json["currency"] as? String ?? "") ?? .ruble
+        self.type = TransactionType(rawValue: json["type"] as? String ?? "") ?? .income
+        self.userID = json["user_id"] as? String ?? ""
+        self.bankAccount = json["bank_account"] as? String ?? ""
+        self.date = ISO8601DateFormatter().date(from: json["date"] as? String ?? "") ?? Date()
+        self.name = json["name"] as? String ?? ""
+        self.planned = json["planned"] as? Bool
+        self.sender = json["sender"] as? String ?? json["sent_to"] as? String
+        self.destinationAccount = json["destination_account"] as? String
+    }
+}
+
 func image(for category: CustomCategoryType) -> String {
     switch category {
     case .income(let income):
@@ -135,6 +158,35 @@ extension CustomCategoryType: Comparable {
             case .constant(let const): return const.rawValue
             }
         }
+    }
+}
+
+extension CustomCategoryType {
+    init?(from categoryId: String) {
+        if let incomeConstant = IncomeConstantCategory(rawValue: categoryId) {
+            self = .income(.constant(incomeConstant))
+            return
+        }
+        if let incomeTemporary = IncomeTemporaryCategory(rawValue: categoryId) {
+            self = .income(.temporary(incomeTemporary))
+            return
+        }
+        
+        if let expenseConstant = ExpenseConstantCategory(rawValue: categoryId) {
+            self = .expense(.constant(expenseConstant))
+            return
+        }
+        if let expenseTemporary = ExpenseTemporaryCategory(rawValue: categoryId) {
+            self = .expense(.temporary(expenseTemporary))
+            return
+        }
+        
+        if let wealthFundConstant = WealthFundConstantCategory(rawValue: categoryId) {
+            self = .wealthFund(.constant(wealthFundConstant))
+            return
+        }
+        
+        return nil
     }
 }
 

@@ -21,6 +21,7 @@ class URLSessionHelper: NSObject, URLSessionDelegate {
 }
 
 struct LoginView: View{
+    @Binding var urlElements: URLElements?
     @State private var email: String = ""
     @State private var password: String = ""
     @State private var showPassword: Bool = false
@@ -36,6 +37,10 @@ struct LoginView: View{
     @State private var isLoading: Bool = false
     private var screenName: String = "Авторизация"
     @State private var navigationPath = NavigationPath()
+    
+    init(urlElements: Binding<URLElements?>){
+        self._urlElements = urlElements
+    }
     
     var body: some View{
         ZStack{
@@ -108,13 +113,16 @@ struct LoginView: View{
                             email: $email,
                             token: $token,
                             isNew: false,
-                            previousScreenName: screenName
+                            previousScreenName: screenName,
+                            urlElements: $urlElements
                         ),
                         isActive: $showEmailVerification,
                         label: {EmptyView()}
                     )
                     NavigationLink(
-                        destination: PasswordResetView(),
+                        destination: PasswordResetView(
+                            urlElements: $urlElements
+                        ),
                         isActive: $showPasswordReset,
                         label: {EmptyView()}
                     )
@@ -141,15 +149,13 @@ struct LoginView: View{
                 "password": password
             ]
             do{
-                let response = try await abstractFetchData(
+                let response = try await self.urlElements?.fetchData(
                     endpoint: "v1/auth/login",
-                    parameters: parameters,
-                    headers: ["Content-Type": "application/json",
-                              "accept" : "application/json"]
+                    parameters: parameters
                 )
-                switch response["status_code"] as? Int{
+                switch response?["status_code"] as? Int{
                 case 200:
-                    token = response["token"] as? String ?? ""
+                    token = response?["token"] as? String ?? ""
                     self.showEmailVerification = true
                 case 401:
                     self.loginError = "Кажется, Вы что-то не так ввели..."

@@ -11,10 +11,11 @@ struct SplashScreenView: View {
     @State private var isActive = false
     @State private var isExpanded = false
     @State private var showAppIcon = false
+    @Binding var urlElements: URLElements?
 
     var body: some View {
         if isActive {
-            ContentView()
+            ContentView(urlElements: $urlElements)
         } else {
             ZStack {
                 if showAppIcon {
