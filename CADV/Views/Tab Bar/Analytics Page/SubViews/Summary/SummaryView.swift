@@ -12,7 +12,7 @@ struct SummarySectionView: View {
     @Binding var groupedAndSortedTransactions: [(
         date: Date, categorizedTransactions: [CategorizedTransaction]
     )]
-    @Binding var bankAccounts: BankAccounts
+    @Binding var bankAccounts: [Int : BankAccounts]
     @Binding var contentHeight: CGFloat
     @Binding var isExpanded: Bool
     @State private var loadedTransactionsPerDate: [Date: Int] = [:]
@@ -37,7 +37,6 @@ struct SummarySectionView: View {
                             ForEach(groupedAndSortedTransactions, id: \.date) { group in
                                 Section(header: Text(group.date, style: .date).foregroundColor(Color.black)) {
                                     
-                                    // Получаем список транзакций для текущей даты с лимитом загрузки
                                     let transactionsToDisplay = getTransactionsForDate(date: group.date, transactions: group.categorizedTransactions)
                                     
                                     ForEach(transactionsToDisplay, id: \.id) { transaction in
@@ -69,8 +68,8 @@ struct SummarySectionView: View {
                     VStack {
                         if (contentHeight > 150 && !isExpanded) || (contentHeight <= 150) {
                             VStack(spacing: 10) {
-                                ForEach(bankAccounts) { bankAccount in
-                                    BankAccountList(bankAccount: bankAccount)
+                                ForEach(Array(bankAccounts.values)) { bankAccount in
+                                    BankAccountList(bankAccounts: bankAccount)
                                 }
                             }
                             .background(
@@ -97,8 +96,8 @@ struct SummarySectionView: View {
                         } else {
                             ScrollView {
                                 VStack(spacing: 10) {
-                                    ForEach(bankAccounts) { bankAccount in
-                                        BankAccountList(bankAccount: bankAccount)
+                                    ForEach(Array(bankAccounts.values)) { bankAccount in
+                                        BankAccountList(bankAccounts: bankAccount)
                                     }
                                 }
                                 .background(

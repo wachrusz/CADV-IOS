@@ -8,7 +8,6 @@
 import SwiftUI
 
 struct CreateBankAccountView: View {
-    @Binding var bankAccounts: BankAccounts
     @Binding var currency: String
     @Binding var urlElements: URLElements?
     
@@ -121,9 +120,10 @@ struct CreateBankAccountView: View {
                 "account_number": generateRandomString(),
                 "account_type": group.rawValue,
                 "id": "",
-                "bank_id": "0",
+                "bank_id": group.rawValue == "Банк" ? "0" : "1",
                 "user_id": "",
-                "account_state": amount
+                "account_state": amount,
+                "account_name": bankAccountName
             ]
         ] as [String : Any]
         print(parameters)

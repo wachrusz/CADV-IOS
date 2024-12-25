@@ -154,7 +154,6 @@ struct CreateGoalView: View {
             )
             switch response?["status_code"] as? Int {
             case 201:
-                print(response)
                 presentationMode.wrappedValue.dismiss()
             default:
                 print("Failed to fetch goals.")

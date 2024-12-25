@@ -10,7 +10,7 @@ import SwiftUI
 struct MainPageView: View {
     @Binding var profile: ProfileInfo
     @Binding var categorizedTransactions: [CategorizedTransaction]
-    @Binding var urlElements: URLElements?
+    @StateObject var dataManager: DataManager
     @State private var selectedCategory: String = "Доходы"
     @State private var selectedPlan: String = "Факт"
     

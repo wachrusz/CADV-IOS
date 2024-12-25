@@ -114,3 +114,43 @@ struct TotalAmountView: View{
     }
     
 }
+
+struct AnalyticsTotalAmountView: View{
+    var bankAccounts: [Int : BankAccounts]
+    @FetchRequest(
+            entity: CurrencyEntity.entity(),
+            sortDescriptors: [],
+            animation: .default
+    ) private var currencies: FetchedResults<CurrencyEntity>
+    @State private var selectedCurrency: String = "RUB"
+    @State var sum: Double = 0.0
+
+    
+    var body: some View {
+        
+        HStack(spacing: 0) {
+            CustomText(
+                text: currencyCodeToSymbol(code: selectedCurrency),
+                font: .custom("Inter", size: 36).weight(.semibold),
+                color: Color("sc1")
+            )
+            .padding(.bottom)
+            CustomText(
+                text: formattedTotalAmount(amount: sum),
+                font: .custom("Inter", size: 45).weight(.bold),
+                color: Color("fg")
+            )
+        }
+        .frame(height: 85)
+        .padding(.horizontal)
+        .onAppear {
+            if let firstCurrency = currencies.first, let currencyCode = firstCurrency.currency {
+                selectedCurrency = currencyCode
+            }
+            sum = bankAccounts.values.reduce(0.0) { $0 + $1.TotalAmount }
+        }
+        .onChange(of: bankAccounts) { _ in
+            sum = bankAccounts.values.reduce(0.0) { $0 + $1.TotalAmount }
+        }
+    }
+}

@@ -13,7 +13,7 @@ struct SettingsPageView: View {
     @Binding var profile: ProfileInfo
     @State private var selectedScreen: String? = nil
     @State private var isSheetPresented = false
-    @Binding var urlElements: URLElements?
+    @StateObject var dataManager: DataManager
     
     @Environment(\.managedObjectContext) private var managedObjectContext
     var body: some View{
@@ -63,7 +63,7 @@ struct SettingsPageView: View {
             case "Настроить профиль":
                 ProfileSettingsView(
                     currentData: $profile,
-                    urlElements: $urlElements
+                    urlElements: self.$dataManager.urlElements
                 )
             case "Подключённые счета":
                 Text("Подключённые счета")
@@ -102,7 +102,7 @@ struct SettingsPageView: View {
                 selectedCategory: self.$selectedCategory,
                 selectedScreen: self.$selectedScreen,
                 isSheetPresented: self.$isSheetPresented,
-                urlElements: self.$urlElements
+                urlElements: self.$dataManager.urlElements
             )
         }
     }
@@ -113,7 +113,7 @@ struct SettingsPageView: View {
                 selectedCategory: self.$selectedCategory,
                 selectedScreen: self.$selectedScreen,
                 isSheetPresented: self.$isSheetPresented,
-                urlElements: self.$urlElements
+                urlElements: self.$dataManager.urlElements
             )
         }
     }
