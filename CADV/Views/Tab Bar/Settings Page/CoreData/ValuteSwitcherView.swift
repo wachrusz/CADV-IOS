@@ -9,7 +9,7 @@ import SwiftUI
 import CoreData
 
 class CurrencyManager: ObservableObject {
-    @Published var selectedCurrency: String = "rub"
+    @Published var selectedCurrency: String = "RUB"
     let context = PersistenceController.shared.container.viewContext
     
     init() {

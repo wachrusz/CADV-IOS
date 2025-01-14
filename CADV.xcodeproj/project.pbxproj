@@ -50,7 +50,7 @@
 		3CD5362C2CC7C8A00099B111 /* AddBankAccountView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CD5362B2CC7C8A00099B111 /* AddBankAccountView.swift */; };
 		3CD5C3142C9863CA0025EFDC /* ConfirmEmailContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CD5C3132C9863CA0025EFDC /* ConfirmEmailContentView.swift */; };
 		3CD5C3192C9873FF0025EFDC /* PopUpContentViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CD5C3182C9873FF0025EFDC /* PopUpContentViews.swift */; };
-		3CD5C31F2CA2F8630025EFDC /* MainPageContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CD5C31E2CA2F8630025EFDC /* MainPageContentView.swift */; };
+		3CD5C31F2CA2F8630025EFDC /* MainPageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CD5C31E2CA2F8630025EFDC /* MainPageView.swift */; };
 		3CD5C3222CA2F9E80025EFDC /* TabBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CD5C3212CA2F9E80025EFDC /* TabBarView.swift */; };
 		3CD5C3252CA2FB0D0025EFDC /* Income.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CD5C3242CA2FB0D0025EFDC /* Income.swift */; };
 		3CD5C3272CA2FB370025EFDC /* Expense.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CD5C3262CA2FB370025EFDC /* Expense.swift */; };
@@ -158,7 +158,7 @@
 		3CD5362B2CC7C8A00099B111 /* AddBankAccountView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddBankAccountView.swift; sourceTree = "<group>"; };
 		3CD5C3132C9863CA0025EFDC /* ConfirmEmailContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfirmEmailContentView.swift; sourceTree = "<group>"; };
 		3CD5C3182C9873FF0025EFDC /* PopUpContentViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopUpContentViews.swift; sourceTree = "<group>"; };
-		3CD5C31E2CA2F8630025EFDC /* MainPageContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainPageContentView.swift; sourceTree = "<group>"; };
+		3CD5C31E2CA2F8630025EFDC /* MainPageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainPageView.swift; sourceTree = "<group>"; };
 		3CD5C3212CA2F9E80025EFDC /* TabBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarView.swift; sourceTree = "<group>"; };
 		3CD5C3242CA2FB0D0025EFDC /* Income.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Income.swift; sourceTree = "<group>"; };
 		3CD5C3262CA2FB370025EFDC /* Expense.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Expense.swift; sourceTree = "<group>"; };
@@ -405,6 +405,15 @@
 			path = ShareInIncome;
 			sourceTree = "<group>";
 		};
+		3CA07A2A2D1C449B004AF1DB /* SubViews */ = {
+			isa = PBXGroup;
+			children = (
+				3CE9FBBB2CCAACF80046CD22 /* ProfileView */,
+				3CE9FBB72CCAAADA0046CD22 /* ButtonsView */,
+			);
+			path = SubViews;
+			sourceTree = "<group>";
+		};
 		3CA28B432CEB3C7600AD1D33 /* NavigationViews */ = {
 			isa = PBXGroup;
 			children = (
@@ -451,7 +460,7 @@
 			children = (
 				3CA28B432CEB3C7600AD1D33 /* NavigationViews */,
 				3C72E30E2CD2512B00B7EA04 /* SubViews */,
-				3CD5C31E2CA2F8630025EFDC /* MainPageContentView.swift */,
+				3CD5C31E2CA2F8630025EFDC /* MainPageView.swift */,
 			);
 			path = "Main Page";
 			sourceTree = "<group>";
@@ -642,9 +651,8 @@
 		3CF201012CCA741A00A5620A /* Settings Page */ = {
 			isa = PBXGroup;
 			children = (
+				3CA07A2A2D1C449B004AF1DB /* SubViews */,
 				3C4F0ECC2CCFA57C008A8D14 /* NavigationViews */,
-				3CE9FBBB2CCAACF80046CD22 /* ProfileView */,
-				3CE9FBB72CCAAADA0046CD22 /* ButtonsView */,
 				3CE9FBB32CCA93420046CD22 /* CoreData */,
 				3CF201022CCA742300A5620A /* SettingsPageView.swift */,
 			);
@@ -724,7 +732,7 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 1540;
-				LastUpgradeCheck = 1540;
+				LastUpgradeCheck = 1600;
 				TargetAttributes = {
 					3CF17A8C2C87812F00A601AC = {
 						CreatedOnToolsVersion = 15.4;
@@ -809,7 +817,7 @@
 				3CD5C3372CB55BEB0025EFDC /* AnnualPayments.swift in Sources */,
 				3C72E3082CD2500900B7EA04 /* GoalsView.swift in Sources */,
 				3C21A7692D086B7600452DF3 /* LocalAuthKeychain.swift in Sources */,
-				3CD5C31F2CA2F8630025EFDC /* MainPageContentView.swift in Sources */,
+				3CD5C31F2CA2F8630025EFDC /* MainPageView.swift in Sources */,
 				3CD5C32E2CAC2D0A0025EFDC /* AnalyticsPageView.swift in Sources */,
 				3CC743F42C94CA9200F10E5E /* RegisterContentView.swift in Sources */,
 				3C5617422CE13238008BA8A1 /* ChangePasswordView.swift in Sources */,
@@ -1091,7 +1099,6 @@
 		3CF17ABA2C87813300A601AC /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
@@ -1111,7 +1118,6 @@
 		3CF17ABB2C87813300A601AC /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
@@ -1131,7 +1137,6 @@
 		3CF17ABD2C87813300A601AC /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 2466T95QV6;
@@ -1149,7 +1154,6 @@
 		3CF17ABE2C87813300A601AC /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 2466T95QV6;

@@ -12,7 +12,6 @@ struct TabBarContentView: View {
     @Environment(\.managedObjectContext) private var viewContext
     @State private var selectedTab = 0
     @State private var isAnalyticsLoaded = false
-    @State private var currency: String = "RUB"
     @StateObject private var dataManager: DataManager
     @Binding var urlElements: URLElements?
 
@@ -43,10 +42,12 @@ struct TabBarContentView: View {
                             annualPayments: self.$dataManager.urlEntities.annualPayments,
                             bankAccounts: self.$dataManager.urlEntities.bankAccounts,
                             groupedAndSortedTransactions: self.$dataManager.urlEntities.groupedAndSortedTransactions,
-                            currency: $currency,
                             dataManager: dataManager
                         )
                         .frame(width: geometry.size.width, height: geometry.size.height)
+                        .onAppear(){
+                            print(self.dataManager.urlElements?.currency)
+                        }
                     } else {
                         ProgressView()
                             .frame(width: geometry.size.width, height: geometry.size.height)

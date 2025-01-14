@@ -9,14 +9,12 @@ import SwiftUI
 
 struct addGoalButton: View{
     @Binding var goals: [Goal]
-    @Binding var currency: String
     @Binding var urlElements: URLElements?
     
     var body: some View {
         NavigationLink(destination:
                         CreateGoalView(
                                 goals: $goals,
-                                currency: $currency,
                                 urlElements: $urlElements
                         )) {
             VStack(spacing: 10) {

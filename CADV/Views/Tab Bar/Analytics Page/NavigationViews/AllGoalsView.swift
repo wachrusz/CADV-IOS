@@ -9,7 +9,6 @@ import SwiftUI
 
 struct AllGoalsView: View {
     @Binding var goals: [Goal]
-    @Binding var currency: String
     @Binding var urlElements: URLElements?
     
     @State private var isLongPressing = false
@@ -18,11 +17,9 @@ struct AllGoalsView: View {
     
     init(
         goals: Binding<[Goal]>,
-        currency: Binding<String>,
         urlElements: Binding<URLElements?>
     ) {
         self._goals = goals
-        self._currency = currency
         self._urlElements = urlElements
         
         UIPageControl.appearance().currentPageIndicatorTintColor = UIColor.purple
@@ -51,7 +48,6 @@ struct AllGoalsView: View {
                 EditGoalView(
                     goal: goal,
                     goals: $goals,
-                    currency: $currency,
                     urlElements: $urlElements
                 )
             } else {

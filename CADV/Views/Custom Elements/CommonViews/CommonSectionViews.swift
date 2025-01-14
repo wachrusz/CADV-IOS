@@ -40,7 +40,7 @@ struct UserProfileSection: View{
             Spacer()
             
             CustomText(
-                text: Date().monthDayString(),
+                text: Date().monthYearString(),
                 font: font,
                 color: Color("fg")
             )

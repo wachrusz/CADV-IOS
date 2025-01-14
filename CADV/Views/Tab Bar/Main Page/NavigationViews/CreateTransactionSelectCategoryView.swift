@@ -12,7 +12,8 @@ struct CreateTransactionSelectCategory: View {
     @Binding var selectedCategory: String
     @Binding var selectedPlan: String
     
-    @State private var customCategoriesFiltered: [CustomCategoryType] = []
+    @State private var customCategoriesFilteredConstant: [CustomCategoryType] = []
+    @State private var customCategoriesFilteredTemporary: [CustomCategoryType] = []
     @FetchRequest var savedCategories: FetchedResults<CategoryEntity>
     
     @State private var navigationTitle: String = ""
@@ -30,8 +31,8 @@ struct CreateTransactionSelectCategory: View {
             predicate = NSPredicate(format: "categoryType == %@", "Доходы")
         case "Расходы":
             predicate = NSPredicate(format: "categoryType == %@", "Расходы")
-        case "Фонд благосостояния":
-            predicate = NSPredicate(format: "categoryType == %@", "Фонд благосостояния")
+        case "Сбережения":
+            predicate = NSPredicate(format: "categoryType == %@", "Сбережения")
         default:
             predicate = NSPredicate(value: true)
         }
@@ -63,58 +64,73 @@ struct CreateTransactionSelectCategory: View {
                     .padding(.vertical)
                     
                     LazyVStack(alignment: .leading) {
-                        if selectedCategory != "Фонд благосостояния"{
-                            Section(header: Text("Постоянные \(customCategoriesFiltered.count + savedCategories.filter { $0.isConstant }.count)")) {
-                                ForEach(customCategoriesFiltered, id: \.self) { category in
+                        if selectedCategory != "Сбережения"{
+                            Section(header: Text("Постоянные \(customCategoriesFilteredConstant.count + savedCategories.filter { $0.isConstant }.count)")) {
+                                ForEach(customCategoriesFilteredConstant, id: \.self) { category in
                                     NavigationLink(destination: CreateTransactionMainView(categoryName: category.displayCategory)
                                     ) {
                                         CategoryRow(
                                             categoryName: category.displayName,
-                                            imageName: category.displayName
+                                            imageName: image(for: category)
                                         )
                                     }
                                 }
                                 
                                 ForEach(savedCategories.filter { $0.isConstant }, id: \.self) { category in
                                     if let categoryName = category.name, let imageName = category.iconName {
-                                        CategoryRow(
-                                            categoryName: categoryName,
-                                            imageName: imageName
-                                        )
+                                        NavigationLink(destination: CreateTransactionMainView(categoryName: categoryName)
+                                        ) {
+                                            CategoryRow(
+                                                categoryName: categoryName,
+                                                imageName: imageName
+                                            )
+                                        }
                                     }
                                 }
                             }
                             
-                            Section(header: Text("Переменные \(customCategoriesFiltered.count + savedCategories.filter { !$0.isConstant }.count)")) {
-                                ForEach(customCategoriesFiltered, id: \.self) { category in
-                                    CategoryRow(
-                                        categoryName: category.displayName,
-                                        imageName: category.displayName
-                                    )
+                            Section(header: Text("Переменные \(customCategoriesFilteredTemporary.count + savedCategories.filter { !$0.isConstant }.count)")) {
+                                ForEach(customCategoriesFilteredTemporary, id: \.self) { category in
+                                    NavigationLink(destination: CreateTransactionMainView(categoryName: category.displayCategory)
+                                    ) {
+                                        CategoryRow(
+                                            categoryName: category.displayName,
+                                            imageName: image(for: category)
+                                        )
+                                    }
                                 }
                                 
                                 ForEach(savedCategories.filter { !$0.isConstant }, id: \.self) { category in
                                     if let categoryName = category.name, let imageName = category.iconName {
+                                        NavigationLink(destination: CreateTransactionMainView(categoryName: categoryName)
+                                        ) {
+                                            CategoryRow(
+                                                categoryName: categoryName,
+                                                imageName: imageName
+                                            )
+                                        }
+                                    }
+                                }
+                            }
+                        }else{
+                            ForEach(customCategoriesFilteredConstant, id: \.self) { category in
+                                NavigationLink(destination: CreateTransactionMainView(categoryName: category.displayCategory)
+                                ) {
+                                    CategoryRow(
+                                        categoryName: category.displayName,
+                                        imageName: image(for: category)
+                                    )
+                                }
+                            }
+                            ForEach(savedCategories.filter {$0.categoryType == "Сбережения"}, id: \.self) { category in
+                                if let categoryName = category.name, let imageName = category.iconName {
+                                    NavigationLink(destination: CreateTransactionMainView(categoryName: categoryName)
+                                    ) {
                                         CategoryRow(
                                             categoryName: categoryName,
                                             imageName: imageName
                                         )
                                     }
-                                }
-                            }
-                        }else{
-                            ForEach(customCategoriesFiltered, id: \.self) { category in
-                                CategoryRow(
-                                    categoryName: category.displayName,
-                                    imageName: category.displayName
-                                )
-                            }
-                            ForEach(savedCategories.filter {$0.categoryType == "Фонд благосостояния"}, id: \.self) { category in
-                                if let categoryName = category.name, let imageName = category.iconName {
-                                    CategoryRow(
-                                        categoryName: categoryName,
-                                        imageName: imageName
-                                    )
                                 }
                             }
                         }
@@ -139,12 +155,14 @@ struct CreateTransactionSelectCategory: View {
                 self.navigationTitle = "\(selectedPlan != "План" ? "Запись" : "Планирование") сбережений"
             }
             
-            if selectedCategory != "Фонд благосостояния" {
-                self.customCategoriesFiltered = CustomCategoryType.allCases.filter { $0.displayIsConstant && $0.displayCategory == selectedCategory }
+            if selectedCategory != "Сбережения" {
+                self.customCategoriesFilteredConstant = CustomCategoryType.allCases.filter { $0.displayIsConstant && $0.displayCategory == selectedCategory }
+                self.customCategoriesFilteredTemporary = CustomCategoryType.allCases.filter { !$0.displayIsConstant && $0.displayCategory == selectedCategory }
             } else {
-                self.customCategoriesFiltered = CustomCategoryType.allCases.filter { $0.displayCategory == selectedCategory }
+                self.customCategoriesFilteredConstant = CustomCategoryType.allCases.filter { $0.displayCategory == selectedCategory }
             }
         }
+        .hideBackButton()
     }
     func action(){
         

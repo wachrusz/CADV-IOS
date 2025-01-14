@@ -12,7 +12,6 @@ struct CreateGoalView: View {
     @State private var goalAmount: String = ""
     @State private var goalTime: String = ""
     @Binding var goals: [Goal]
-    @Binding var currency: String
     @Binding var urlElements: URLElements?
     
     @Environment(\.presentationMode) var presentationMode
@@ -29,35 +28,26 @@ struct CreateGoalView: View {
         ZStack {
             GeometryReader { geometry in
                 VStack() {
+                    /*
                     CustomText(
                         text: "Создать цель",
                         font: Font.custom("Inter", size: 16).weight(.semibold),
                         color: Color("fg")
                     )
                     .padding(.vertical)
+                     */
                     VStack(alignment: .leading){
-                        CustomText(
-                            text: "Название цели",
-                            font: Font.custom("Inter", size: 12).weight(.semibold),
-                            color: Color("fg")
-                        )
                         
                         CustomTextField(
                             input: $goalName,
-                            text: "Нажмите, чтобы ввести",
+                            text: "Название цели",
                             showTextFieldError: $showNameTextFieldError,
                             isFine: $isNameFieldFine
                         )
                         
-                        CustomText(
-                            text: "Размер цели в основной валюте",
-                            font: Font.custom("Inter", size: 12).weight(.semibold),
-                            color: Color("fg")
-                        )
-                        
                         HStack(alignment: .top, spacing: 10) {
                             CustomText(
-                                text: currencyCodeToSymbol(code: currency),
+                                text: currencyCodeToSymbol(code: urlElements?.currency ?? "RUB"),
                                 font: Font.custom("Inter", size: 14).weight(.semibold),
                                 color: Color("sc2")
                             )
@@ -68,21 +58,16 @@ struct CreateGoalView: View {
                             
                             CustomTextField(
                                 input: $goalAmount,
-                                text: "00.00",
+                                text: "Размер цели",
                                 showTextFieldError: $showAmountTextFieldError,
                                 isFine: $isAmountFieldFine
                             )
                             .keyboardType(.decimalPad)
                         }
-                        CustomText(
-                            text: "Планируемое время достижения в месяцах:",
-                            font: Font.custom("Inter", size: 12).weight(.semibold),
-                            color: Color("fg")
-                        )
                         
                         CustomTextField(
                             input: $goalTime,
-                            text: "0",
+                            text: "Планируемое время достижения в месяцах",
                             showTextFieldError: $showTimeTextFieldError,
                             isFine: $isTimeFieldFine
                         )
@@ -106,6 +91,7 @@ struct CreateGoalView: View {
         }
         .background(.white)
         .edgesIgnoringSafeArea(.bottom)
+        .navigationTitle("Создать цель")
         .hideBackButton()
     }
 
@@ -139,7 +125,7 @@ struct CreateGoalView: View {
             "goal":[
                 "goal": goalName,
                 "need": amount,
-                "currency": currency,
+                "currency": urlElements?.currency ?? "RUB",
                 "current_state": 0,
                 "start_date": startDateString,
                 "end_date": endDateString

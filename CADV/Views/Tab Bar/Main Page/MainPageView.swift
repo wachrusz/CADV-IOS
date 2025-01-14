@@ -32,7 +32,7 @@ struct MainPageView: View {
                     CategorySwitchButtons(
                         selectedCategory: $selectedCategory,
                         pageIndex: $pageIndex,
-                        categories: ["Доходы", "Расходы", "Фонд благосостояния"]
+                        categories: ["Доходы", "Расходы", "Сбережения"]
                     )
                     
                     TotalAmountView(text: totalAmount(for: selectedCategory))
@@ -81,7 +81,7 @@ struct MainPageView: View {
             case .expense:
                 isMatchingCategory = category == "Расходы"
             case .wealthFund:
-                isMatchingCategory = category == "Фонд благосостояния"
+                isMatchingCategory = category == "Сбережения"
             }
 
             return isMatchingCategory && (

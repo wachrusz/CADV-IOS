@@ -16,7 +16,6 @@ struct AnalyticsPageView: View {
     @Binding var groupedAndSortedTransactions: [(
         date: Date, categorizedTransactions: [CategorizedTransaction]
     )]
-    @Binding var currency: String
     @StateObject var dataManager: DataManager
     
     @State private var isSummaryExpanded: Bool = false
@@ -67,16 +66,24 @@ struct AnalyticsPageView: View {
                             groupedAndSortedTransactions: $groupedAndSortedTransactions,
                             bankAccounts: $bankAccounts,
                             contentHeight: $contentHeight,
-                            isExpanded: $isExpanded)
+                            isExpanded: $isExpanded
+                        )
                         
                         ActionButtons(
                             isFirstAction: $isAddingBank,
                             isSecondAction: $isEnteringManually,
                             firstButtonContent: AddBankAccountView(),
-                            secondButtonContent: CreateBankAccountView(
-                                currency: $currency,
-                                urlElements: self.$dataManager.urlElements
-                            ),
+                            secondButtonContent:  Group{
+                                if selectedPlan != "Транзакции"  {
+                                    CreateBankAccountView(
+                                        urlElements: self.$dataManager.urlElements
+                                ) }
+                                else{
+                                    CreateTransactionAnalyticsView(
+                                        dataManager: dataManager
+                                    )
+                                }
+                            },
                             firstButtonText: "Добавить банк",
                             secondButtonText: "Внести вручную",
                             firstButtonAction: {},
@@ -93,7 +100,6 @@ struct AnalyticsPageView: View {
                             showAllGoalsView: $showAllGoalsView,
                             showAnnualPayments: $showAnnualPayments,
                             dragOffset: $dragOffset,
-                            currency: $currency,
                             urlElements: self.$dataManager.urlElements
                         )
                         
@@ -127,7 +133,6 @@ struct AnalyticsPageView: View {
                             EditGoalView(
                                 goal: goal,
                                 goals: $goals,
-                                currency: $currency,
                                 urlElements: self.$dataManager.urlElements
                             )
                         } else {

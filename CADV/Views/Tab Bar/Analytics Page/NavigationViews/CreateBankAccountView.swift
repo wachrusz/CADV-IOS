@@ -8,7 +8,6 @@
 import SwiftUI
 
 struct CreateBankAccountView: View {
-    @Binding var currency: String
     @Binding var urlElements: URLElements?
     
     @Environment(\.dismiss) var dismiss
@@ -29,12 +28,14 @@ struct CreateBankAccountView: View {
             ZStack {
                 GeometryReader { geometry in
                     VStack() {
+                         /*
                         CustomText(
                             text: "Создать новый счет",
                             font: Font.custom("Gilroy", size: 16).weight(.semibold),
                             color: Color("fg")
                         )
                         .padding(.vertical)
+                          */
                         VStack(alignment: .leading){
                             CustomTextField(
                                 input: $bankAccountName,
@@ -45,7 +46,7 @@ struct CreateBankAccountView: View {
                             
                             HStack(alignment: .top, spacing: 10) {
                                 CustomText(
-                                    text: currencyCodeToSymbol(code: currency),
+                                    text: currencyCodeToSymbol(code: urlElements?.currency ?? "RUB"),
                                     font: Font.custom("Inter", size: 14).weight(.semibold),
                                     color: Color("sc2")
                                 )
@@ -93,6 +94,7 @@ struct CreateBankAccountView: View {
                 .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
             }
         }
+        .navigationTitle("Создать новый счет")
         .edgesIgnoringSafeArea(.bottom)
         .hideBackButton()
     }

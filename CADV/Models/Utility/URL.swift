@@ -237,8 +237,7 @@ struct URLElements {
     }
 
     //! CORE DATA
-
-    func saveTokenData(responseObject: [String: Any]) {
+    mutating func saveTokenData(responseObject: [String: Any]) {
         print("------------\nResponse Object: \(responseObject)")
         
         let fetchRequest: NSFetchRequest<NSFetchRequestResult> = AccessEntity.fetchRequest()
@@ -268,11 +267,13 @@ struct URLElements {
         token.refreshTokenLifeTime = Int64(30*24*60*60)
         token.accessToken = accessToken
         token.refreshToken = refreshToken
-        token.accessTokenExpiresAt = Date().addingTimeInterval(60)//Double(accessTokenLifeTime))
+        token.accessTokenExpiresAt = Date().addingTimeInterval(Double(accessTokenLifeTime))
         print(token)
         do {
             try viewCtx.save()
             print("Token data saved successfully.")
+            self.tokenData = TokenData(from: token)
+            print(self.tokenData)
         } catch {
             print("Failed to save token data: \(error.localizedDescription)")
         }

@@ -12,7 +12,6 @@ import SwiftUI
 class DataManager: ObservableObject {
     @Published var urlEntities: URLEntities = URLEntities()
     @Published var isAnalyticsLoaded: Bool = false
-    @Published var currency: String = "RUB"
     var urlElements: URLElements?
     
     init(urlElements: URLElements?) {
@@ -34,6 +33,12 @@ class DataManager: ObservableObject {
             self.urlElements?.fetchCurrency()
             self.urlElements?.fetchTokenData()
             self.urlEntities.getGroupedTransactions()
+        }
+    }
+    
+    func updateProfileData() {
+        Task{
+            await fetchProfileData()
         }
     }
     

@@ -254,6 +254,7 @@ struct EnterVerificationEmailCode: View {
                 case 200:
                     print("case 200")
                     urlElements?.saveTokenData(responseObject: response ?? [:])
+                    print(urlElements)
                     self.isNavigationActive = true
                     return
                 case 400:

@@ -13,7 +13,6 @@ struct EditGoalView: View {
     @State private var goalTime: String
     @Binding var goals: [Goal]
     var goal: Goal
-    @Binding var currency: String
     @Binding var urlElements: URLElements?
 
     @Environment(\.presentationMode) var presentationMode
@@ -28,7 +27,6 @@ struct EditGoalView: View {
 
     init(goal: Goal,
          goals: Binding<[Goal]>,
-         currency: Binding<String>,
          urlElements: Binding<URLElements?>
     ) {
         self.goal = goal
@@ -41,7 +39,6 @@ struct EditGoalView: View {
             self._goalTime = State(initialValue: "0")
         }
         self._goals = goals
-        self._currency = currency
         self._urlElements = urlElements
         print(".sheet, goal: \(goal)")
     }
@@ -78,7 +75,7 @@ struct EditGoalView: View {
                         
                         HStack(alignment: .top, spacing: 10) {
                             CustomText(
-                                text: currencyCodeToSymbol(code: currency),
+                                text: currencyCodeToSymbol(code: urlElements?.currency ?? "RUB"),
                                 font: Font.custom("Inter", size: 14).weight(.semibold),
                                 color: Color("sc2")
                             )
@@ -168,7 +165,7 @@ struct EditGoalView: View {
                     ID: goal.ID,
                     Need: amount,
                     UserID: goal.UserID,
-                    Currency: currency
+                    Currency: urlElements?.currency ?? "RUB"
                 ).toDictionary(),
                 needsAuthorization: true,
                 needsCurrency: true

@@ -13,7 +13,6 @@ struct goalsSectionView: View{
     @Binding var selectedGoal: Goal?
     @Binding var isEditing: Bool
     @Binding var showAllGoalsView: Bool
-    @Binding var currency: String
     @Binding var urlElements: URLElements?
     
     var body: some View {
@@ -33,7 +32,6 @@ struct goalsSectionView: View{
                     NavigationLink(
                         destination: CreateGoalView(
                                         goals: $goals,
-                                        currency: $currency,
                                         urlElements: $urlElements
                                     )
                     ) {
@@ -57,7 +55,6 @@ struct goalsSectionView: View{
             case 0:
                 addGoalButton(
                     goals: $goals,
-                    currency: $currency,
                     urlElements: $urlElements
                 )
             default:
@@ -67,7 +64,6 @@ struct goalsSectionView: View{
                     selectedGoal: $selectedGoal,
                     isEditing: $isEditing,
                     showAllGoalsView: $showAllGoalsView,
-                    currency: $currency,
                     urlElements: $urlElements
                 )
             }
