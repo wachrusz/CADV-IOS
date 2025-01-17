@@ -6,7 +6,12 @@ disabled_rules:
   - function_body_length # Длина тела функции
   - file_length          # Длина файла
   - type_body_length     # Длина тела типа
-  - comment_spacing 
+  - comment_spacing
+  - comment_spacing
+  - multiline_comments
+  - opening_brace
+  - trailing_comments
+  - vertical_whitespace
 
 opt_in_rules:
   - force_unwrapping     # Запрет на использование force unwrap (!)
@@ -29,10 +34,9 @@ cyclomatic_complexity:
 
 excluded:
   - Pods
-  - Tests
-  - Generated    
+  - Frameworks
+  - Products
 
 colon:
   flexible_right_spacing: true # Гибкий пробел после двоеточия
-trailing_semicolon
-trailing_semicolon: false # Запрет на использование точек с запятой
+  trailing_semicolon: false # Запрет на использование точек с запятой
