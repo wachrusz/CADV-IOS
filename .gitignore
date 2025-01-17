@@ -1,3 +1,5 @@
-/CADV/GoogleService-Info.plist
+GoogleService-Info.plist
 /Pods
 /Frameworks
+Podfile
+Podfile.lock
