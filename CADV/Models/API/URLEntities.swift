@@ -38,7 +38,7 @@ struct URLEntities {
         let sortedTransactions = groupedTransactions.keys.sorted(by: >).map { date in
             let transactions = groupedTransactions[date]!
             let count = transactions.count
-            print("date: \(date), ctgTrz: \(count)")
+            Logger.shared.log(.info, "date: \(date), ctgTrz: \(count)")
             return (date: date, categorizedTransactions: transactions)
         }
         

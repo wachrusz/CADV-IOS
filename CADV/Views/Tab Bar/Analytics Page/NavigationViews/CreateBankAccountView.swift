@@ -115,7 +115,7 @@ struct CreateBankAccountView: View {
             return
         }
 
-        print(amount)
+        Logger.shared.log(.info, amount)
         
         let parameters = [
             "account": [
@@ -128,7 +128,6 @@ struct CreateBankAccountView: View {
                 "account_name": bankAccountName
             ]
         ] as [String : Any]
-        print(parameters)
         do{
             let response = try await urlElements?.fetchData(
                 endpoint: "v1/app/accounts",
@@ -140,7 +139,6 @@ struct CreateBankAccountView: View {
             case 201:
                 dismiss()
             default:
-                print(response as Any)
                 showError(message: "pogodite pzh")
             }
         }catch{

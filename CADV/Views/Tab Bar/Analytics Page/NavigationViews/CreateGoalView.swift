@@ -142,10 +142,10 @@ struct CreateGoalView: View {
             case 201:
                 presentationMode.wrappedValue.dismiss()
             default:
-                print("Failed to fetch goals.")
+                Logger.shared.log(.error, "Failed to fetch goals.")
             }
         }catch let error{
-            print(error, separator: "\n", terminator: "\n")
+            Logger.shared.log(.error, "\(error)")
             showError(message: "Упс, что-то пошло не так")
         }
     }

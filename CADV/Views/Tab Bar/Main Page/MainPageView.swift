@@ -56,6 +56,7 @@ struct MainPageView: View {
                             image: "tech", text: "Упс... Этого нет"
                         ),
                         secondButtonContent: CreateTransactionSelectCategory(
+                            urlElements: $dataManager.urlElements,
                             selectedCategory: $selectedCategory,
                             selectedPlan: $selectedPlan
                         ),

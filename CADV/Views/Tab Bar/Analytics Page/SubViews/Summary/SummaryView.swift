@@ -16,6 +16,7 @@ struct SummarySectionView: View {
     @Binding var contentHeight: CGFloat
     @Binding var isExpanded: Bool
     @State private var loadedTransactionsPerDate: [Date: Int] = [:]
+    @State private var bankAccountsIsEmpty: Bool = true
     
     
     var body: some View {
@@ -55,7 +56,7 @@ struct SummarySectionView: View {
                     .cornerRadius(10)
                 }
             case "Счета":
-                if bankAccounts.isEmpty {
+                if bankAccountsIsEmpty {
                     VStack {
                         CustomText(
                             text: "Подключите приложение банка, чтобы данные о ваших финансах учитывались автоматически или добавьте информацию о наличном счете, чтобы учитывать операции с наличными",
@@ -130,6 +131,13 @@ struct SummarySectionView: View {
                     }
                     .padding()
                     .onAppear {
+                        for value in bankAccounts.values {
+                            Logger.shared.log(.info, value)
+                            if !value.Array.isEmpty {
+                                Logger.shared.log(.warning, value)
+                                self.bankAccountsIsEmpty = false
+                            }
+                        }
                     }
                 }
             default:

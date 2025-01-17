@@ -120,7 +120,7 @@ struct ProfileSettingsView: View{
             }
         }
         catch let error{
-            print(error)
+            Logger.shared.log(.error, "\(error)")
         }
     }
 }

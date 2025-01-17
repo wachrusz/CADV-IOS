@@ -155,7 +155,7 @@ func stringToDate(_ dateString: String) -> Date? {
     if let date = dateFormatter.date(from: dateString) {
         return date
     } else {
-        print("Ошибка: Не удалось преобразовать строку в дату.")
+        Logger.shared.log(.error, "Ошибка: Не удалось преобразовать строку в дату.")
         return nil
     }
 }

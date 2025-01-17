@@ -6,6 +6,7 @@
 //
 import Foundation
 import CoreData
+import SwiftyJSON
 
 struct TokenData{
     var accessToken: String
@@ -59,7 +60,9 @@ struct URLElements {
         needsAuthorization: Bool = false,
         needsCurrency: Bool = false
     ) async throws -> [String: Any] {
+        Logger.shared.log(.warning, "-------------------------------------")
         var urlString =  self.urlString + endpoint
+        Logger.shared.log(.warning, "Sending request to \(urlString)")
         
         if method == "GET", !parameters.isEmpty {
             let queryItems = parameters.map { URLQueryItem(name: $0.key, value: "\($0.value)") }
@@ -69,6 +72,7 @@ struct URLElements {
         }
         
         guard let url = URL(string: urlString) else {
+            Logger.shared.log(.error, NSError(domain: "abstractFetchData", code: -1, userInfo: [NSLocalizedDescriptionKey: "Invalid URL"]))
             throw NSError(domain: "abstractFetchData", code: -1, userInfo: [NSLocalizedDescriptionKey: "Invalid URL"])
         }
         
@@ -79,8 +83,11 @@ struct URLElements {
         let headers = self.prepareHeaders(
             with: tokenData,
             needsAuthorization: needsAuthorization,
-            needsCurrency: needsCurrency
+            needsCurrency: needsCurrency,
+            endpoint: endpoint
         )
+        
+        Logger.shared.log(.warning, headers)
         
         for (key, value) in headers {
             request.setValue(value, forHTTPHeaderField: key)
@@ -90,6 +97,7 @@ struct URLElements {
             do {
                 request.httpBody = try JSONSerialization.data(withJSONObject: parameters)
             } catch {
+                Logger.shared.log(.error, NSError(domain: "abstractFetchData", code: -2, userInfo: [NSLocalizedDescriptionKey: "Failed to encode JSON"]))
                 throw NSError(domain: "abstractFetchData", code: -2, userInfo: [NSLocalizedDescriptionKey: "Failed to encode JSON"])
             }
         }
@@ -108,10 +116,12 @@ struct URLElements {
             
             let responseObject = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] ?? [:]
             
+            Logger.shared.log(.info, responseObject)
+            
             switch httpResponse.statusCode {
             case 401:
                 if retryAttempts > 0, headers["Authorization"] != nil {
-                    print("Received 401, attempting to refresh token...")
+                    Logger.shared.log(.warning, "Received 401, attempting to refresh token...")
                     let success = await withCheckedContinuation { continuation in
                         refreshTokenIfNeeded() { result in
                             continuation.resume(returning: result)
@@ -119,7 +129,7 @@ struct URLElements {
                     }
                     
                     if success {
-                        print("Token refreshed successfully, retrying request...")
+                        Logger.shared.log(.info, "Token refreshed successfully, retrying request...")
                         var newHeaders = headers
                         newHeaders["Authorization"] = self.tokenData.accessToken
                         return try await abstractFetchData(
@@ -130,7 +140,7 @@ struct URLElements {
                             needsAuthorization: needsAuthorization
                         )
                     } else {
-                        print("Failed to refresh token, aborting...")
+                        Logger.shared.log(.error, "Failed to refresh token, aborting...")
                         throw NSError(domain: "abstractFetchData", code: 401, userInfo: [NSLocalizedDescriptionKey: "Unauthorized: Token refresh failed"])
                     }
                 } else {
@@ -149,12 +159,13 @@ struct URLElements {
     func prepareHeaders(
         with tokenData: TokenData,
         needsAuthorization: Bool,
-        needsCurrency: Bool
+        needsCurrency: Bool,
+        endpoint: String
     ) -> [String: String] {
         var headers = [String: String]()
 
         if needsAuthorization {
-            headers["Authorization"] = tokenData.accessToken
+            headers["Authorization"] = "Bearer " + tokenData.accessToken
         }
         if needsCurrency{
             headers["X-Currency"] = self.currency
@@ -162,6 +173,9 @@ struct URLElements {
 
         headers["Content-Type"] = "application/json"
         headers["Accept"] = "application/json"
+        if endpoint.contains("/auth"){
+            headers["X-Device-ID"] = getDeviceIdentifier()
+        }
 
         return headers
     }
@@ -174,7 +188,7 @@ struct URLElements {
                 self.currency = currency[0].currency ?? ""
             }
         }catch{
-            print(error)
+            Logger.shared.log(.error, error)
         }
     }
     
@@ -193,7 +207,7 @@ struct URLElements {
             }
             
         }catch{
-            print(error)
+            Logger.shared.log(.error, (error))
         }
     }
     
@@ -211,43 +225,45 @@ struct URLElements {
     }
 
     func refreshToken() async -> Bool {
-        print("Started refresh")
+        Logger.shared.log(.warning, "Started refresh")
+        
         do {
             let response = try await fetchData(
                 endpoint: "v1/auth/refresh",
                 method: "POST",
                 parameters: ["refresh_token": self.tokenData.refreshToken]
             )
-            switch response["status_code"] as? Int {
-            case 200:
-                if let newToken = response["access_token"] as? String,
-                   let newRefreshToken = response["refresh_token"] as? String {
-                    saveNewTokens(token: newToken, refreshToken: newRefreshToken, viewCtx: viewCtx)
-                    print("Token refreshed successfully")
-                    return true
-                }
-            default:
-                let errorMessage = response as [String : Any]
-                print("Error refreshing token: \(errorMessage)")
+            
+            let json = JSON(response)
+            
+            if json["status_code"].intValue == 200 {
+                let newToken = json["access_token"].stringValue
+                let newRefreshToken = json["refresh_token"].stringValue
+                
+                saveNewTokens(token: newToken, refreshToken: newRefreshToken, viewCtx: viewCtx)
+                
+                Logger.shared.log(.info, "Token refreshed successfully")
+                return true
+            } else {
+                let errorMessage = json.dictionaryObject ?? [:]
+                Logger.shared.log(.error, "Error refreshing token: \(errorMessage)")
             }
         } catch {
-            print("Failed to refresh token: \(error.localizedDescription)")
+            Logger.shared.log(.error, "Failed to refresh token: \(error.localizedDescription)")
         }
+        
         return false
     }
-
     //! CORE DATA
     mutating func saveTokenData(responseObject: [String: Any]) {
-        print("------------\nResponse Object: \(responseObject)")
-        
         let fetchRequest: NSFetchRequest<NSFetchRequestResult> = AccessEntity.fetchRequest()
         let deleteRequest = NSBatchDeleteRequest(fetchRequest: fetchRequest)
         
         do {
             try viewCtx.execute(deleteRequest)
-            print("Deleted old tokens")
+            Logger.shared.log(.info, "Deleted old tokens")
         } catch {
-            print("Failed to delete old tokens: \(error)")
+            Logger.shared.log(.error, "Failed to delete old tokens: \(error)")
         }
         
         guard
@@ -258,7 +274,7 @@ struct URLElements {
             let refreshToken = tokenDetails["refresh_token"] as? String,
             let refreshTokenExpiresAt = tokenDetails["expires_at"] as? Int64
         else {
-            print("Error: Missing or incorrect data structure in responseObject.")
+            Logger.shared.log(.error, "Error: Missing or incorrect data structure in responseObject.")
             return
         }
         
@@ -268,14 +284,13 @@ struct URLElements {
         token.accessToken = accessToken
         token.refreshToken = refreshToken
         token.accessTokenExpiresAt = Date().addingTimeInterval(Double(accessTokenLifeTime))
-        print(token)
         do {
             try viewCtx.save()
-            print("Token data saved successfully.")
+            Logger.shared.log(.info, "Token data saved successfully.")
             self.tokenData = TokenData(from: token)
-            print(self.tokenData)
+            Logger.shared.log(.info, self.tokenData)
         } catch {
-            print("Failed to save token data: \(error.localizedDescription)")
+            Logger.shared.log(.error, "Failed to save token data: \(error.localizedDescription)")
         }
     }
     
@@ -291,9 +306,9 @@ struct URLElements {
                         
                         do {
                             try self.viewCtx.execute(deleteRequest)
-                            print("Удалены данные для сущности: \(entityName)")
+                            Logger.shared.log(.warning, "Удалены данные для сущности: \(entityName)")
                         } catch {
-                            print("Ошибка при удалении данных для сущности \(entityName): \(error.localizedDescription)")
+                            Logger.shared.log(.error, "Ошибка при удалении данных для сущности \(entityName): \(error.localizedDescription)")
                         }
                     }
                 }
@@ -307,7 +322,6 @@ struct URLElements {
         refreshToken: String,
         viewCtx: NSManagedObjectContext
     ){
-        print("----------------------------------------\nSavingNewTokens")
         let fetchRequest: NSFetchRequest<AccessEntity> = AccessEntity.fetchRequest()
         do {
             let tokens = try viewCtx.fetch(fetchRequest)
@@ -319,9 +333,8 @@ struct URLElements {
                 try viewCtx.save()
             }
         } catch {
-            print("Failed to fetch or save refreshed token: \(error.localizedDescription)")
+            Logger.shared.log(.error, "Failed to fetch or save refreshed token: \(error.localizedDescription)")
         }
-        print("----------------------------------------\nSavingNewTokens")
     }
 
 }

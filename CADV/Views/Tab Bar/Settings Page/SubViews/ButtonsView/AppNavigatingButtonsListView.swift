@@ -96,10 +96,10 @@ struct AppNavigatingButtonsList: View {
             case 200:
                 urlElements?.deleteAllEntities()
             default:
-                print("Failed to fetch goals.")
+                Logger.shared.log(.error, "Failed to fetch goals.")
             }
         } catch {
-            print("Error logging out: \(error)")
+            Logger.shared.log(.error, "Error logging out: \(error)")
         }
     }
 }

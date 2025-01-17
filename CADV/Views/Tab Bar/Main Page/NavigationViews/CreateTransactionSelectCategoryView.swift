@@ -9,6 +9,7 @@ import SwiftUI
 import CoreData
 
 struct CreateTransactionSelectCategory: View {
+    @Binding var urlElements: URLElements?
     @Binding var selectedCategory: String
     @Binding var selectedPlan: String
     
@@ -19,9 +20,11 @@ struct CreateTransactionSelectCategory: View {
     @State private var navigationTitle: String = ""
     
     init(
+        urlElements: Binding<URLElements?>,
         selectedCategory: Binding<String>,
         selectedPlan: Binding<String>
     ) {
+        self._urlElements = urlElements
         self._selectedCategory = selectedCategory
         self._selectedPlan = selectedPlan
         
@@ -42,79 +45,34 @@ struct CreateTransactionSelectCategory: View {
             sortDescriptors: [],
             predicate: predicate
         )
-        
-        print(selectedCategory.wrappedValue)
     }
     
     
     var body: some View {
-        ZStack {
-            NavigationStack {
-                ScrollView{
-                    HStack(alignment: .center, spacing: 20){
-                        StepView(number: "1", currentStep: 1, stepIndex: 1)
-                        StepView(number: "2", currentStep: 1, stepIndex: 2)
-                    }
-                    .padding(.top)
-                    CustomText(
-                        text: "Выбор категории",
-                        font: Font.custom("Gilroy",size: 12).weight(.semibold),
-                        color: Color("fg")
-                    )
-                    .padding(.vertical)
-                    
-                    LazyVStack(alignment: .leading) {
-                        if selectedCategory != "Сбережения"{
-                            Section(header: Text("Постоянные \(customCategoriesFilteredConstant.count + savedCategories.filter { $0.isConstant }.count)")) {
-                                ForEach(customCategoriesFilteredConstant, id: \.self) { category in
-                                    NavigationLink(destination: CreateTransactionMainView(categoryName: category.displayCategory)
-                                    ) {
-                                        CategoryRow(
-                                            categoryName: category.displayName,
-                                            imageName: image(for: category)
-                                        )
-                                    }
-                                }
-                                
-                                ForEach(savedCategories.filter { $0.isConstant }, id: \.self) { category in
-                                    if let categoryName = category.name, let imageName = category.iconName {
-                                        NavigationLink(destination: CreateTransactionMainView(categoryName: categoryName)
-                                        ) {
-                                            CategoryRow(
-                                                categoryName: categoryName,
-                                                imageName: imageName
-                                            )
-                                        }
-                                    }
-                                }
-                            }
-                            
-                            Section(header: Text("Переменные \(customCategoriesFilteredTemporary.count + savedCategories.filter { !$0.isConstant }.count)")) {
-                                ForEach(customCategoriesFilteredTemporary, id: \.self) { category in
-                                    NavigationLink(destination: CreateTransactionMainView(categoryName: category.displayCategory)
-                                    ) {
-                                        CategoryRow(
-                                            categoryName: category.displayName,
-                                            imageName: image(for: category)
-                                        )
-                                    }
-                                }
-                                
-                                ForEach(savedCategories.filter { !$0.isConstant }, id: \.self) { category in
-                                    if let categoryName = category.name, let imageName = category.iconName {
-                                        NavigationLink(destination: CreateTransactionMainView(categoryName: categoryName)
-                                        ) {
-                                            CategoryRow(
-                                                categoryName: categoryName,
-                                                imageName: imageName
-                                            )
-                                        }
-                                    }
-                                }
-                            }
-                        }else{
+        NavigationStack {
+            ScrollView{
+                HStack(alignment: .center, spacing: 20){
+                    StepView(number: "1", currentStep: 1, stepIndex: 1)
+                    StepView(number: "2", currentStep: 1, stepIndex: 2)
+                }
+                .padding(.top)
+                CustomText(
+                    text: "Выбор категории",
+                    font: Font.custom("Gilroy",size: 12).weight(.semibold),
+                    color: Color("fg")
+                )
+                .padding(.vertical)
+                
+                LazyVStack(alignment: .leading) {
+                    if selectedCategory != "Сбережения"{
+                        Section(header: Text("Постоянные \(customCategoriesFilteredConstant.count + savedCategories.filter { $0.isConstant }.count)")) {
                             ForEach(customCategoriesFilteredConstant, id: \.self) { category in
-                                NavigationLink(destination: CreateTransactionMainView(categoryName: category.displayCategory)
+                                NavigationLink(destination: CreateTransactionMainView(
+                                    urlElements: $urlElements,
+                                    categoryName: category.displayCategory,
+                                    sectionName: selectedCategory,
+                                    selectedPlan: selectedPlan
+                                )
                                 ) {
                                     CategoryRow(
                                         categoryName: category.displayName,
@@ -122,9 +80,48 @@ struct CreateTransactionSelectCategory: View {
                                     )
                                 }
                             }
-                            ForEach(savedCategories.filter {$0.categoryType == "Сбережения"}, id: \.self) { category in
+                            
+                            ForEach(savedCategories.filter { $0.isConstant }, id: \.self) { category in
                                 if let categoryName = category.name, let imageName = category.iconName {
-                                    NavigationLink(destination: CreateTransactionMainView(categoryName: categoryName)
+                                    NavigationLink(destination: CreateTransactionMainView(
+                                        urlElements: $urlElements,
+                                        categoryName: categoryName,
+                                        sectionName: selectedCategory,
+                                        selectedPlan: selectedPlan
+                                    )) {
+                                        CategoryRow(
+                                            categoryName: categoryName,
+                                            imageName: imageName
+                                        )
+                                    }
+                                }
+                            }
+                        }
+                        
+                        Section(header: Text("Переменные \(customCategoriesFilteredTemporary.count + savedCategories.filter { !$0.isConstant }.count)")) {
+                            ForEach(customCategoriesFilteredTemporary, id: \.self) { category in
+                                NavigationLink(destination: CreateTransactionMainView(
+                                    urlElements: $urlElements,
+                                    categoryName: category.displayCategory,
+                                    sectionName: selectedCategory,
+                                    selectedPlan: selectedPlan
+                                )
+                                ) {
+                                    CategoryRow(
+                                        categoryName: category.displayName,
+                                        imageName: image(for: category)
+                                    )
+                                }
+                            }
+                            
+                            ForEach(savedCategories.filter { !$0.isConstant }, id: \.self) { category in
+                                if let categoryName = category.name, let imageName = category.iconName {
+                                    NavigationLink(destination: CreateTransactionMainView(
+                                        urlElements: $urlElements,
+                                        categoryName: categoryName,
+                                        sectionName: selectedCategory,
+                                        selectedPlan: selectedPlan
+                                    )
                                     ) {
                                         CategoryRow(
                                             categoryName: categoryName,
@@ -134,16 +131,47 @@ struct CreateTransactionSelectCategory: View {
                                 }
                             }
                         }
-                        ActionDissmisButtons(
-                            action: action,
-                            actionTitle: "Добавить категорию"
-                        )
+                    }else{
+                        ForEach(customCategoriesFilteredConstant, id: \.self) { category in
+                            NavigationLink(destination: CreateTransactionMainView(
+                                urlElements: $urlElements,
+                                categoryName: category.displayCategory,
+                                sectionName: selectedCategory,
+                                selectedPlan: selectedPlan
+                            )
+                            ) {
+                                CategoryRow(
+                                    categoryName: category.displayName,
+                                    imageName: image(for: category)
+                                )
+                            }
+                        }
+                        ForEach(savedCategories.filter {$0.categoryType == "Сбережения"}, id: \.self) { category in
+                            if let categoryName = category.name, let imageName = category.iconName {
+                                NavigationLink(destination: CreateTransactionMainView(
+                                    urlElements: $urlElements,
+                                    categoryName: categoryName,
+                                    sectionName: selectedCategory,
+                                    selectedPlan: selectedPlan
+                                )
+                                ) {
+                                    CategoryRow(
+                                        categoryName: categoryName,
+                                        imageName: imageName
+                                    )
+                                }
+                            }
+                        }
                     }
+                    ActionDissmisButtons(
+                        action: action,
+                        actionTitle: "Добавить категорию"
+                    )
                 }
-                Spacer()
             }
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            Spacer()
         }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
         .navigationTitle(navigationTitle)
         .onAppear(){
             switch selectedCategory {

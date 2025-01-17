@@ -170,7 +170,7 @@ struct LoginView: View{
                     self.isLoading = false
                 }
             }catch let error{
-                print(error)
+                Logger.shared.log(.error, error)
                 self.loginError = "error"
                 self.showErrorPopup = true
                 self.isLoading = false

@@ -45,7 +45,7 @@ struct BankAccountList: View {
             }
             .frame(maxWidth: .infinity, alignment: .trailing)
             .onAppear(){
-                print(bankAccounts)
+                Logger.shared.log(.info, bankAccounts)
             }
         }
         .frame(maxHeight: 100)

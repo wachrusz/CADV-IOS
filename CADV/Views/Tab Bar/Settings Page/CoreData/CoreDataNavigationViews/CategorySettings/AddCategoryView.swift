@@ -122,7 +122,7 @@ struct AddCategory: View {
                 try managedObjectContext.save()
                 dismiss()
             } catch {
-                print("Ошибка сохранения категории: \(error)")
+                Logger.shared.log(.error, "Ошибка сохранения категории: \(error)")
             }
         }else{
             

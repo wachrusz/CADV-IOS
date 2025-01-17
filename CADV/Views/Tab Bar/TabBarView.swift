@@ -46,7 +46,6 @@ struct TabBarContentView: View {
                         )
                         .frame(width: geometry.size.width, height: geometry.size.height)
                         .onAppear(){
-                            print(self.dataManager.urlElements?.currency)
                         }
                     } else {
                         ProgressView()

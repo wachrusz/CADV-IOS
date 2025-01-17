@@ -14,7 +14,7 @@ struct CreateTransactionMainView: View {
     var sectionName: String
     var selectedPlan: String
     @State private var planned: Bool = false
-    @State private var transactionAmmount: Double = 0
+    @State private var transactionAmmount: String = "0.0"
     @State private var showAmountTextFieldError: Bool = false
     @State private var isAmountFieldFine: Bool = false
     

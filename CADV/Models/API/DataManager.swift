@@ -59,12 +59,10 @@ class DataManager: ObservableObject {
             )
             switch response?["status_code"] as? Int {
             case 200:
-                print(response?["analytics"] as Any)
                 guard let analytics = response?["analytics"] as? [String: Any],
                       let incomeArray = analytics["income"] as? [[String: Any]],
                       let expenseArray = analytics["expense"] as? [[String: Any]],
                       let wealthFundArray = analytics["wealth_fund"] as? [[String: Any]] else {
-                    print("Error: Could not find or parse 'transactions' as an array of dictionaries")
                     return
                 }
                 do{
@@ -72,18 +70,18 @@ class DataManager: ObservableObject {
                     let trnsactionsData = try JSONSerialization.data(withJSONObject: transactionsArray, options: [])
                     let transactions = try JSONDecoder().decode([CategorizedTransaction].self, from: trnsactionsData)
                     for transaction in transactions {
-                        print("Transaction: \(transaction)")
+                        Logger.shared.log(.info, "Transaction: \(transaction)")
                     }
                     
                     self.urlEntities.categorizedTransactions = transactions
                 }catch{
-                    print("Error decoding transactions: \(error)")
+                    Logger.shared.log(.error, "Error decoding transactions: \(error)")
                 }
             default:
-                print("Failed to fetch goals.")
+                Logger.shared.log(.error, "Failed to fetch goals.")
             }
         }catch let error{
-            print(error)
+            Logger.shared.log(.error, error)
         }
     }
     
@@ -101,11 +99,10 @@ class DataManager: ObservableObject {
                     let tracker = response?["tracker"] as? [String: Any],
                     let goalArray = tracker["goal"] as? [[String: Any]]
                 else {
-                    print("Error: Could not find or parse 'goal' as an array of dictionaries")
+                    Logger.shared.log(.warning, "Error: Could not find or parse 'goal' as an array of dictionaries")
                     return
                 }
                 do {
-                    print(tracker)
                     let newGoalsData = try JSONSerialization.data(withJSONObject: goalArray, options: [])
                     let newGoals = try JSONDecoder().decode([Goal].self, from: newGoalsData)
                     
@@ -114,10 +111,10 @@ class DataManager: ObservableObject {
 
                 }
             default:
-                print("Failed to fetch goals.")
+                Logger.shared.log(.error, "Failed to fetch goals.")
             }
         }catch let error{
-            print(error)
+            Logger.shared.log(.error, error)
         }
         
     }
@@ -131,9 +128,8 @@ class DataManager: ObservableObject {
             )
             switch response?["status_code"] as? Int {
             case 200:
-                print(response ?? [:])
                 guard let profileData = try? JSONSerialization.data(withJSONObject: response?["profile"] ?? [:], options: []) else {
-                    print("Error: Could not serialize profile data")
+                    Logger.shared.log(.error, "Error: Could not serialize profile data")
                     return
                 }
                 do {
@@ -141,14 +137,14 @@ class DataManager: ObservableObject {
                     
                     self.urlEntities.profile = profile
                 } catch {
-                    print("Error decoding profile: \(error)")
+                    Logger.shared.log(.error, "Error decoding profile: \(error)")
                 }
             default:
                 let errorMessage = response?["error"] as? String
-                print("Error: \(errorMessage ?? "Unknown error case")")
+                Logger.shared.log(.error, "Error: \(errorMessage ?? "Unknown error case")")
             }
         }catch let error{
-            print(error)
+            Logger.shared.log(.error, error)
         }
     }
     
@@ -168,20 +164,20 @@ class DataManager: ObservableObject {
             )
             switch response?["status_code"] as? Int {
             case 200:
-                print(response?["message"] as Any)
+                Logger.shared.log(.info, response?["message"] as Any)
             default:
                 let errorMessage = response?["error"] as? String
-                print("Error: \(errorMessage ?? "Unknown error case")")
+                Logger.shared.log(.error, "Error: \(errorMessage ?? "Unknown error case")")
             }
         }catch let error{
-            print(error)
+            Logger.shared.log(.error, error)
         }
     }
     
     func fetchMore() async {
         do {
             guard let urlElements = self.urlElements else {
-                print("Error: urlElements is nil")
+                Logger.shared.log(.error, "Error: urlElements is nil")
                 return
             }
             
@@ -194,19 +190,19 @@ class DataManager: ObservableObject {
             switch response["status_code"] as? Int {
             case 200:
                 guard let moreData = response["more"] as? [String: Any] else {
-                    print("Error: Could not extract 'more' data")
+                    Logger.shared.log(.error, "Error: Could not extract 'more' data")
                     return
                 }
                 
                 guard let appData = moreData["app"] as? [String: Any] else {
-                    print("Error: Could not extract 'app' data")
+                    Logger.shared.log(.error, "Error: Could not extract 'app' data")
                     return
                 }
                 
-                print("appData: \(appData)")
+                Logger.shared.log(.info, "appData: \(appData)")
                 
                 guard let connectedAccountsDict = appData["connected_accounts"] as? [String: Any] else {
-                    print("Error: Could not extract 'connected_accounts' data")
+                    Logger.shared.log(.error, "Error: Could not extract 'connected_accounts' data")
                     return
                 }
                 
@@ -214,12 +210,12 @@ class DataManager: ObservableObject {
                 
                 for (key, accountsArray) in connectedAccountsDict {
                     guard let accountsArray = accountsArray as? [[String: Any]] else {
-                        print("Error: Invalid account data for key \(key)")
+                        Logger.shared.log(.error, "Error: Invalid account data for key \(key)")
                         continue
                     }
                     
                     guard let category = Int(key) else {
-                        print("Error: Invalid category key \(key)")
+                        Logger.shared.log(.error, "Error: Invalid category key \(key)")
                         continue
                     }
                     
@@ -231,8 +227,8 @@ class DataManager: ObservableObject {
                               let accountNumber = accountData["account_number"] as? String,
                               let accountState = accountData["account_state"] as? Double,
                               let accountType = accountData["account_type"] as? String else {
-                            print("Error: Invalid account data")
-                            print(accountData)
+                            Logger.shared.log(.error, "Error: Invalid account data")
+                            Logger.shared.log(.info, accountData)
                             continue
                         }
                         
@@ -269,9 +265,9 @@ class DataManager: ObservableObject {
                 
             default:
                 let errorMessage = response["error"] as? String
-                print("Error: \(errorMessage ?? "Unknown error case")")
+                Logger.shared.log(.error, "Error: \(errorMessage ?? "Unknown error case")")
             }
         } catch {
-            print("Error fetching data: \(error)")
+            Logger.shared.log(.error, "Error fetching data: \(error)")
         }
     }}

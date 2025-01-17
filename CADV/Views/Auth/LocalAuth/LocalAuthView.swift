@@ -74,7 +74,7 @@ struct LocalAuthView: View {
                                                 isCodeValid = true
                                             }
                                         } else {
-                                            print("Face ID authentication failed")
+                                            Logger.shared.log(.info,"Face ID authentication failed")
                                         }
                                     }
                                 }
@@ -110,7 +110,7 @@ struct LocalAuthView: View {
                     Text("Delete")
                         .onTapGesture {
                             KeychainHelper.shared.delete(forKey: keychainKey)
-                            print("deleted")
+                            Logger.shared.log(.info, "Deleted all occurencies of passwords and other confidential information")
                         }
                 }
                 .padding(.bottom, 40)
@@ -128,10 +128,10 @@ struct LocalAuthView: View {
             .padding()
             .onAppear(){
                 if KeychainHelper.shared.read(forKey: keychainKey) == nil{
-                    print(KeychainHelper.shared.read(forKey: keychainKey))
+                    Logger.shared.log(.info, KeychainHelper.shared.read(forKey: keychainKey))
                     codeExists = false
                 }else{
-                    print(KeychainHelper.shared.read(forKey: keychainKey))
+                    Logger.shared.log(.info, KeychainHelper.shared.read(forKey: keychainKey))
                 }
                 
                 if UserDefaults.standard.bool(forKey: "isFaceIDEnabled") {
@@ -193,7 +193,6 @@ struct LocalAuthView: View {
                 shake(true)
                 
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                    print("checkCode DispatchQueue.main.asyncAfter(deadline: .now() + 1)")
                     isCodeValid = true
                 }
             } else {
@@ -212,7 +211,7 @@ struct LocalAuthView: View {
     private func setupUserPinCode(_ code: String) {
         let defaultPin = code
         KeychainHelper.shared.save(defaultPin, forKey: keychainKey)
-        print("PIN saved in Keychain")
+        Logger.shared.log(.info, "PIN saved in Keychain")
     }
     
     private func enableFaceID() {
@@ -225,16 +224,16 @@ struct LocalAuthView: View {
             context.evaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, localizedReason: reason) { success, authenticationError in
                 DispatchQueue.main.async {
                     if success {
-                        print("Face ID enabled successfully")
+                        Logger.shared.log(.info, "Face ID enabled successfully")
                         UserDefaults.standard.set(true, forKey: "isFaceIDEnabled")
                     } else {
-                        print("Face ID setup failed: \(authenticationError?.localizedDescription ?? "Unknown error")")
+                        Logger.shared.log(.error, "Face ID setup failed: \(authenticationError?.localizedDescription ?? "Unknown error")")
                     }
                 }
             }
         } else {
             DispatchQueue.main.async {
-                print("Face ID is not available: \(error?.localizedDescription ?? "Unknown error")")
+                Logger.shared.log(.error, "Face ID is not available: \(error?.localizedDescription ?? "Unknown error")")
             }
         }
     }
@@ -271,16 +270,16 @@ struct LocalAuthView: View {
             context.evaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, localizedReason: reason) { success, authenticationError in
                 DispatchQueue.main.async {
                     if success {
-                        print("Biometric authentication successful")
+                        Logger.shared.log(.info,"Biometric authentication successful")
                         completion(true)
                     } else {
-                        print("Biometric authentication failed: \(authenticationError?.localizedDescription ?? "Unknown error")")
+                        Logger.shared.log(.error, "Biometric authentication failed: \(authenticationError?.localizedDescription ?? "Unknown error")")
                         completion(false)
                     }
                 }
             }
         } else {
-            print("Biometric authentication not available: \(error?.localizedDescription ?? "Unknown error")")
+            Logger.shared.log(.error, "Biometric authentication not available: \(error?.localizedDescription ?? "Unknown error")")
             completion(false)
         }
     }

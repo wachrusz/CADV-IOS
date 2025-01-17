@@ -19,7 +19,7 @@ struct CADVApp: App {
         didSet {
             guard oldValue != isAuthenticated else { return }
             
-            print("Authentication status changed: \(isAuthenticated)")
+            Logger.shared.log(.info, "Authentication status changed: \(isAuthenticated)")
         }
     }
     @State private var urlElements: URLElements?
@@ -56,32 +56,32 @@ struct CADVApp: App {
         do {
             let tokens = try context.fetch(fetchRequest)
             if tokens.isEmpty {
-                print("Core Data is empty, creating default token")
+                Logger.shared.log(.warning, "Core Data is empty, creating default token")
                 createDefaultToken()
                 urlElements = URLElements(
                     tokenData: TokenData(from: AccessEntity(context: context)),
                     viewCtx: context
                 )
                 isAuthenticated = false
-                print(urlElements as Any)
+                Logger.shared.log(.info, urlElements as Any)
             } else if let entity = tokens.first {
                 let tokenData = TokenData(from: entity)
                 urlElements = URLElements(tokenData: tokenData, viewCtx: context)
                 isAuthenticated = isValid(token: tokenData)
-                print(urlElements as Any)
+                Logger.shared.log(.info, urlElements as Any)
             } else {
-                print("No token found, initializing default URL elements")
+                Logger.shared.log(.info, "No token found, initializing default URL elements")
                 urlElements = URLElements(
                     tokenData: TokenData(from: AccessEntity(context: context)),
                     viewCtx: context
                 )
                 isAuthenticated = false
-                print(urlElements as Any)
+                Logger.shared.log(.info, urlElements as Any)
             }
         } catch {
-            print("Error fetching token: \(error)")
+            Logger.shared.log(.error, "Error fetching token: \(error)")
             isAuthenticated = false
-            print(urlElements as Any)
+            Logger.shared.log(.info, urlElements as Any)
         }
     }
     
@@ -90,58 +90,58 @@ struct CADVApp: App {
         isCheckingToken = true
             
         defer { isCheckingToken = false }
-        print("Started checking tokens, attempts left: \(attemptsLeft)")
+        Logger.shared.log(.info, "Started checking tokens, attempts left: \(attemptsLeft)")
         let context = persistenceController.container.viewContext
         let fetchRequest: NSFetchRequest<AccessEntity> = AccessEntity.fetchRequest()
         
         do {
             let tokens = try context.fetch(fetchRequest)
             if tokens.isEmpty {
-                print("Core Data is empty, creating default token")
+                Logger.shared.log(.info, "Core Data is empty, creating default token")
                 createDefaultToken()
                 isAuthenticated = false
                 return
             }
             
             if let entity = tokens.first {
-                print("Found token entity")
+                Logger.shared.log(.info, "Found token entity")
                 let tokenData = TokenData(from: entity)
                 
                 if isValid(token: tokenData) {
-                    print("Token is valid")
+                    Logger.shared.log(.info, "Token is valid")
                     isAuthenticated = true
                     return
                 } else {
-                    print("Token is invalid")
+                    Logger.shared.log(.warning, "Token is invalid")
                     
                     if attemptsLeft > 0 {
                         urlElements?.refreshTokenIfNeeded() { success in
                             if success {
-                                print("Token refreshed successfully, rechecking...")
+                                Logger.shared.log(.info, "Token refreshed successfully, rechecking...")
                                 self.initializeURLElements()
                                 self.checkToken(attemptsLeft: attemptsLeft - 1)
                             } else {
-                                print("Failed to refresh token, attempts left: \(attemptsLeft - 1)")
+                                Logger.shared.log(.warning, "Failed to refresh token, attempts left: \(attemptsLeft - 1)")
                                 self.checkToken(attemptsLeft: attemptsLeft - 1)
                             }
                         }
                     } else {
-                        print("All attempts exhausted, authentication failed")
+                        Logger.shared.log(.error, "All attempts exhausted, authentication failed")
                         isAuthenticated = false
                     }
                 }
             } else {
-                print("No token found, setting isAuthenticated to false")
+                Logger.shared.log(.warning, "No token found, setting isAuthenticated to false")
                 isAuthenticated = false
             }
         } catch {
-            print("Error fetching token: \(error)")
+            Logger.shared.log(.error, "Error fetching token: \(error)")
             isAuthenticated = false
         }
     }
     
     private func isValid(token: TokenData) -> Bool {
-        print("exp: \(token.accessTokenExpiresAt), curr: \(Date())")
+        Logger.shared.log(.info, "exp: \(token.accessTokenExpiresAt), curr: \(Date())")
         return token.accessTokenExpiresAt > Date()
     }
     
@@ -155,9 +155,9 @@ struct CADVApp: App {
         
         do {
             try context.save()
-            print("Default token created")
+            Logger.shared.log(.info, "Default token created")
         } catch {
-            print("Failed to create default token: \(error.localizedDescription)")
+            Logger.shared.log(.error, "Failed to create default token: \(error.localizedDescription)")
         }
     }
 
