@@ -48,32 +48,34 @@ struct AddCategory: View {
                         .cornerRadius(15)
                         .frame(maxHeight: 40)
                 }
-                HStack {
-                    Button(action: {
-                        isConstant = true
-                    }) {
-                        Text("Постоянный")
-                            .fontWeight(isConstant ? .bold : .regular)
-                            .foregroundColor(isConstant ? .white : .black)
-                            .padding()
-                            .background(isConstant ? Color.black : Color.white)
-                            .cornerRadius(15)
-                            .frame(maxHeight: 40)
+                if category != "Сбережения"{
+                    HStack {
+                        Button(action: {
+                            isConstant = true
+                        }) {
+                            Text("Постоянный")
+                                .fontWeight(isConstant ? .bold : .regular)
+                                .foregroundColor(isConstant ? .white : .black)
+                                .padding()
+                                .background(isConstant ? Color.black : Color.white)
+                                .cornerRadius(15)
+                                .frame(maxHeight: 40)
+                        }
+                        
+                        Button(action: {
+                            isConstant = false
+                        }) {
+                            Text("Переменный")
+                                .fontWeight(!isConstant ? .bold : .regular)
+                                .foregroundColor(!isConstant ? .white : .black)
+                                .padding()
+                                .background(!isConstant ? Color.black : Color.white)
+                                .cornerRadius(15)
+                                .frame(maxHeight: 40)
+                        }
                     }
-                    
-                    Button(action: {
-                        isConstant = false
-                    }) {
-                        Text("Переменный")
-                            .fontWeight(!isConstant ? .bold : .regular)
-                            .foregroundColor(!isConstant ? .white : .black)
-                            .padding()
-                            .background(!isConstant ? Color.black : Color.white)
-                            .cornerRadius(15)
-                            .frame(maxHeight: 40)
-                    }
+                    .padding(.vertical, 10)
                 }
-                .padding(.vertical, 10)
                 ActionDissmisButtons(
                     action: saveCategory,
                     actionTitle: "Сохранить"
@@ -120,7 +122,7 @@ struct AddCategory: View {
                 try managedObjectContext.save()
                 dismiss()
             } catch {
-                print("Ошибка сохранения категории: \(error)")
+                Logger.shared.log(.error, "Ошибка сохранения категории: \(error)")
             }
         }else{
             

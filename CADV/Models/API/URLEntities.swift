@@ -13,7 +13,7 @@ struct URLEntities {
     var goals: [Goal]
     var finHealth: FinHealth
     var annualPayments: [AnnualPayment]
-    var bankAccounts: BankAccounts
+    var bankAccounts: [Int:BankAccounts]
     var groupedAndSortedTransactions: [(date: Date, categorizedTransactions: [CategorizedTransaction])] = []
     
     init() {
@@ -22,7 +22,10 @@ struct URLEntities {
         self.goals = []
         self.finHealth = FinHealth()
         self.annualPayments = []
-        self.bankAccounts = BankAccounts()
+        self.bankAccounts =  [
+            0: BankAccounts(),
+            1: BankAccounts()
+        ]
     }
     
     mutating func getGroupedTransactions()
@@ -35,7 +38,7 @@ struct URLEntities {
         let sortedTransactions = groupedTransactions.keys.sorted(by: >).map { date in
             let transactions = groupedTransactions[date]!
             let count = transactions.count
-            print("date: \(date), ctgTrz: \(count)")
+            Logger.shared.log(.info, "date: \(date), ctgTrz: \(count)")
             return (date: date, categorizedTransactions: transactions)
         }
         

@@ -7,7 +7,8 @@
 
 import Foundation
 
-struct BankAccounts: Sequence, RandomAccessCollection {
+struct BankAccounts: Sequence, RandomAccessCollection, Equatable, Identifiable {
+    let id: UUID = UUID()
     var Array: [BankAccount] = []
     var TotalAmount: Double {self.Array.reduce(0) { $0 + $1.totalAmount }}
     var Group: BankAccountsGroup? = nil

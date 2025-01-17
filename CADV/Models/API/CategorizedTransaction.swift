@@ -81,19 +81,54 @@ func image(for category: CustomCategoryType) -> String {
         switch expense{
             case .constant(let category):
             switch category{
+            case .property:
+                return "home"
+            case .waterBills:
+                return "office"
+            case .internetBills:
+                return "phone"
+            case .insurance:
+                return "deal"
+            case .creditCard:
+                return "calendar"
+            case .auto:
+                return "auto"
+            case .education:
+                return "education"
             default:
                 return "ufo"
             }
         case .temporary(let category):
             switch category{
+            case .household:
+                return "tech"
+            case .food:
+                return "food"
+            case .vacation:
+                return "palette"
+            case .other:
+                return "ufo"
+            case .hardware:
+                return "laptop"
+            case .entertainment:
+                return "pinata"
             default:
                 return "ufo"
             }
         }
     case .wealthFund(let category):
         switch category{
-        default:
-            return "ufo"
+        case .constant(let category):
+            switch category{
+            case .investments:
+                return "briefcase"
+            case .savings:
+                return "money_bag"
+            case .valute:
+                return "cash"
+            default:
+                return "ufo"
+            }
         }
     }
 }
@@ -120,7 +155,7 @@ extension CustomCategoryType: Comparable {
         switch self {
         case .income: return  "Доходы"
         case .expense: return "Расходы"
-        case .wealthFund: return "Фонд благосостояния"
+        case .wealthFund: return "Сбережения"
         }
     }
     

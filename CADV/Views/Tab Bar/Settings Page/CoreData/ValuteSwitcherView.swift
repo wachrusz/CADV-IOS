@@ -9,7 +9,7 @@ import SwiftUI
 import CoreData
 
 class CurrencyManager: ObservableObject {
-    @Published var selectedCurrency: String = "rub"
+    @Published var selectedCurrency: String = "RUB"
     let context = PersistenceController.shared.container.viewContext
     
     init() {
@@ -24,7 +24,7 @@ class CurrencyManager: ObservableObject {
                 selectedCurrency = savedCurrency
             }
         } catch {
-            print("Ошибка загрузки валюты: \(error)")
+            Logger.shared.log(.warning, "Ошибка загрузки валюты: \(error)")
         }
     }
     
@@ -36,7 +36,7 @@ class CurrencyManager: ObservableObject {
             entity.currency = currency
             try context.save()
         } catch {
-            print("Ошибка сохранения валюты: \(error)")
+            Logger.shared.log(.error, "Ошибка сохранения валюты: \(error)")
         }
     }
 }

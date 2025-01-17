@@ -12,12 +12,11 @@ struct AnalyticsPageView: View {
     @Binding var categorizedTransactions: [CategorizedTransaction]
     @Binding var goals: [Goal]
     @Binding var annualPayments: [AnnualPayment]
-    @Binding var bankAccounts: BankAccounts
+    @Binding var bankAccounts: [Int : BankAccounts]
     @Binding var groupedAndSortedTransactions: [(
         date: Date, categorizedTransactions: [CategorizedTransaction]
     )]
-    @Binding var currency: String
-    @Binding var urlElements: URLElements?
+    @StateObject var dataManager: DataManager
     
     @State private var isSummaryExpanded: Bool = false
     @State private var selectedCategory: String = "Состояние"
@@ -52,10 +51,8 @@ struct AnalyticsPageView: View {
                     )
                     switch selectedCategory{
                     case "Состояние":
-                        TotalAmountView(
-                            text: formattedTotalAmount(
-                                amount: bankAccounts.TotalAmount
-                            )
+                        AnalyticsTotalAmountView(
+                            bankAccounts: bankAccounts
                         )
                         
                         PlanSwitcherButtons(
@@ -69,17 +66,24 @@ struct AnalyticsPageView: View {
                             groupedAndSortedTransactions: $groupedAndSortedTransactions,
                             bankAccounts: $bankAccounts,
                             contentHeight: $contentHeight,
-                            isExpanded: $isExpanded)
+                            isExpanded: $isExpanded
+                        )
                         
                         ActionButtons(
                             isFirstAction: $isAddingBank,
                             isSecondAction: $isEnteringManually,
                             firstButtonContent: AddBankAccountView(),
-                            secondButtonContent: CreateBankAccountView(
-                                bankAccounts: $bankAccounts,
-                                currency: $currency,
-                                urlElements: $urlElements
-                            ),
+                            secondButtonContent:  Group{
+                                if selectedPlan != "Транзакции"  {
+                                    CreateBankAccountView(
+                                        urlElements: self.$dataManager.urlElements
+                                ) }
+                                else{
+                                    CreateTransactionAnalyticsView(
+                                        dataManager: dataManager
+                                    )
+                                }
+                            },
                             firstButtonText: "Добавить банк",
                             secondButtonText: "Внести вручную",
                             firstButtonAction: {},
@@ -96,8 +100,7 @@ struct AnalyticsPageView: View {
                             showAllGoalsView: $showAllGoalsView,
                             showAnnualPayments: $showAnnualPayments,
                             dragOffset: $dragOffset,
-                            currency: $currency,
-                            urlElements: $urlElements
+                            urlElements: self.$dataManager.urlElements
                         )
                         
                     case "Финансовое Здоровье":
@@ -116,8 +119,8 @@ struct AnalyticsPageView: View {
                 .padding(.bottom)
                 .background(Color.white)
                 .hideBackButton()
-                .onAppear {
-                    print("Helooooooo")
+                .onAppear(){
+                    self.dataManager.updateAnalyticsPage()
                 }
                 .sheet(isPresented: Binding<Bool>(
                     get: { isEditing },
@@ -130,8 +133,7 @@ struct AnalyticsPageView: View {
                             EditGoalView(
                                 goal: goal,
                                 goals: $goals,
-                                currency: $currency,
-                                urlElements: $urlElements
+                                urlElements: self.$dataManager.urlElements
                             )
                         } else {
                             Text("Ошибка: цель не выбрана.")

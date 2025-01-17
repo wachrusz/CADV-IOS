@@ -99,7 +99,7 @@ struct PasswordResetView: View {
                 case 200:
                     showEmailVerification = true
                 default:
-                    print("s")
+                    Logger.shared.log(.info, "WHOOOPS")
                     //showError(message: "oioioi")
                 }
             }catch{

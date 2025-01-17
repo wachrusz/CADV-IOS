@@ -13,7 +13,6 @@ struct goalsView: View{
     @Binding var selectedGoal: Goal?
     @Binding var isEditing: Bool
     @Binding var showAllGoalsView: Bool
-    @Binding var currency: String
     @Binding var urlElements: URLElements?
     
     var body: some View {
@@ -52,7 +51,6 @@ struct goalsView: View{
             .sheet(isPresented: $showAllGoalsView) {
                 AllGoalsView(
                     goals: $goals,
-                    currency: $currency,
                     urlElements: $urlElements
                 )
             }

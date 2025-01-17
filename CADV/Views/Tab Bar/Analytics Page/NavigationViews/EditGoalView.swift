@@ -13,7 +13,6 @@ struct EditGoalView: View {
     @State private var goalTime: String
     @Binding var goals: [Goal]
     var goal: Goal
-    @Binding var currency: String
     @Binding var urlElements: URLElements?
 
     @Environment(\.presentationMode) var presentationMode
@@ -28,7 +27,6 @@ struct EditGoalView: View {
 
     init(goal: Goal,
          goals: Binding<[Goal]>,
-         currency: Binding<String>,
          urlElements: Binding<URLElements?>
     ) {
         self.goal = goal
@@ -41,9 +39,8 @@ struct EditGoalView: View {
             self._goalTime = State(initialValue: "0")
         }
         self._goals = goals
-        self._currency = currency
         self._urlElements = urlElements
-        print(".sheet, goal: \(goal)")
+        Logger.shared.log(.info, ".sheet, goal: \(goal)")
     }
 
     var body: some View {
@@ -78,7 +75,7 @@ struct EditGoalView: View {
                         
                         HStack(alignment: .top, spacing: 10) {
                             CustomText(
-                                text: currencyCodeToSymbol(code: currency),
+                                text: currencyCodeToSymbol(code: urlElements?.currency ?? "RUB"),
                                 font: Font.custom("Inter", size: 14).weight(.semibold),
                                 color: Color("sc2")
                             )
@@ -156,29 +153,39 @@ struct EditGoalView: View {
         let endDateString = dateFormatter.string(from: endDate)
         
         let goalNameString = goalName.replacingOccurrences(of: " ", with: "")
+        let newGoal = Goal(
+            CurrentState: goal.CurrentState,
+            StartDate: startDateString,
+            EndDate: endDateString,
+            GoalName: goalName,
+            ID: goal.ID,
+            Need: amount,
+            UserID: goal.UserID,
+            Currency: urlElements?.currency ?? "RUB"
+        )
+        Logger.shared.log(.warning, "Updated goal: \(newGoal)")
         do{
             let response = try await self.urlElements?.fetchData(
                 endpoint: "v1/tracker/goal",
                 method: "PUT",
-                parameters: Goal(
-                    CurrentState: goal.CurrentState,
-                    StartDate: startDateString,
-                    EndDate: endDateString,
-                    GoalName: goalName,
-                    ID: goal.ID,
-                    Need: amount,
-                    UserID: goal.UserID,
-                    Currency: currency
-                ).toDictionary(),
+                parameters: ["goal":[
+                    "goal": newGoal.GoalName,
+                    "need": newGoal.Need,
+                    "currency": urlElements?.currency ?? "RUB",
+                    "current_state": newGoal.CurrentState,
+                    "start_date": newGoal.StartDate,
+                    "end_date": newGoal.EndDate,
+                    "id": newGoal.ID
+                ]], retryAttempts: 3,
                 needsAuthorization: true,
                 needsCurrency: true
             )
             switch response?["status_code"] as? Int {
-            case 200:
-                print(response ?? [:])
+            case 201:
+                Logger.shared.log(.info, response ?? [:])
                 presentationMode.wrappedValue.dismiss()
             default:
-                print("Failed to fetch goals.")
+                Logger.shared.log(.error, "Failed to fetch goals.")
             }
         }catch{
             showError(message: "Упс... что-то пошло не так")

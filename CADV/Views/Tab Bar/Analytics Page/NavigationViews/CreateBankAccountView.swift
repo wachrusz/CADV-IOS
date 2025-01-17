@@ -8,8 +8,6 @@
 import SwiftUI
 
 struct CreateBankAccountView: View {
-    @Binding var bankAccounts: BankAccounts
-    @Binding var currency: String
     @Binding var urlElements: URLElements?
     
     @Environment(\.dismiss) var dismiss
@@ -30,12 +28,14 @@ struct CreateBankAccountView: View {
             ZStack {
                 GeometryReader { geometry in
                     VStack() {
+                         /*
                         CustomText(
                             text: "Создать новый счет",
                             font: Font.custom("Gilroy", size: 16).weight(.semibold),
                             color: Color("fg")
                         )
                         .padding(.vertical)
+                          */
                         VStack(alignment: .leading){
                             CustomTextField(
                                 input: $bankAccountName,
@@ -46,7 +46,7 @@ struct CreateBankAccountView: View {
                             
                             HStack(alignment: .top, spacing: 10) {
                                 CustomText(
-                                    text: currencyCodeToSymbol(code: currency),
+                                    text: currencyCodeToSymbol(code: urlElements?.currency ?? "RUB"),
                                     font: Font.custom("Inter", size: 14).weight(.semibold),
                                     color: Color("sc2")
                                 )
@@ -94,6 +94,7 @@ struct CreateBankAccountView: View {
                 .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
             }
         }
+        .navigationTitle("Создать новый счет")
         .edgesIgnoringSafeArea(.bottom)
         .hideBackButton()
     }
@@ -114,19 +115,19 @@ struct CreateBankAccountView: View {
             return
         }
 
-        print(amount)
+        Logger.shared.log(.info, amount)
         
         let parameters = [
             "account": [
                 "account_number": generateRandomString(),
                 "account_type": group.rawValue,
                 "id": "",
-                "bank_id": "0",
+                "bank_id": group.rawValue == "Банк" ? "0" : "1",
                 "user_id": "",
-                "account_state": amount
+                "account_state": amount,
+                "account_name": bankAccountName
             ]
         ] as [String : Any]
-        print(parameters)
         do{
             let response = try await urlElements?.fetchData(
                 endpoint: "v1/app/accounts",
@@ -138,7 +139,6 @@ struct CreateBankAccountView: View {
             case 201:
                 dismiss()
             default:
-                print(response as Any)
                 showError(message: "pogodite pzh")
             }
         }catch{

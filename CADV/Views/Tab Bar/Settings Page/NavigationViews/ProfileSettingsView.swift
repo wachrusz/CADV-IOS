@@ -21,44 +21,49 @@ struct ProfileSettingsView: View{
     @State private var errorMessage: String = ""
     
     var body: some View{
-        VStack{
-            CustomText(
-                text: "Настройка профиля",
-                font: Font.custom("Gilroy", size: 16).weight(.semibold),
-                color: Color("fg")
-            )
-            .padding(.vertical)
-            
-            HStack(alignment: .center, spacing: 20){
-                AsyncImage(url: URL(string: currentData.AvatarURL))
+        ZStack{
+            VStack(spacing: 20){
+                CustomText(
+                    text: "Настройка профиля",
+                    font: Font.custom("Gilroy", size: 16).weight(.semibold),
+                    color: Color("fg")
+                )
+                
+                HStack{
+                    AsyncImage(
+                        url: URL(string: currentData.AvatarURL)
+                    )
                     .frame(width: 45, height: 45)
                     .background(Color.gray)
                     .clipShape(Circle())
-                CustomText(
-                    text: "Сменить изображение",
-                    font: Font.custom("Gilroy", size: 14).weight(.semibold),
-                    color: Color("fg")
-                )
-            }
-            .padding(.vertical)
-            .background(Color("bg1"))
-            .cornerRadius(15)
-            .onTapGesture {
-                //TODO: realise
-            }
-            
-            VStack{
-                HStack(spacing: 20) {
+                    .padding(.horizontal)
+                    
+                    CustomText(
+                        text: "Сменить изображение",
+                        font: Font.custom("Gilroy", size: 14).weight(.semibold),
+                        color: Color("fg")
+                    )
+                    Spacer()
+                }
+                .frame(maxWidth: .infinity, maxHeight: 65)
+                .background(Color("bg1"))
+                .cornerRadius(15)
+                .padding(.horizontal)
+                .onTapGesture {
+                    updateProfileImage()
+                }
+                
+                HStack{
                     CustomTextField(
                         input: $newData.Name,
-                        text: "Имя",
+                        text: (currentData.Name != "" ? currentData.Name : "Имя"),
                         showTextFieldError: $showNameFieldError,
                         isFine: $isNameFieldFine
                     )
                     
                     CustomTextField(
                         input: $newData.Surname,
-                        text: "Фамилия",
+                        text: (currentData.Surname != "" ? currentData.Surname : "Фамилия"),
                         showTextFieldError: $showSurnameFieldError,
                         isFine: $isSurnameFieldFine
                     )
@@ -69,8 +74,6 @@ struct ProfileSettingsView: View{
                     action: updateName,
                     actionTitle: "Сохранить"
                 )
-                .padding()
-                
                 Spacer()
             }
             ErrorPopUp(
@@ -87,8 +90,7 @@ struct ProfileSettingsView: View{
                        ExpirationDate: currentData.ExpirationDate
             )
         }
-        .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity)
-        .background(Color.white)
+        .hideBackButton()
     }
     
     private func updateProfileImage() {
@@ -118,7 +120,7 @@ struct ProfileSettingsView: View{
             }
         }
         catch let error{
-            print(error)
+            Logger.shared.log(.error, "\(error)")
         }
     }
 }

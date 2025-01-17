@@ -10,7 +10,7 @@ import SwiftUI
 struct MainPageView: View {
     @Binding var profile: ProfileInfo
     @Binding var categorizedTransactions: [CategorizedTransaction]
-    @Binding var urlElements: URLElements?
+    @StateObject var dataManager: DataManager
     @State private var selectedCategory: String = "Доходы"
     @State private var selectedPlan: String = "Факт"
     
@@ -32,7 +32,7 @@ struct MainPageView: View {
                     CategorySwitchButtons(
                         selectedCategory: $selectedCategory,
                         pageIndex: $pageIndex,
-                        categories: ["Доходы", "Расходы", "Фонд благосостояния"]
+                        categories: ["Доходы", "Расходы", "Сбережения"]
                     )
                     
                     TotalAmountView(text: totalAmount(for: selectedCategory))
@@ -56,6 +56,7 @@ struct MainPageView: View {
                             image: "tech", text: "Упс... Этого нет"
                         ),
                         secondButtonContent: CreateTransactionSelectCategory(
+                            urlElements: $dataManager.urlElements,
                             selectedCategory: $selectedCategory,
                             selectedPlan: $selectedPlan
                         ),
@@ -81,7 +82,7 @@ struct MainPageView: View {
             case .expense:
                 isMatchingCategory = category == "Расходы"
             case .wealthFund:
-                isMatchingCategory = category == "Фонд благосостояния"
+                isMatchingCategory = category == "Сбережения"
             }
 
             return isMatchingCategory && (

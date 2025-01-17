@@ -64,6 +64,7 @@ struct LoginView: View{
                             font: Font.custom("Inter", size: 14).weight(.semibold),
                             color: Color("fg")
                         )
+                        
                         CustomTextField(
                             input: $email,
                             text: "example@example.com",
@@ -73,11 +74,13 @@ struct LoginView: View{
                         .onChange(of: email) { newValue in
                             validateEmail(newValue)
                         }
+                        
                         CustomText(
                             text: "Введите пароль",
                             font: Font.custom("Inter", size: 14).weight(.semibold),
                             color: Color("fg")
                         )
+                        
                         CustomSecureField(
                             input: $password,
                             showSecureFieldError: $showSecureFieldError,
@@ -145,7 +148,7 @@ struct LoginView: View{
         isLoading = true
         if isTextFieldFine && isSecureFieldFine {
             let parameters = [
-                "email": email,
+                "email": email.lowercased(),
                 "password": password
             ]
             do{
@@ -167,7 +170,7 @@ struct LoginView: View{
                     self.isLoading = false
                 }
             }catch let error{
-                print(error)
+                Logger.shared.log(.error, error)
                 self.loginError = "error"
                 self.showErrorPopup = true
                 self.isLoading = false

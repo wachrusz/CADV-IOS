@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct CreateTransactionAnalyticsView: View{
+    @StateObject var dataManager: DataManager
+    
     var body: some View{
         VStack{
             ActionDissmisButtons(

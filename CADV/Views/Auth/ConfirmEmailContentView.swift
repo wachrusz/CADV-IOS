@@ -252,18 +252,16 @@ struct EnterVerificationEmailCode: View {
             if !isReset {
                 switch response?["status_code"] as? Int {
                 case 200:
-                    print("case 200")
                     urlElements?.saveTokenData(responseObject: response ?? [:])
+                    Logger.shared.log(.info,urlElements as Any)
                     self.isNavigationActive = true
                     return
                 case 400:
-                    print("case 400")
                     let errorMessage = response?["error"] as? String ?? ""
                     self.confirmationError = errorMessage
                     return
                 default:
                     let errorMessage = response?["error"] as? String ?? ""
-                    print(errorMessage)
                     self.confirmationError = errorMessage
                     return
                 }
@@ -274,7 +272,7 @@ struct EnterVerificationEmailCode: View {
             self.isNavigationActive = true
         }
         catch let error{
-            print(error)
+            Logger.shared.log(.error, error)
         }
     }
     
@@ -284,11 +282,11 @@ struct EnterVerificationEmailCode: View {
     func requestNotificationPermission() {
         UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge]) { granted, error in
             if let error = error {
-                print("Error requesting permission: \(error.localizedDescription)")
+                Logger.shared.log(.error, "Error requesting permission: \(error.localizedDescription))")
             } else if granted {
-                print("Permission granted for notifications.")
+                Logger.shared.log(.info, "Permission granted for notifications.")
             } else {
-                print("Permission denied for notifications.")
+                Logger.shared.log(.info, "Permission denied for notifications.")
             }
         }
     }
@@ -306,9 +304,9 @@ func sendLocalNotification(withCode code: String) {
     
     UNUserNotificationCenter.current().add(request) { error in
         if let error = error {
-            print("Ошибка при добавлении уведомления: \(error.localizedDescription)")
+            Logger.shared.log(.error, "Ошибка при добавлении уведомления: \(error.localizedDescription)")
         } else {
-            print("Уведомление успешно добавлено")
+            Logger.shared.log(.info, "Уведомление успешно добавлено")
         }
     }
 }
@@ -323,7 +321,7 @@ extension UIApplication {
 extension AppDelegate: UNUserNotificationCenterDelegate {
     func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
         let code = response.notification.request.content.body
-        print("Код подтверждения: \(code)")
+        Logger.shared.log(.info, "Код подтверждения: \(code)")
         completionHandler()
     }
     

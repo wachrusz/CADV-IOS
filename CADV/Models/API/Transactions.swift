@@ -34,7 +34,7 @@ enum BankAccountsGroup: String, Codable, Hashable, CaseIterable{
 enum TransactionType: String, Codable, Hashable, CaseIterable {
     case income = "Доходы"
     case expense = "Расходы"
-    case wealthFund = "Фонд благосостояния"
+    case wealthFund = "Сбережения"
 }
 
 enum CategoryType: String, Codable, Hashable {

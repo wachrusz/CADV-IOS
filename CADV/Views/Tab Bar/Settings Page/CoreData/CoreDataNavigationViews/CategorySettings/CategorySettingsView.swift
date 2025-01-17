@@ -27,7 +27,7 @@ struct CategorySettingsView: View{
                 CategorySwitchButtons(
                     selectedCategory: $selectedCategory,
                     pageIndex: $pageIndex,
-                    categories: ["Доходы", "Расходы", "Фонд благосостояния"]
+                    categories: ["Доходы", "Расходы", "Сбережения"]
                 )
                 CategorySettingsList(
                     selectedCategory: $selectedCategory,
@@ -47,7 +47,6 @@ struct CategorySettingsView: View{
             .colorScheme(.light)
             .padding(.bottom)
             .frame(maxWidth: .infinity, maxHeight: .infinity)
-            .edgesIgnoringSafeArea(.all)
         }
         .hideBackButton()
     }
@@ -58,7 +57,7 @@ struct CategorySettingsView: View{
             return "Создать категорию дохода"
         case "Расходы":
             return "Создать категорию расхода"
-        case "Фонд благосостояния":
+        case "Сбережения":
             return "Создать категорию сбережений"
         default:
             return "УПС! Что-то пошло не так... Попробуйте еще раз... Пока!"
@@ -85,8 +84,8 @@ struct CategorySettingsList: View {
             predicate = NSPredicate(format: "categoryType == %@", "Доходы")
         case "Расходы":
             predicate = NSPredicate(format: "categoryType == %@", "Расходы")
-        case "Фонд благосостояния":
-            predicate = NSPredicate(format: "categoryType == %@", "Фонд благосостояния")
+        case "Сбережения":
+            predicate = NSPredicate(format: "categoryType == %@", "Сбережения")
         default:
             predicate = NSPredicate(value: true)
         }
@@ -99,80 +98,82 @@ struct CategorySettingsList: View {
     }
 
     var body: some View {
-        ScrollView {
-            LazyVStack {
-                if selectedCategory != "Фонд благосостояния"{
-                    Section(header: Text("Постоянные \(customCategoriesFiltered.count + savedCategories.filter { $0.isConstant }.count)")) {
+        NavigationStack{
+            ScrollView {
+                LazyVStack {
+                    if selectedCategory != "Сбережения"{
+                        Section(header: Text("Постоянные \(customCategoriesFiltered.count + savedCategories.filter { $0.isConstant }.count)")) {
+                            ForEach(customCategoriesFiltered, id: \.self) { category in
+                                CategoryRow(
+                                    categoryName: category.displayName,
+                                    imageName: category.displayName
+                                )
+                            }
+                            
+                            ForEach(savedCategories.filter { $0.isConstant }, id: \.self) { category in
+                                if let categoryName = category.name, let imageName = category.iconName {
+                                    CategoryRow(
+                                        categoryName: categoryName,
+                                        imageName: imageName
+                                    )
+                                }
+                            }
+                        }
+                        
+                        Section(header: Text("Переменные \(customCategoriesFiltered.count + savedCategories.filter { !$0.isConstant }.count)")) {
+                            ForEach(customCategoriesFiltered, id: \.self) { category in
+                                CategoryRow(
+                                    categoryName: category.displayName,
+                                    imageName: category.displayName
+                                )
+                            }
+                            
+                            ForEach(savedCategories.filter { !$0.isConstant }, id: \.self) { category in
+                                if let categoryName = category.name, let imageName = category.iconName {
+                                    CategoryRow(
+                                        categoryName: categoryName,
+                                        imageName: imageName
+                                    )
+                                }
+                            }
+                        }
+                    }else{
                         ForEach(customCategoriesFiltered, id: \.self) { category in
                             CategoryRow(
                                 categoryName: category.displayName,
                                 imageName: category.displayName
                             )
                         }
-                        
-                        ForEach(savedCategories.filter { $0.isConstant }, id: \.self) { category in
+                        ForEach(savedCategories.filter {$0.categoryType == "Сбережения"}, id: \.self) { category in
                             if let categoryName = category.name, let imageName = category.iconName {
                                 CategoryRow(
                                     categoryName: categoryName,
                                     imageName: imageName
                                 )
+                                .onAppear(){
+                                }
                             }
                         }
                     }
-                    
-                    Section(header: Text("Переменные \(customCategoriesFiltered.count + savedCategories.filter { !$0.isConstant }.count)")) {
-                        ForEach(customCategoriesFiltered, id: \.self) { category in
-                            CategoryRow(
-                                categoryName: category.displayName,
-                                imageName: category.displayName
-                            )
-                        }
-                        
-                        ForEach(savedCategories.filter { !$0.isConstant }, id: \.self) { category in
-                            if let categoryName = category.name, let imageName = category.iconName {
-                                CategoryRow(
-                                    categoryName: categoryName,
-                                    imageName: imageName
-                                )
-                            }
-                        }
-                    }
-                }else{
-                    ForEach(customCategoriesFiltered, id: \.self) { category in
-                        CategoryRow(
-                            categoryName: category.displayName,
-                            imageName: category.displayName
-                        )
-                    }
-                    ForEach(savedCategories.filter {$0.categoryType == "Фонд благосостояния"}, id: \.self) { category in
-                        if let categoryName = category.name, let imageName = category.iconName {
-                            CategoryRow(
-                                categoryName: categoryName,
-                                imageName: imageName
-                            )
-                            .onAppear(){
-                            }
-                        }
-                    }
+                    ActionDissmisButtons(
+                        action: showAddCategoryScreenFunction,
+                        actionTitle: "Добавить категорию"
+                    )
                 }
-                ActionDissmisButtons(
-                    action: showAddCategoryScreenFunction,
-                    actionTitle: "Добавить категорию"
-                )
             }
-        }
-        .onChange(of: selectedCategory){
-            if selectedCategory != "Фонд благосостояния" {
-                self.customCategoriesFiltered = CustomCategoryType.allCases.filter { $0.displayIsConstant && $0.displayCategory == selectedCategory }
-            } else {
-                self.customCategoriesFiltered = CustomCategoryType.allCases.filter { $0.displayCategory == selectedCategory }
+            .onChange(of: selectedCategory){
+                if selectedCategory != "Сбережения" {
+                    self.customCategoriesFiltered = CustomCategoryType.allCases.filter { $0.displayIsConstant && $0.displayCategory == selectedCategory }
+                } else {
+                    self.customCategoriesFiltered = CustomCategoryType.allCases.filter { $0.displayCategory == selectedCategory }
+                }
             }
-        }
-        .onAppear(){
-            if selectedCategory != "Фонд благосостояния" {
-                self.customCategoriesFiltered = CustomCategoryType.allCases.filter { $0.displayIsConstant && $0.displayCategory == selectedCategory }
-            } else {
-                self.customCategoriesFiltered = CustomCategoryType.allCases.filter { $0.displayCategory == selectedCategory }
+            .onAppear(){
+                if selectedCategory != "Сбережения" {
+                    self.customCategoriesFiltered = CustomCategoryType.allCases.filter { $0.displayIsConstant && $0.displayCategory == selectedCategory }
+                } else {
+                    self.customCategoriesFiltered = CustomCategoryType.allCases.filter { $0.displayCategory == selectedCategory }
+                }
             }
         }
     }

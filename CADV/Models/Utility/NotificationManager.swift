@@ -15,9 +15,9 @@ class NotificationManager: NSObject, ObservableObject {
     func requestPermission() {
         UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge]) { granted, error in
             if granted {
-                print("Разрешение на уведомления получено")
+                Logger.shared.log(.info, "Notification permission granted")
             } else {
-                print("Разрешение на уведомления отклонено")
+                Logger.shared.log(.info,"Разрешение на уведомления отклонено")
             }
         }
         
@@ -37,9 +37,9 @@ class NotificationManager: NSObject, ObservableObject {
         
         UNUserNotificationCenter.current().add(request) { error in
             if let error = error {
-                print("Ошибка отправки уведомления: \(error.localizedDescription)")
+                Logger.shared.log(.warning, "Ошибка отправки уведомления: \(error.localizedDescription)")
             } else {
-                print("Уведомление отправлено")
+                Logger.shared.log(.info, "Уведомление отправлено")
             }
         }
     }
@@ -52,7 +52,7 @@ extension NotificationManager: UNUserNotificationCenterDelegate {
     }
 
     func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
-        print("Уведомление нажато: \(response.notification.request.content.body)")
+        Logger.shared.log(.info, "Уведомление нажато: \(response.notification.request.content.body)")
         completionHandler()
     }
 }

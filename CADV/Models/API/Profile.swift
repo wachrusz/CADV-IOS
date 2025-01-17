@@ -34,7 +34,7 @@ extension ProfileInfo {
             let userID = dictionary["user_id"] as? String,
             let avatarURL = dictionary["avatar_url"] as? String
         else {
-            print("Error parsing ProfileInfo dictionary. Missing required keys.")
+            Logger.shared.log(.error, "Error parsing ProfileInfo dictionary. Missing required keys.")
             return nil
         }
 

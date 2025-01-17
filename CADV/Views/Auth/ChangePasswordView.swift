@@ -94,7 +94,6 @@ struct ChangePasswordView: View {
                 "reset_token": token
             ]
             
-            print("Parameters being sent: \(parameters)")
             do{
                 let response = try await self.urlElements?.fetchData(
                     endpoint: "v1/auth/password",
@@ -103,7 +102,6 @@ struct ChangePasswordView: View {
                 )
                 switch response?["status_code"] as? Int{
                 case 200:
-                    print(response)
                     self.isCompleted = true
                 case 400:
                     errorMessage = "Кажется, Вы что-то не так ввели"
@@ -114,7 +112,7 @@ struct ChangePasswordView: View {
                 }
             }
             catch let error{
-                print(error)
+                Logger.shared.log(.error, error)
             }
         }
     }
