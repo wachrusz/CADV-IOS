@@ -77,7 +77,19 @@ struct CreateTransactionSelectCategory: View {
                                     CategoryRow(
                                         categoryName: category.displayName,
                                         imageName: image(for: category)
-                                    )
+                                    ).onTapGesture {
+                                        let additionalData: [String: Any] = [
+                                            "element": "Category_Row",
+                                            "category": category.displayName,
+                                        ]
+                                        
+                                        FirebaseAnalyticsManager.shared.logUserActionEvent(
+                                            userId: getDeviceIdentifier(),
+                                            actionType: "picked",
+                                            screenName: "CreateTransactionSelectCategoryView",
+                                            additionalData: additionalData
+                                        )
+                                    }
                                 }
                             }
                             
@@ -92,7 +104,19 @@ struct CreateTransactionSelectCategory: View {
                                         CategoryRow(
                                             categoryName: categoryName,
                                             imageName: imageName
-                                        )
+                                        ).onTapGesture {
+                                            let additionalData: [String: Any] = [
+                                                "element": "Category_Row",
+                                                "category": categoryName,
+                                            ]
+                                            
+                                            FirebaseAnalyticsManager.shared.logUserActionEvent(
+                                                userId: getDeviceIdentifier(),
+                                                actionType: "picked",
+                                                screenName: "CreateTransactionSelectCategoryView",
+                                                additionalData: additionalData
+                                            )
+                                        }
                                     }
                                 }
                             }
@@ -110,7 +134,19 @@ struct CreateTransactionSelectCategory: View {
                                     CategoryRow(
                                         categoryName: category.displayName,
                                         imageName: image(for: category)
-                                    )
+                                    ).onTapGesture {
+                                        let additionalData: [String: Any] = [
+                                            "element": "Category_Row",
+                                            "category": category.displayName,
+                                        ]
+                                        
+                                        FirebaseAnalyticsManager.shared.logUserActionEvent(
+                                            userId: getDeviceIdentifier(),
+                                            actionType: "picked",
+                                            screenName: "CreateTransactionSelectCategoryView",
+                                            additionalData: additionalData
+                                        )
+                                    }
                                 }
                             }
                             
@@ -126,7 +162,19 @@ struct CreateTransactionSelectCategory: View {
                                         CategoryRow(
                                             categoryName: categoryName,
                                             imageName: imageName
-                                        )
+                                        ).onTapGesture {
+                                            let additionalData: [String: Any] = [
+                                                "element": "Category_Row",
+                                                "category": categoryName,
+                                            ]
+                                            
+                                            FirebaseAnalyticsManager.shared.logUserActionEvent(
+                                                userId: getDeviceIdentifier(),
+                                                actionType: "picked",
+                                                screenName: "CreateTransactionSelectCategoryView",
+                                                additionalData: additionalData
+                                            )
+                                        }
                                     }
                                 }
                             }
@@ -143,7 +191,19 @@ struct CreateTransactionSelectCategory: View {
                                 CategoryRow(
                                     categoryName: category.displayName,
                                     imageName: image(for: category)
-                                )
+                                ).onTapGesture {
+                                    let additionalData: [String: Any] = [
+                                        "element": "Category_Row",
+                                        "category": category.displayName,
+                                    ]
+                                    
+                                    FirebaseAnalyticsManager.shared.logUserActionEvent(
+                                        userId: getDeviceIdentifier(),
+                                        actionType: "picked",
+                                        screenName: "CreateTransactionSelectCategoryView",
+                                        additionalData: additionalData
+                                    )
+                                }
                             }
                         }
                         ForEach(savedCategories.filter {$0.categoryType == "Сбережения"}, id: \.self) { category in
@@ -158,7 +218,19 @@ struct CreateTransactionSelectCategory: View {
                                     CategoryRow(
                                         categoryName: categoryName,
                                         imageName: imageName
-                                    )
+                                    ).onTapGesture {
+                                        let additionalData: [String: Any] = [
+                                            "element": "Category_Row",
+                                            "category": categoryName,
+                                        ]
+                                        
+                                        FirebaseAnalyticsManager.shared.logUserActionEvent(
+                                            userId: getDeviceIdentifier(),
+                                            actionType: "picked",
+                                            screenName: "CreateTransactionSelectCategoryView",
+                                            additionalData: additionalData
+                                        )
+                                    }
                                 }
                             }
                         }
@@ -166,7 +238,18 @@ struct CreateTransactionSelectCategory: View {
                     ActionDissmisButtons(
                         action: action,
                         actionTitle: "Добавить категорию"
-                    )
+                    ).onTapGesture {
+                        let additionalData: [String: Any] = [
+                            "element": "action_dissmiss_button",
+                        ]
+                        
+                        FirebaseAnalyticsManager.shared.logUserActionEvent(
+                            userId: getDeviceIdentifier(),
+                            actionType: "tapped",
+                            screenName: "CreateTransactionSelectCategoryView",
+                            additionalData: additionalData
+                        )
+                    }
                 }
             }
             Spacer()

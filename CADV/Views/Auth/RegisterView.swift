@@ -1,5 +1,5 @@
 //
-//  RegisterContentView.swift
+//  RegisterView.swift
 //  CADV
 //
 //  Created by Misha Vakhrushin on 13.09.2024.
@@ -55,7 +55,6 @@ struct RegisterView: View{
                             text: "example@emaple.com",
                             showTextFieldError: $showTextFieldError,
                             isFine: $isTextFieldFine
-                            
                         )
                         CustomText(
                             text: "Введите пароль",
@@ -133,6 +132,18 @@ struct RegisterView: View{
             case 200:
                 token = response?["token"] as? String ?? ""
                 self.showEmailVerification = true
+                
+                let additionalData: [String: Any] = [
+                    "element": "register"
+                ]
+                
+                FirebaseAnalyticsManager.shared.logUserActionEvent(
+                    userId: getDeviceIdentifier(),
+                    actionType: "started",
+                    screenName: "RegisterView",
+                    additionalData: additionalData
+                )
+                
             case 400:
                 errorMessage = "Кажется, Вы что-то не так ввели"
                 showErrorPopup = true

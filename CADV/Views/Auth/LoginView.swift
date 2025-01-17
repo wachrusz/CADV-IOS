@@ -1,5 +1,5 @@
 //
-//  LoginContentView.swift
+//  LoginView.swift
 //  CADV
 //
 //  Created by Misha Vakhrushin on 08.09.2024.
@@ -105,6 +105,17 @@ struct LoginView: View{
                             .frame(maxWidth: .infinity, alignment: .trailing)
                             .onTapGesture {
                                 showPasswordReset.toggle()
+                                
+                                let additionalData: [String: Any] = [
+                                    "element": "forgot_password_button"
+                                ]
+                                
+                                FirebaseAnalyticsManager.shared.logUserActionEvent(
+                                    userId: getDeviceIdentifier(),
+                                    actionType: "tapped",
+                                    screenName: "LoginView",
+                                    additionalData: additionalData
+                                )
                             }
                             .disabled(isLoading)
                         }
@@ -160,6 +171,18 @@ struct LoginView: View{
                 case 200:
                     token = response?["token"] as? String ?? ""
                     self.showEmailVerification = true
+                    
+                    let additionalData: [String: Any] = [
+                        "element": "login"
+                    ]
+                    
+                    FirebaseAnalyticsManager.shared.logUserActionEvent(
+                        userId: getDeviceIdentifier(),
+                        actionType: "started",
+                        screenName: "LoginView",
+                        additionalData: additionalData
+                    )
+                    
                 case 401:
                     self.loginError = "Кажется, Вы что-то не так ввели..."
                     self.showErrorPopup = true

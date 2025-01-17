@@ -211,7 +211,6 @@ struct LocalAuthView: View {
     private func setupUserPinCode(_ code: String) {
         let defaultPin = code
         KeychainHelper.shared.save(defaultPin, forKey: keychainKey)
-        Logger.shared.log(.info, "PIN saved in Keychain")
     }
     
     private func enableFaceID() {

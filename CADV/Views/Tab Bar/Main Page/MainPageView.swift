@@ -27,7 +27,18 @@ struct MainPageView: View {
                 VStack(spacing: 30) {
                     UserProfileSection(
                         profile: $profile
-                    )
+                    ).onTapGesture {
+                        let additionalData: [String: Any] = [
+                            "element": "UserProfileView"
+                        ]
+                        
+                        FirebaseAnalyticsManager.shared.logUserActionEvent(
+                            userId: getDeviceIdentifier(),
+                            actionType: "tapped",
+                            screenName: "MainPageView",
+                            additionalData: additionalData
+                        )
+                    }
                     
                     CategorySwitchButtons(
                         selectedCategory: $selectedCategory,
@@ -59,11 +70,22 @@ struct MainPageView: View {
                             urlElements: $dataManager.urlElements,
                             selectedCategory: $selectedCategory,
                             selectedPlan: $selectedPlan
-                        ),
+                        ).onAppear(){
+                            let additionalData: [String: Any] = [
+                                "element": "CreateTransactionSelectCategory"
+                            ]
+                            
+                            FirebaseAnalyticsManager.shared.logUserActionEvent(
+                                userId: getDeviceIdentifier(),
+                                actionType: "opened",
+                                screenName: "MainPageView",
+                                additionalData: additionalData
+                            )
+                        },
                         firstButtonText: "Добавить банк",
                         secondButtonText: "Внести вручную",
                         firstButtonAction: {},
-                        secondButtonAction: {}
+                        secondButtonAction: recordAction()
                     )
                     .cornerRadius(15)
                 }
@@ -71,6 +93,20 @@ struct MainPageView: View {
         }
         .padding(.bottom)
         .hideBackButton()
+    }
+    
+    private func recordAction() -> () -> Void {
+        let additionalData: [String: Any] = [
+            "element": "create_transaction_button"
+        ]
+        
+        FirebaseAnalyticsManager.shared.logUserActionEvent(
+            userId: getDeviceIdentifier(),
+            actionType: "tapped",
+            screenName: "MainPageView",
+            additionalData: additionalData
+        )
+        return {}
     }
     
     private func totalAmount(for category: String) -> String {

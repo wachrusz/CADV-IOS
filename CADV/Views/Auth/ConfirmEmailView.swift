@@ -1,5 +1,5 @@
 //
-//  ConfirmEmailContentView.swift
+//  ConfirmEmailView.swift
 //  CADV
 //
 //  Created by Misha Vakhrushin on 16.09.2024.
@@ -255,6 +255,17 @@ struct EnterVerificationEmailCode: View {
                     urlElements?.saveTokenData(responseObject: response ?? [:])
                     Logger.shared.log(.info,urlElements as Any)
                     self.isNavigationActive = true
+                    
+                    let additionalData: [String: Any] = [
+                        "element": isReset ? "password_reset" : (isNew ? "registration" : "login")
+                    ]
+                    
+                    FirebaseAnalyticsManager.shared.logUserActionEvent(
+                        userId: getDeviceIdentifier(),
+                        actionType: isReset ? "confirmed" : "completed",
+                        screenName: "ConfirmEmailView",
+                        additionalData: additionalData
+                    )
                     return
                 case 400:
                     let errorMessage = response?["error"] as? String ?? ""

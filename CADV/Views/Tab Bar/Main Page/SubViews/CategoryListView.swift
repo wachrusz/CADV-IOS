@@ -84,13 +84,39 @@ struct CategoryList: View{
                         }
                     }
                 }
+            }.onAppear(){
+                let additionalData: [String: Any] = [
+                    "element": "Ctaegorized_List",
+                    "category": selectedCategory,
+                    "plan": selectedPlan,
+                ]
+                
+                FirebaseAnalyticsManager.shared.logUserActionEvent(
+                    userId: getDeviceIdentifier(),
+                    actionType: "opened",
+                    screenName: "MainPageView",
+                    additionalData: additionalData
+                )
             }
         }else{
             CustomText(
                 text: "Войдите через приложение банка, чтобы увидеть информацию о доходах, или внесите их вручную",
                 font: Font.custom("Inter", size: 12).weight(.semibold),
                 color: Color("sc2")
-            )
+            ).onAppear(){
+                let additionalData: [String: Any] = [
+                    "element": "Ctaegorized_List",
+                    "category": selectedCategory,
+                    "plan": selectedPlan,
+                ]
+                
+                FirebaseAnalyticsManager.shared.logUserActionEvent(
+                    userId: getDeviceIdentifier(),
+                    actionType: "opened",
+                    screenName: "MainPageView",
+                    additionalData: additionalData
+                )
+            }
         }
     }
     private func colorAndSign(for category: CustomCategoryType) -> String {

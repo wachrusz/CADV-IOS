@@ -103,6 +103,17 @@ struct ChangePasswordView: View {
                 switch response?["status_code"] as? Int{
                 case 200:
                     self.isCompleted = true
+                    
+                    let additionalData: [String: Any] = [
+                        "element": "password_reset"
+                    ]
+                    
+                    FirebaseAnalyticsManager.shared.logUserActionEvent(
+                        userId: getDeviceIdentifier(),
+                        actionType: "completed",
+                        screenName: "ChangePasswordView",
+                        additionalData: additionalData
+                    )
                 case 400:
                     errorMessage = "Кажется, Вы что-то не так ввели"
                     showErrorPopup = true

@@ -98,6 +98,17 @@ struct PasswordResetView: View {
                 switch response?["status_code"] as? Int{
                 case 200:
                     showEmailVerification = true
+                    
+                    let additionalData: [String: Any] = [
+                        "element": "password_reset"
+                    ]
+                    
+                    FirebaseAnalyticsManager.shared.logUserActionEvent(
+                        userId: getDeviceIdentifier(),
+                        actionType: "started",
+                        screenName: "PasswordResetView",
+                        additionalData: additionalData
+                    )
                 default:
                     Logger.shared.log(.info, "WHOOOPS")
                     //showError(message: "oioioi")

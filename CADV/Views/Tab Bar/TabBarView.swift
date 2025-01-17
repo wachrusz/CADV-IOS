@@ -33,6 +33,18 @@ struct TabBarContentView: View {
                         dataManager: dataManager
                     )
                     .frame(width: geometry.size.width, height: geometry.size.height)
+                    .onAppear(){
+                        let additionalData: [String: Any] = [
+                            "element": "Main_Page"
+                        ]
+                        
+                        FirebaseAnalyticsManager.shared.logUserActionEvent(
+                            userId: getDeviceIdentifier(),
+                            actionType: "opened",
+                            screenName: "TabBarView",
+                            additionalData: additionalData
+                        )
+                    }
                 case 1:
                     if isAnalyticsLoaded {
                         AnalyticsPageView(
@@ -46,6 +58,16 @@ struct TabBarContentView: View {
                         )
                         .frame(width: geometry.size.width, height: geometry.size.height)
                         .onAppear(){
+                            let additionalData: [String: Any] = [
+                                "element": "Analytics_Page"
+                            ]
+                            
+                            FirebaseAnalyticsManager.shared.logUserActionEvent(
+                                userId: getDeviceIdentifier(),
+                                actionType: "opened",
+                                screenName: "TabBarView",
+                                additionalData: additionalData
+                            )
                         }
                     } else {
                         ProgressView()
@@ -62,6 +84,18 @@ struct TabBarContentView: View {
                         dataManager: dataManager
                     )
                     .frame(width: geometry.size.width, height: geometry.size.height)
+                    .onAppear(){
+                        let additionalData: [String: Any] = [
+                            "element": "Settings_Page"
+                        ]
+                        
+                        FirebaseAnalyticsManager.shared.logUserActionEvent(
+                            userId: getDeviceIdentifier(),
+                            actionType: "opened",
+                            screenName: "TabBarView",
+                            additionalData: additionalData
+                        )
+                    }
                 default:
                     MainPageView(
                         profile: self.$dataManager.urlEntities.profile,

@@ -87,7 +87,7 @@ struct AnalyticsPageView: View {
                             firstButtonText: "Добавить банк",
                             secondButtonText: "Внести вручную",
                             firstButtonAction: {},
-                            secondButtonAction: {}
+                            secondButtonAction: recordAction()
                         )
                         
                     case "Цели":
@@ -141,6 +141,20 @@ struct AnalyticsPageView: View {
                     }
             }
         }
+    }
+    
+    private func recordAction() -> () -> Void {
+        let additionalData: [String: Any] = [
+            "element": selectedPlan == "Транзакции" ? "create_transaction_button" : "create_bank_account_button"
+        ]
+        
+        FirebaseAnalyticsManager.shared.logUserActionEvent(
+            userId: getDeviceIdentifier(),
+            actionType: "tapped",
+            screenName: "AnalyticsPageView",
+            additionalData: additionalData
+        )
+        return {}
     }
     
     private func getNumberOfPages(itemsPerPage: Int = 20, itemsArray: [Any]) -> Int {

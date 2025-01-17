@@ -106,6 +106,17 @@ struct NewUser: View {
                         }
                     }
                 }
+            }.onTapGesture {
+                let additionalData: [String: Any] = [
+                    "element": "background"
+                ]
+                
+                FirebaseAnalyticsManager.shared.logUserActionEvent(
+                    userId: getDeviceIdentifier(),
+                    actionType: "tapped",
+                    screenName: "NewUser",
+                    additionalData: additionalData
+                )
             }
             
             VStack(alignment: .center, spacing: 10) {
@@ -122,8 +133,21 @@ struct NewUser: View {
                         .background(Color.black)
                         .cornerRadius(10)
                         .padding()
+                    }.onTapGesture {
+                        let additionalData: [String: Any] = [
+                            "element": "register_button"
+                        ]
+                        
+                        FirebaseAnalyticsManager.shared.logUserActionEvent(
+                            userId: getDeviceIdentifier(),
+                            actionType: "tapped",
+                            screenName: "NewUser",
+                            additionalData: additionalData
+                        )
                     }
-                    NavigationLink(destination: LoginView(urlElements: $urlElements)) {
+                    NavigationLink(destination: LoginView(
+                        urlElements: $urlElements
+                    )) {
                         CustomText(
                             text: "Вход",
                             font: Font.custom("Gilroy", size: 16).weight(.semibold),
@@ -137,6 +161,17 @@ struct NewUser: View {
                                 .stroke(Color.black, lineWidth: 1)
                         )
                         .padding()
+                    }.onTapGesture {
+                        let additionalData: [String: Any] = [
+                            "element": "login_button"
+                        ]
+                        
+                        FirebaseAnalyticsManager.shared.logUserActionEvent(
+                            userId: getDeviceIdentifier(),
+                            actionType: "tapped",
+                            screenName: "NewUser",
+                            additionalData: additionalData
+                        )
                     }
                 }
                 
@@ -165,6 +200,12 @@ struct NewUser: View {
                 withAnimation {
                     self.startMovement.toggle()
                 }
+                
+                FirebaseAnalyticsManager.shared.logUserActionEvent(
+                    userId: getDeviceIdentifier(),
+                    actionType: "app_started",
+                    screenName: "NewUser"
+                )
             }
         }
         //.navigationBarBackButtonHidden(true)
