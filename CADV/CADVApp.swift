@@ -5,25 +5,28 @@
 //  Created by Misha Vakhrushin on 03.09.2024.
 //
 
+import CoreData
+import FirebaseCore
 import SwiftUI
 import UserNotifications
-import CoreData
 
 @main
 struct CADVApp: App {
     let persistenceController = PersistenceController.shared
-    
-    @State       private var isCheckingToken       = false
-    @StateObject private var notificationManager   = NotificationManager()
-    @State       private var isAuthenticated: Bool = false {
+
+    @StateObject private var notificationManager = NotificationManager()
+    @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
+
+    @State private var urlElements: URLElements?
+    @State private var isCheckingToken = false
+    @State private var isAuthenticated: Bool = false {
         didSet {
             guard oldValue != isAuthenticated else { return }
-            
+
             Logger.shared.log(.info, "Authentication status changed: \(isAuthenticated)")
         }
     }
-    @State private var urlElements: URLElements?
-    
+
     var body: some Scene {
         WindowGroup {
             if let _ = urlElements {
@@ -48,11 +51,11 @@ struct CADVApp: App {
             }
         }
     }
-    
+
     private func initializeURLElements() {
         let context = persistenceController.container.viewContext
         let fetchRequest: NSFetchRequest<AccessEntity> = AccessEntity.fetchRequest()
-        
+
         do {
             let tokens = try context.fetch(fetchRequest)
             if tokens.isEmpty {
@@ -84,16 +87,16 @@ struct CADVApp: App {
             Logger.shared.log(.info, urlElements as Any)
         }
     }
-    
+
     private func checkToken(attemptsLeft: Int = 3) {
         guard !isCheckingToken else { return }
         isCheckingToken = true
-            
+
         defer { isCheckingToken = false }
         Logger.shared.log(.info, "Started checking tokens, attempts left: \(attemptsLeft)")
         let context = persistenceController.container.viewContext
         let fetchRequest: NSFetchRequest<AccessEntity> = AccessEntity.fetchRequest()
-        
+
         do {
             let tokens = try context.fetch(fetchRequest)
             if tokens.isEmpty {
@@ -102,27 +105,27 @@ struct CADVApp: App {
                 isAuthenticated = false
                 return
             }
-            
+
             if let entity = tokens.first {
                 Logger.shared.log(.info, "Found token entity")
                 let tokenData = TokenData(from: entity)
-                
+
                 if isValid(token: tokenData) {
                     Logger.shared.log(.info, "Token is valid")
                     isAuthenticated = true
                     return
                 } else {
                     Logger.shared.log(.warning, "Token is invalid")
-                    
+
                     if attemptsLeft > 0 {
-                        urlElements?.refreshTokenIfNeeded() { success in
+                        urlElements?.refreshTokenIfNeeded { success in
                             if success {
                                 Logger.shared.log(.info, "Token refreshed successfully, rechecking...")
-                                self.initializeURLElements()
-                                self.checkToken(attemptsLeft: attemptsLeft - 1)
+                                initializeURLElements()
+                                checkToken(attemptsLeft: attemptsLeft - 1)
                             } else {
                                 Logger.shared.log(.warning, "Failed to refresh token, attempts left: \(attemptsLeft - 1)")
-                                self.checkToken(attemptsLeft: attemptsLeft - 1)
+                                checkToken(attemptsLeft: attemptsLeft - 1)
                             }
                         }
                     } else {
@@ -139,12 +142,12 @@ struct CADVApp: App {
             isAuthenticated = false
         }
     }
-    
+
     private func isValid(token: TokenData) -> Bool {
         Logger.shared.log(.info, "exp: \(token.accessTokenExpiresAt), curr: \(Date())")
         return token.accessTokenExpiresAt > Date()
     }
-    
+
     private func createDefaultToken() {
         let context = persistenceController.container.viewContext
         let newToken = AccessEntity(context: context)
@@ -152,7 +155,7 @@ struct CADVApp: App {
         newToken.refreshToken = "default_refresh_token"
         newToken.accessTokenExpiresAt = Date().addingTimeInterval(-10000)
         newToken.refreshTokenLifeTime = 3600
-        
+
         do {
             try context.save()
             Logger.shared.log(.info, "Default token created")
@@ -160,11 +163,18 @@ struct CADVApp: App {
             Logger.shared.log(.error, "Failed to create default token: \(error.localizedDescription)")
         }
     }
-
 }
 
 class AppDelegate: NSObject, UIApplicationDelegate {
-    func application(_ application: UIApplication, supportedInterfaceOrientationsFor window: UIWindow?) -> UIInterfaceOrientationMask {
-        return .portrait
+    func application(_: UIApplication, supportedInterfaceOrientationsFor _: UIWindow?) -> UIInterfaceOrientationMask {
+        .portrait
+    }
+
+    func application(
+        _: UIApplication,
+        didFinishLaunchingWithOptions _: [UIApplication.LaunchOptionsKey: Any]? = nil
+    ) -> Bool {
+        FirebaseApp.configure()
+        return true
     }
 }

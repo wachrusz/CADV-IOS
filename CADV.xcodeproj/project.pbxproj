@@ -12,7 +12,7 @@
 		3C0C2C952CE695D70040B886 /* BankAccountCategorySelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C0C2C942CE695CC0040B886 /* BankAccountCategorySelectionView.swift */; };
 		3C21A7662D0869FD00452DF3 /* LocalAuthView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C21A7652D0869F100452DF3 /* LocalAuthView.swift */; };
 		3C21A7692D086B7600452DF3 /* LocalAuthKeychain.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C21A7682D086B7300452DF3 /* LocalAuthKeychain.swift */; };
-		3C2EC36A2D3A71ED003AF0FB /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3C2EC3692D3A71ED003AF0FB /* GoogleService-Info.plist */; };
+		3C2EC36E2D3A9BC6003AF0FB /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3C2EC36D2D3A9BC6003AF0FB /* GoogleService-Info.plist */; };
 		3C4F0ECE2CCFA6CE008A8D14 /* ProfileSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C4F0ECD2CCFA6C7008A8D14 /* ProfileSettingsView.swift */; };
 		3C5385D82CCFE56C00242054 /* CommonButtonViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C5385D72CCFE56900242054 /* CommonButtonViews.swift */; };
 		3C5385DA2CCFF58700242054 /* CommonSectionViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C5385D92CCFF57A00242054 /* CommonSectionViews.swift */; };
@@ -129,8 +129,9 @@
 		3C0C2C942CE695CC0040B886 /* BankAccountCategorySelectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BankAccountCategorySelectionView.swift; sourceTree = "<group>"; };
 		3C21A7652D0869F100452DF3 /* LocalAuthView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalAuthView.swift; sourceTree = "<group>"; };
 		3C21A7682D086B7300452DF3 /* LocalAuthKeychain.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalAuthKeychain.swift; sourceTree = "<group>"; };
-		3C2EC3692D3A71ED003AF0FB /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		3C2EC36C2D3A95F0003AF0FB /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
+		3C2EC36D2D3A9BC6003AF0FB /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		3C2EC3732D3AA4AC003AF0FB /* .swiftlint.yml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; path = .swiftlint.yml; sourceTree = "<group>"; };
 		3C4F0ECD2CCFA6C7008A8D14 /* ProfileSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileSettingsView.swift; sourceTree = "<group>"; };
 		3C5385D72CCFE56900242054 /* CommonButtonViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommonButtonViews.swift; sourceTree = "<group>"; };
 		3C5385D92CCFF57A00242054 /* CommonSectionViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommonSectionViews.swift; sourceTree = "<group>"; };
@@ -611,6 +612,7 @@
 		3CF17A842C87812F00A601AC = {
 			isa = PBXGroup;
 			children = (
+				3C2EC3732D3AA4AC003AF0FB /* .swiftlint.yml */,
 				3C2EC36C2D3A95F0003AF0FB /* .gitignore */,
 				3CF17A8F2C87812F00A601AC /* CADV */,
 				3CF17AA52C87813300A601AC /* CADVTests */,
@@ -644,7 +646,7 @@
 				3CF17A992C87813200A601AC /* Persistence.swift */,
 				3CF17A9B2C87813200A601AC /* CADV.xcdatamodeld */,
 				3CF17A962C87813200A601AC /* Preview Content */,
-				3C2EC3692D3A71ED003AF0FB /* GoogleService-Info.plist */,
+				3C2EC36D2D3A9BC6003AF0FB /* GoogleService-Info.plist */,
 			);
 			path = CADV;
 			sourceTree = "<group>";
@@ -837,7 +839,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				3C56174A2CE23491008BA8A1 /* Inter-Bold.ttf in Resources */,
-				3C2EC36A2D3A71ED003AF0FB /* GoogleService-Info.plist in Resources */,
+				3C2EC36E2D3A9BC6003AF0FB /* GoogleService-Info.plist in Resources */,
 				3C56174D2CE234A3008BA8A1 /* Gilroy-Semibold.ttf in Resources */,
 				3C56174B2CE23491008BA8A1 /* Inter-SemiBold.ttf in Resources */,
 				3C56174F2CE234B4008BA8A1 /* Gilroy-Bold.ttf in Resources */,

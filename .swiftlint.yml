@@ -1,0 +1,38 @@
+disabled_rules:
+  - trailing_whitespace # Пробелы в конце строк
+  - line_length         # Длина строки (можно настроить ниже)
+  - force_cast          # Принудительное приведение типов
+  - force_try           # Принудительный try!
+  - function_body_length # Длина тела функции
+  - file_length          # Длина файла
+  - type_body_length     # Длина тела типа
+  - comment_spacing 
+
+opt_in_rules:
+  - force_unwrapping     # Запрет на использование force unwrap (!)
+  - empty_count          # Проверка на использование .count == 0 вместо .isEmpty
+  - discouraged_direct_init # Запрет на прямую инициализацию некоторых типов (например, NSDate())
+
+line_length: 120         # Максимальная длина строки (120 символов)
+file_length:
+  warning: 400           # Предупреждение при превышении 400 строк
+  error: 600             # Ошибка при превышении 600 строк
+type_body_length:
+  warning: 200           # Предупреждение при превышении 200 строк в типе
+  error: 300             # Ошибка при превышении 300 строк в типе
+function_body_length:
+  warning: 40            # Предупреждение при превышении 40 строк в функции
+  error: 60              # Ошибка при превышении 60 строк в функции
+cyclomatic_complexity:
+  warning: 10            # Предупреждение при сложности функции больше 10
+  error: 20              # Ошибка при сложности функции больше 20
+
+excluded:
+  - Pods
+  - Tests
+  - Generated    
+
+colon:
+  flexible_right_spacing: true # Гибкий пробел после двоеточия
+trailing_semicolon
+trailing_semicolon: false # Запрет на использование точек с запятой
