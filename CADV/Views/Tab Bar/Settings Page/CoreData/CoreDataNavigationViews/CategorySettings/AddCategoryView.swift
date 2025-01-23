@@ -6,14 +6,14 @@
 //
 
 import SwiftUI
-import CoreData
+import RealmSwift
 
 struct AddCategory: View {
-    @Environment(\.managedObjectContext) var managedObjectContext
     @Environment(\.dismiss) var dismiss
+    @Binding var category: String
+    @Binding var urlElements: URLElements?
     
     @State var name: String = ""
-    @Binding var category: String
     @State var navigationTitle: String
     @State var isConstant: Bool = false
     @State var imageName: String = "-"
@@ -25,13 +25,13 @@ struct AddCategory: View {
     ]
     
     var body: some View {
-        ZStack{
-            VStack(alignment: .center){
+        ZStack {
+            VStack(alignment: .center) {
                 CategoryPreview(
                     imageName: $imageName,
                     name: $name
                 )
-                HStack{
+                HStack {
                     Picker("тут иконка", selection: $imageName) {
                         ForEach(availableIcons, id: \.self) { icon in
                             Image(icon)
@@ -48,7 +48,7 @@ struct AddCategory: View {
                         .cornerRadius(15)
                         .frame(maxHeight: 40)
                 }
-                if category != "Сбережения"{
+                if category != "Сбережения" {
                     HStack {
                         Button(action: {
                             isConstant = true
@@ -110,36 +110,38 @@ struct AddCategory: View {
         .background(Color.white.edgesIgnoringSafeArea(.all))
         .navigationTitle(navigationTitle)
     }
+    
     private func saveCategory() {
-        if check(){
-            let newCategory = CategoryEntity(context: managedObjectContext)
+        if check() {
+            let newCategory = CategoryEntity()
             newCategory.name = name
             newCategory.categoryType = category
             newCategory.isConstant = isConstant
             newCategory.iconName = imageName
             
             do {
-                try managedObjectContext.save()
+                try RealmManager.shared.realm.write {
+                    RealmManager.shared.realm.add(newCategory)
+                }
                 dismiss()
             } catch {
                 Logger.shared.log(.error, "Ошибка сохранения категории: \(error)")
             }
-        }else{
-            
         }
     }
     
-    private func check() -> Bool{
-        if name.isEmpty{
+    private func check() -> Bool {
+        if name.isEmpty {
             showError(message: "Название не должно быть пустым")
             return false
         }
-        if imageName.isEmpty || imageName == "-"{
+        if imageName.isEmpty || imageName == "-" {
             showError(message: "Вы обязаны выбрать иконку")
             return false
         }
         return true
     }
+    
     private func showError(message: String) {
         errorMessage = message
         withAnimation {

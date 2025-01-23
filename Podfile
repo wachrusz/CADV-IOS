@@ -9,6 +9,7 @@ target 'CADV' do
   # Pods for CADV
   pod 'SwiftyJSON'
   pod 'Firebase'
+  pod 'RealmSwift'
   target 'CADVTests' do
     inherit! :search_paths
     # Pods for testing

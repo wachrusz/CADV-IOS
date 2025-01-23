@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import RealmSwift
 
 struct CommonHeader: View{
     var image: String
@@ -80,16 +81,11 @@ struct ProfileImageAndInfo: View{
 }
 
 //Balance
-struct TotalAmountView: View{
+struct TotalAmountView: View {
     var text: String
-    @FetchRequest(
-            entity: CurrencyEntity.entity(),
-            sortDescriptors: [],
-            animation: .default
-    ) private var currencies: FetchedResults<CurrencyEntity>
+    @ObservedResults(CurrencyEntity.self) var currencies
     @State private var selectedCurrency: String = "RUB"
 
-    
     var body: some View {
         HStack(spacing: 0) {
             CustomText(
@@ -107,27 +103,20 @@ struct TotalAmountView: View{
         .frame(height: 85)
         .padding(.horizontal)
         .onAppear {
-            if let firstCurrency = currencies.first, let currencyCode = firstCurrency.currency {
-                selectedCurrency = currencyCode
+            if let firstCurrency = currencies.first {
+                selectedCurrency = firstCurrency.currency
             }
         }
     }
-    
 }
 
-struct AnalyticsTotalAmountView: View{
-    var bankAccounts: [Int : BankAccounts]
-    @FetchRequest(
-            entity: CurrencyEntity.entity(),
-            sortDescriptors: [],
-            animation: .default
-    ) private var currencies: FetchedResults<CurrencyEntity>
+struct AnalyticsTotalAmountView: View {
+    var bankAccounts: [Int: BankAccounts]
+    @ObservedResults(CurrencyEntity.self) var currencies 
     @State private var selectedCurrency: String = "RUB"
-    @State var sum: Double = 0.0
+    @State private var sum: Double = 0.0
 
-    
     var body: some View {
-        
         HStack(spacing: 0) {
             CustomText(
                 text: currencyCodeToSymbol(code: selectedCurrency),
@@ -144,8 +133,8 @@ struct AnalyticsTotalAmountView: View{
         .frame(height: 85)
         .padding(.horizontal)
         .onAppear {
-            if let firstCurrency = currencies.first, let currencyCode = firstCurrency.currency {
-                selectedCurrency = currencyCode
+            if let firstCurrency = currencies.first {
+                selectedCurrency = firstCurrency.currency
             }
             sum = bankAccounts.values.reduce(0.0) { $0 + $1.TotalAmount }
         }

@@ -29,9 +29,8 @@ class FirebaseAnalyticsManager: ObservableObject {
     ) {
         var parameters: [String: Any] = [
             "device_id": userId,
-            "action_type": actionType,
-            "screen_name": screenName,
-            "timestamp": Timestamp()
+            "action_type": "user_action",
+            "screen_name": screenName
         ]
 
         if let userInfo = getUserInfo() {
@@ -42,7 +41,7 @@ class FirebaseAnalyticsManager: ObservableObject {
             parameters.merge(additionalData) { (current, _) in current }
         }
 
-        logEvent("user_action", parameters: parameters)
+        logEvent(actionType, parameters: parameters)
     }
 
     private func getUserInfo() -> [String: Any]? {

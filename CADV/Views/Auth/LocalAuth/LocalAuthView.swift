@@ -116,7 +116,7 @@ struct LocalAuthView: View {
                 .padding(.bottom, 40)
                 
                 NavigationLink(
-                    destination: TabBarContentView(
+                    destination: TabBarView(
                         urlElements: $urlElements
                     ),
                     isActive: $isCodeValid

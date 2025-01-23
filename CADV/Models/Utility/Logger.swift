@@ -28,7 +28,7 @@ class Logger {
     func log(_ level: LogLevel, _ message: Any, file: String = #file, line: Int = #line) {
         let timestamp = DateFormatter.localizedString(from: Date(), dateStyle: .medium, timeStyle: .medium)
         let fileName = (file as NSString).lastPathComponent
-        let logMessage = "\(timestamp) [\(level.rawValue)] \(message) (File: \(fileName), Line: \(line))"
+        let logMessage = "[CADVApp] \(timestamp) [\(level.rawValue)] \(message) (File: \(fileName), Line: \(line))"
         
         print(logMessage)
     }

@@ -119,6 +119,8 @@ struct MainPageView: View {
                 isMatchingCategory = category == "Расходы"
             case .wealthFund:
                 isMatchingCategory = category == "Сбережения"
+            case .error:
+                isMatchingCategory = false
             }
 
             return isMatchingCategory && (

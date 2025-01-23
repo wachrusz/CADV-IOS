@@ -13,7 +13,7 @@ struct URLEntities {
     var goals: [Goal]
     var finHealth: FinHealth
     var annualPayments: [AnnualPayment]
-    var bankAccounts: [Int:BankAccounts]
+    var bankAccounts: [Int : BankAccounts]
     var groupedAndSortedTransactions: [(date: Date, categorizedTransactions: [CategorizedTransaction])] = []
     
     init() {
@@ -23,8 +23,7 @@ struct URLEntities {
         self.finHealth = FinHealth()
         self.annualPayments = []
         self.bankAccounts =  [
-            0: BankAccounts(),
-            1: BankAccounts()
+            0: BankAccounts()
         ]
     }
     

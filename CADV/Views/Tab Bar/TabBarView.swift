@@ -6,10 +6,9 @@
 //
 
 import SwiftUI
-import CoreData
+import RealmSwift
 
-struct TabBarContentView: View {
-    @Environment(\.managedObjectContext) private var viewContext
+struct TabBarView: View {
     @State private var selectedTab = 0
     @State private var isAnalyticsLoaded = false
     @StateObject private var dataManager: DataManager
@@ -33,17 +32,8 @@ struct TabBarContentView: View {
                         dataManager: dataManager
                     )
                     .frame(width: geometry.size.width, height: geometry.size.height)
-                    .onAppear(){
-                        let additionalData: [String: Any] = [
-                            "element": "Main_Page"
-                        ]
-                        
-                        FirebaseAnalyticsManager.shared.logUserActionEvent(
-                            userId: getDeviceIdentifier(),
-                            actionType: "opened",
-                            screenName: "TabBarView",
-                            additionalData: additionalData
-                        )
+                    .onAppear {
+                        logScreenView(screenName: "Main_Page")
                     }
                 case 1:
                     if isAnalyticsLoaded {
@@ -57,17 +47,8 @@ struct TabBarContentView: View {
                             dataManager: dataManager
                         )
                         .frame(width: geometry.size.width, height: geometry.size.height)
-                        .onAppear(){
-                            let additionalData: [String: Any] = [
-                                "element": "Analytics_Page"
-                            ]
-                            
-                            FirebaseAnalyticsManager.shared.logUserActionEvent(
-                                userId: getDeviceIdentifier(),
-                                actionType: "opened",
-                                screenName: "TabBarView",
-                                additionalData: additionalData
-                            )
+                        .onAppear {
+                            logScreenView(screenName: "Analytics_Page")
                         }
                     } else {
                         ProgressView()
@@ -84,17 +65,8 @@ struct TabBarContentView: View {
                         dataManager: dataManager
                     )
                     .frame(width: geometry.size.width, height: geometry.size.height)
-                    .onAppear(){
-                        let additionalData: [String: Any] = [
-                            "element": "Settings_Page"
-                        ]
-                        
-                        FirebaseAnalyticsManager.shared.logUserActionEvent(
-                            userId: getDeviceIdentifier(),
-                            actionType: "opened",
-                            screenName: "TabBarView",
-                            additionalData: additionalData
-                        )
+                    .onAppear {
+                        logScreenView(screenName: "Settings_Page")
                     }
                 default:
                     MainPageView(
@@ -110,15 +82,27 @@ struct TabBarContentView: View {
         .edgesIgnoringSafeArea(.bottom)
         .hideBackButton()
         .colorScheme(.light)
-        .onAppear(){
+        .onAppear {
             dataManager.fetchData()
         }
     }
     
-    func loadAnalyticsPage() {
+    private func loadAnalyticsPage() {
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
             isAnalyticsLoaded = true
         }
     }
     
+    private func logScreenView(screenName: String) {
+        let additionalData: [String: Any] = [
+            "element": screenName
+        ]
+        
+        FirebaseAnalyticsManager.shared.logUserActionEvent(
+            userId: getDeviceIdentifier(),
+            actionType: "opened",
+            screenName: "TabBarView",
+            additionalData: additionalData
+        )
+    }
 }

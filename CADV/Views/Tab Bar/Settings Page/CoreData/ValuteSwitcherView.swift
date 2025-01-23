@@ -6,37 +6,55 @@
 //
 
 import SwiftUI
-import CoreData
+import RealmSwift
 
 class CurrencyManager: ObservableObject {
     @Published var selectedCurrency: String = "RUB"
-    let context = PersistenceController.shared.container.viewContext
+    let realm = try! Realm()
     
     init() {
         loadCurrency()
     }
     
     func loadCurrency() {
-        let request: NSFetchRequest<CurrencyEntity> = CurrencyEntity.fetchRequest()
-        do {
-            let results = try context.fetch(request)
-            if let savedCurrency = results.first?.currency {
-                selectedCurrency = savedCurrency
+        if let currencyEntity = realm.object(ofType: CurrencyEntity.self, forPrimaryKey: "currency") {
+            selectedCurrency = currencyEntity.currency
+        } else {
+            // Если валюта не найдена, создаем новую запись с дефолтным значением
+            let newCurrencyEntity = CurrencyEntity()
+            newCurrencyEntity.currency = "RUB"
+            do {
+                try realm.write {
+                    realm.add(newCurrencyEntity)
+                }
+            } catch {
+                Logger.shared.log(.error, "Ошибка создания дефолтной валюты: \(error)")
             }
-        } catch {
-            Logger.shared.log(.warning, "Ошибка загрузки валюты: \(error)")
         }
     }
     
     func saveCurrency(_ currency: String) {
-        let request: NSFetchRequest<CurrencyEntity> = CurrencyEntity.fetchRequest()
-        do {
-            let results = try context.fetch(request)
-            let entity = results.first ?? CurrencyEntity(context: context)
-            entity.currency = currency
-            try context.save()
-        } catch {
-            Logger.shared.log(.error, "Ошибка сохранения валюты: \(error)")
+        if let currencyEntity = realm.object(ofType: CurrencyEntity.self, forPrimaryKey: "currency") {
+            do {
+                try realm.write {
+                    currencyEntity.currency = currency
+                }
+                selectedCurrency = currency
+            } catch {
+                Logger.shared.log(.error, "Ошибка сохранения валюты: \(error)")
+            }
+        } else {
+            // Если запись не найдена, создаем новую
+            let newCurrencyEntity = CurrencyEntity()
+            newCurrencyEntity.currency = currency
+            do {
+                try realm.write {
+                    realm.add(newCurrencyEntity)
+                }
+                selectedCurrency = currency
+            } catch {
+                Logger.shared.log(.error, "Ошибка создания новой валюты: \(error)")
+            }
         }
     }
 }

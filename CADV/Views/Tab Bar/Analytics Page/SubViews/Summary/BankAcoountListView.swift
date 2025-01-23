@@ -12,7 +12,7 @@ struct BankAccountList: View {
     
     var body: some View {
         HStack {
-            Image(bankAccounts.Group?.rawValue ?? "")
+            Image(bankAccounts.Group?.returnImageName ?? "")
                 .resizable()
                 .frame(width: 40, height: 40)
                 .background(Color.gray.opacity(0.1))

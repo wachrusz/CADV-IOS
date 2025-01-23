@@ -127,6 +127,8 @@ struct CategoryList: View{
             return "-"
         case .wealthFund:
             return ""
+        case .error:
+            return ""
         }
     }
 }

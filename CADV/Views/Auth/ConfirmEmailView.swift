@@ -8,7 +8,7 @@
 import SwiftUI
 import UIKit
 import UserNotifications
-import CoreData
+import RealmSwift
 
 class CustomCodeTextField: UITextField {
     var onDeleteBackward: (() -> Void)?
@@ -30,14 +30,11 @@ struct CustomCodeTextFieldWrapper: UIViewRepresentable {
         textField.textAlignment = .center
         textField.font = UIFont.systemFont(ofSize: 18, weight: .semibold)
         textField.keyboardType = .numberPad
-        
         textField.textColor = .black
-        
         textField.onDeleteBackward = onDeleteBackward
         return textField
     }
 
-    
     func updateUIView(_ uiView: CustomCodeTextField, context: Context) {
         uiView.text = text
         
@@ -81,7 +78,6 @@ struct EnterVerificationEmailCode: View {
     @Binding var token: String
     @State var confirmationError: String?
     @StateObject private var notificationManager = NotificationManager()
-    @Environment(\.managedObjectContext) private var viewContext
     @State var remainingAttempts: Int = 0
     @State var lockDuration: Int = 0
     @State private var resetToken: String = ""
@@ -94,9 +90,8 @@ struct EnterVerificationEmailCode: View {
     }
     @Binding var urlElements: URLElements?
     
-    
     var body: some View {
-        NavigationStack{
+        NavigationStack {
             ZStack {
                 VStack {
                     VStack(spacing: 10) {
@@ -105,13 +100,12 @@ struct EnterVerificationEmailCode: View {
                                 StepView(number: "1", currentStep: 2, stepIndex: 1)
                                 StepView(number: "2", currentStep: 2, stepIndex: 2)
                                 StepView(number: "3", currentStep: 2, stepIndex: 3)
-                            }else{
+                            } else {
                                 StepView(number: "1", currentStep: 2, stepIndex: 1)
                                 StepView(number: "2", currentStep: 2, stepIndex: 2)
                             }
                         }
                         .padding()
-                        
                         
                         CustomText(
                             text: "Подтверждение",
@@ -139,7 +133,7 @@ struct EnterVerificationEmailCode: View {
                                                 focusedField = index + 1 < 4 ? index + 1 : nil
                                             }
                                             if index == 3 && newValue.count == 1 {
-                                                Task{
+                                                Task {
                                                     focusedField = 0
                                                     await validateCode()
                                                 }
@@ -194,17 +188,20 @@ struct EnterVerificationEmailCode: View {
                                 token: $resetToken,
                                 urlElements: $urlElements
                             ),
-                            isActive: $isNavigationActive) {
-                                EmptyView()
-                            }
-                    }else{
+                            isActive: $isNavigationActive
+                        ) {
+                            EmptyView()
+                        }
+                    } else {
                         NavigationLink(
                             destination: LocalAuthView(urlElements: $urlElements),
-                            isActive: $isNavigationActive) {
-                                EmptyView()
-                            }
+                            isActive: $isNavigationActive
+                        ) {
+                            EmptyView()
+                        }
                     }
-                }.onAppear {
+                }
+                .onAppear {
                     notificationManager.requestPermission()
                 }
                 
@@ -238,7 +235,7 @@ struct EnterVerificationEmailCode: View {
         }
     }
     
-    private func validateCode() async{
+    private func validateCode() async {
         let enteredCode = code.joined()
         let parameters = [
             "code": enteredCode,
@@ -246,14 +243,14 @@ struct EnterVerificationEmailCode: View {
         ]
         do {
             let response = try await self.urlElements?.fetchData(
-            endpoint: isReset ? "v1/auth/password/confirm" : (isNew ? "v1/auth/register/confirm" : "v1/auth/login/confirm"),
-            parameters: parameters
-        )
+                endpoint: isReset ? "v1/auth/password/confirm" : (isNew ? "v1/auth/register/confirm" : "v1/auth/login/confirm"),
+                parameters: parameters
+            )
             if !isReset {
                 switch response?["status_code"] as? Int {
                 case 200:
                     urlElements?.saveTokenData(responseObject: response ?? [:])
-                    Logger.shared.log(.info,urlElements as Any)
+                    Logger.shared.log(.info, urlElements as Any)
                     self.isNavigationActive = true
                     
                     let additionalData: [String: Any] = [
@@ -278,11 +275,10 @@ struct EnterVerificationEmailCode: View {
                 }
             }
             
-            let resetTokenDetails = response?["token_details"] as? [String : Any] ?? [:]
+            let resetTokenDetails = response?["token_details"] as? [String: Any] ?? [:]
             self.resetToken = resetTokenDetails["reset_token"] as? String ?? ""
             self.isNavigationActive = true
-        }
-        catch let error{
+        } catch {
             Logger.shared.log(.error, error)
         }
     }
@@ -321,7 +317,6 @@ func sendLocalNotification(withCode code: String) {
         }
     }
 }
-
 
 extension UIApplication {
     func endEditing() {

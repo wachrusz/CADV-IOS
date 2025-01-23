@@ -65,7 +65,7 @@ struct AppNavigatingButtonsList: View {
             Text("Подключённые счета")
                 .foregroundStyle(.black)
         case "Настройка категорий":
-            CategorySettingsView()
+            CategorySettingsView(urlElements: $urlElements)
         case "Архив операций":
             OperationsArchiveView()
         case "Экспорт отчётности":

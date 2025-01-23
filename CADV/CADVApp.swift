@@ -5,15 +5,13 @@
 //  Created by Misha Vakhrushin on 03.09.2024.
 //
 
-import CoreData
+import RealmSwift
 import FirebaseCore
 import SwiftUI
 import UserNotifications
 
 @main
 struct CADVApp: App {
-    let persistenceController = PersistenceController.shared
-
     @StateObject private var notificationManager = NotificationManager()
     @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
 
@@ -22,7 +20,6 @@ struct CADVApp: App {
     @State private var isAuthenticated: Bool = false {
         didSet {
             guard oldValue != isAuthenticated else { return }
-
             Logger.shared.log(.info, "Authentication status changed: \(isAuthenticated)")
         }
     }
@@ -32,11 +29,9 @@ struct CADVApp: App {
             if let _ = urlElements {
                 if isAuthenticated {
                     LocalAuthView(urlElements: $urlElements)
-                        .environment(\.managedObjectContext, persistenceController.container.viewContext)
                         .preferredColorScheme(.light)
                 } else {
                     SplashScreenView(urlElements: $urlElements)
-                        .environment(\.managedObjectContext, persistenceController.container.viewContext)
                         .preferredColorScheme(.light)
                         .onAppear {
                             notificationManager.requestPermission()
@@ -53,38 +48,31 @@ struct CADVApp: App {
     }
 
     private func initializeURLElements() {
-        let context = persistenceController.container.viewContext
-        let fetchRequest: NSFetchRequest<AccessEntity> = AccessEntity.fetchRequest()
 
-        do {
-            let tokens = try context.fetch(fetchRequest)
-            if tokens.isEmpty {
-                Logger.shared.log(.warning, "Core Data is empty, creating default token")
-                createDefaultToken()
-                urlElements = URLElements(
-                    tokenData: TokenData(from: AccessEntity(context: context)),
-                    viewCtx: context
+        if let tokenEntity = RealmManager.shared.realm.objects(TokenEntity.self).first {
+            let tokenData = TokenData(
+                accessToken: tokenEntity.accessToken,
+                refreshToken: tokenEntity.refreshToken,
+                accessTokenExpiresAt: tokenEntity.accessTokenExpiresAt,
+                refreshTokenExpiresAt: tokenEntity.refreshTokenExpiresAt
+            )
+            urlElements = URLElements(tokenData: tokenData)
+            isAuthenticated = isValid(token: tokenData)
+            Logger.shared.log(.info, "URL elements initialized with existing token")
+        } else {
+            Logger.shared.log(.warning, "Realm is empty, creating default token")
+            createDefaultToken()
+            if let tokenEntity = RealmManager.shared.realm.objects(TokenEntity.self).first {
+                let tokenData = TokenData(
+                    accessToken: tokenEntity.accessToken,
+                    refreshToken: tokenEntity.refreshToken,
+                    accessTokenExpiresAt: tokenEntity.accessTokenExpiresAt,
+                    refreshTokenExpiresAt: tokenEntity.refreshTokenExpiresAt
                 )
+                urlElements = URLElements(tokenData: tokenData)
                 isAuthenticated = false
-                Logger.shared.log(.info, urlElements as Any)
-            } else if let entity = tokens.first {
-                let tokenData = TokenData(from: entity)
-                urlElements = URLElements(tokenData: tokenData, viewCtx: context)
-                isAuthenticated = isValid(token: tokenData)
-                Logger.shared.log(.info, urlElements as Any)
-            } else {
-                Logger.shared.log(.info, "No token found, initializing default URL elements")
-                urlElements = URLElements(
-                    tokenData: TokenData(from: AccessEntity(context: context)),
-                    viewCtx: context
-                )
-                isAuthenticated = false
-                Logger.shared.log(.info, urlElements as Any)
+                Logger.shared.log(.info, "URL elements initialized with default token")
             }
-        } catch {
-            Logger.shared.log(.error, "Error fetching token: \(error)")
-            isAuthenticated = false
-            Logger.shared.log(.info, urlElements as Any)
         }
     }
 
@@ -94,51 +82,43 @@ struct CADVApp: App {
 
         defer { isCheckingToken = false }
         Logger.shared.log(.info, "Started checking tokens, attempts left: \(attemptsLeft)")
-        let context = persistenceController.container.viewContext
-        let fetchRequest: NSFetchRequest<AccessEntity> = AccessEntity.fetchRequest()
 
-        do {
-            let tokens = try context.fetch(fetchRequest)
-            if tokens.isEmpty {
-                Logger.shared.log(.info, "Core Data is empty, creating default token")
-                createDefaultToken()
-                isAuthenticated = false
+        let realm = try! Realm()
+
+        if let tokenEntity = realm.objects(TokenEntity.self).first {
+            Logger.shared.log(.info, "Found token entity: \(tokenEntity)")
+            let tokenData = TokenData(
+                accessToken: tokenEntity.accessToken,
+                refreshToken: tokenEntity.refreshToken,
+                accessTokenExpiresAt: tokenEntity.accessTokenExpiresAt,
+                refreshTokenExpiresAt: tokenEntity.refreshTokenExpiresAt
+            )
+
+            if isValid(token: tokenData) {
+                Logger.shared.log(.info, "Token is valid")
+                isAuthenticated = true
                 return
-            }
-
-            if let entity = tokens.first {
-                Logger.shared.log(.info, "Found token entity")
-                let tokenData = TokenData(from: entity)
-
-                if isValid(token: tokenData) {
-                    Logger.shared.log(.info, "Token is valid")
-                    isAuthenticated = true
-                    return
-                } else {
-                    Logger.shared.log(.warning, "Token is invalid")
-
-                    if attemptsLeft > 0 {
-                        urlElements?.refreshTokenIfNeeded { success in
-                            if success {
-                                Logger.shared.log(.info, "Token refreshed successfully, rechecking...")
-                                initializeURLElements()
-                                checkToken(attemptsLeft: attemptsLeft - 1)
-                            } else {
-                                Logger.shared.log(.warning, "Failed to refresh token, attempts left: \(attemptsLeft - 1)")
-                                checkToken(attemptsLeft: attemptsLeft - 1)
-                            }
-                        }
-                    } else {
-                        Logger.shared.log(.error, "All attempts exhausted, authentication failed")
-                        isAuthenticated = false
-                    }
-                }
             } else {
-                Logger.shared.log(.warning, "No token found, setting isAuthenticated to false")
-                isAuthenticated = false
+                Logger.shared.log(.warning, "Token is invalid")
+
+                if attemptsLeft > 0 {
+                    urlElements?.refreshTokenIfNeeded { success in
+                        if success {
+                            Logger.shared.log(.info, "Token refreshed successfully, rechecking...")
+                            initializeURLElements()
+                            checkToken(attemptsLeft: attemptsLeft - 1)
+                        } else {
+                            Logger.shared.log(.warning, "Failed to refresh token, attempts left: \(attemptsLeft - 1)")
+                            checkToken(attemptsLeft: attemptsLeft - 1)
+                        }
+                    }
+                } else {
+                    Logger.shared.log(.error, "All attempts exhausted, authentication failed")
+                    isAuthenticated = false
+                }
             }
-        } catch {
-            Logger.shared.log(.error, "Error fetching token: \(error)")
+        } else {
+            Logger.shared.log(.warning, "No token found, setting isAuthenticated to false")
             isAuthenticated = false
         }
     }
@@ -149,15 +129,23 @@ struct CADVApp: App {
     }
 
     private func createDefaultToken() {
-        let context = persistenceController.container.viewContext
-        let newToken = AccessEntity(context: context)
-        newToken.accessToken = "default_access_token"
-        newToken.refreshToken = "default_refresh_token"
-        newToken.accessTokenExpiresAt = Date().addingTimeInterval(-10000)
-        newToken.refreshTokenLifeTime = 3600
+        let realm = try! Realm()
+        realm.deleteAll()
+        if KeychainHelper.shared.read(forKey: "user_pin_code") != nil{
+            KeychainHelper.shared.delete(forKey: "user_pin_code")
+        }
+
+        let tokenEntity = TokenEntity()
+        tokenEntity.deviceID = getDeviceIdentifier()
+        tokenEntity.accessToken = "default_access_token"
+        tokenEntity.refreshToken = "default_refresh_token"
+        tokenEntity.accessTokenExpiresAt = Date().addingTimeInterval(-10000)
+        tokenEntity.refreshTokenExpiresAt = Date().addingTimeInterval(3600)
 
         do {
-            try context.save()
+            try realm.write {
+                realm.add(tokenEntity, update: .modified)
+            }
             Logger.shared.log(.info, "Default token created")
         } catch {
             Logger.shared.log(.error, "Failed to create default token: \(error.localizedDescription)")
@@ -175,6 +163,28 @@ class AppDelegate: NSObject, UIApplicationDelegate {
         didFinishLaunchingWithOptions _: [UIApplication.LaunchOptionsKey: Any]? = nil
     ) -> Bool {
         FirebaseApp.configure()
+        
+        Realm.Configuration.defaultConfiguration = Realm.Configuration(
+            shouldCompactOnLaunch: { totalBytes, usedBytes in
+                print("Realm file size: \(totalBytes) bytes, used: \(usedBytes) bytes")
+                return false
+            }
+        )
+        
         return true
+    }
+}
+
+class RealmManager: ObservableObject {
+    static let shared = RealmManager()
+    let realm: Realm
+    
+    private init() {
+        do {
+            self.realm = try Realm()
+            print("Realm created at \(Thread.current)")
+        } catch {
+            fatalError("Failed to initialize Realm: \(error)")
+        }
     }
 }

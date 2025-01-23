@@ -7,7 +7,6 @@
 
 import Foundation
 import SwiftUI
-import CoreData
 
 func textFieldValidatorEmail(_ string: String) -> Bool {
     if string.count > 64 || string.isEmpty || string.count < 2 {

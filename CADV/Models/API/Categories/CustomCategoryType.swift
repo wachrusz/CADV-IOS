@@ -1,65 +1,14 @@
 //
-//  CategorizedTransactions.swift
+//  CustomCategory.swift
 //  CADV
 //
-//  Created by Misha Vakhrushin on 29.10.2024.
+//  Created by Misha Vakhrushin on 22.01.2025.
 //
-
-import Foundation
-
-protocol CategorizedTransactionsProtocol: Codable{
-    var id: UUID { get }
-    var amount: Double { get }
-    var category: CustomCategoryType { get }
-    var currency: CurrencyType { get }
-    var type: TransactionType { get }
-    var userID: String { get }
-    var bankAccount: String { get }
-    var date: Date { get }
-    var name: String { get }
-}
-
-struct CategorizedTransaction: CategorizedTransactionsProtocol, Identifiable, Equatable, Hashable {
-    var id = UUID()
-    let amount: Double
-    let category: CustomCategoryType
-    let currency: CurrencyType
-    let type: TransactionType
-    let userID: String
-    let bankAccount: String
-    let date: Date
-    let name: String
-    
-    var planned: Bool?
-    var sender: String?
-    var destinationAccount: String?
-}
-
-extension CategorizedTransaction {
-    init(from json: [String: Any]) throws {
-        self.id = UUID(uuidString: json["id"] as? String ?? "") ?? UUID()
-        self.amount = json["amount"] as? Double ?? 0.0
-        
-        guard let categoryId = json["category_id"] as? String,
-              let category = CustomCategoryType(from: categoryId) else {
-            throw NSError(domain: "Invalid category_id", code: 1)
-        }
-        self.category = category
-        
-        self.currency = CurrencyType(rawValue: json["currency"] as? String ?? "") ?? .ruble
-        self.type = TransactionType(rawValue: json["type"] as? String ?? "") ?? .income
-        self.userID = json["user_id"] as? String ?? ""
-        self.bankAccount = json["bank_account"] as? String ?? ""
-        self.date = ISO8601DateFormatter().date(from: json["date"] as? String ?? "") ?? Date()
-        self.name = json["name"] as? String ?? ""
-        self.planned = json["planned"] as? Bool
-        self.sender = json["sender"] as? String ?? json["sent_to"] as? String
-        self.destinationAccount = json["destination_account"] as? String
-    }
-}
 
 func image(for category: CustomCategoryType) -> String {
     switch category {
+    case .error:
+        return ""
     case .income(let income):
         switch income {
             case .constant(let category):
@@ -145,6 +94,7 @@ enum CustomCategoryType: CaseIterable, Codable, Hashable {
     case income(IncomeCategory)
     case expense(ExpenseCategory)
     case wealthFund(WealthFundCategory)
+    case error
 }
 
 extension CustomCategoryType: Comparable {
@@ -156,6 +106,7 @@ extension CustomCategoryType: Comparable {
         case .income: return  "Доходы"
         case .expense: return "Расходы"
         case .wealthFund: return "Сбережения"
+        case .error: return "Error"
         }
     }
     
@@ -173,6 +124,7 @@ extension CustomCategoryType: Comparable {
             }
         case .wealthFund(_):
             return false
+        case .error: return false
         }
     }
     
@@ -192,6 +144,8 @@ extension CustomCategoryType: Comparable {
             switch category {
             case .constant(let const): return const.rawValue
             }
+        case .error:
+            return "Error"
         }
     }
 }
@@ -274,36 +228,29 @@ enum WealthFundConstantCategory: String, CaseIterable, Codable, Hashable {
     case savings = "Сбережения"
 }
 
-func generateTestTransactions(count: Int) -> [CategorizedTransaction] {
-    var transactions: [CategorizedTransaction] = []
-    
-    for _ in 0..<count {
-        let randomCategory = CustomCategoryType.allCases.randomElement()!
-        let randomCurrency = CurrencyType.allCases.randomElement()!
-        let randomType: TransactionType = {
-            switch randomCategory {
-            case .income: return .income
-            case .expense: return .expense
-            case .wealthFund: return .wealthFund
+
+extension CategoryEntity {
+    func toCustomCategoryType() -> CustomCategoryType {
+        switch self.categoryType {
+        case "income":
+            if let incomeConstant = IncomeConstantCategory(rawValue: self.name) {
+                return .income(.constant(incomeConstant))
+            } else if let incomeTemporary = IncomeTemporaryCategory(rawValue: self.name) {
+                return .income(.temporary(incomeTemporary))
             }
-        }()
-        
-        let transaction = CategorizedTransaction(
-            amount: Double.random(in: 10.0...10000.0),
-            category: randomCategory,
-            currency: randomCurrency,
-            type: randomType,
-            userID: UUID().uuidString,
-            bankAccount: "Bank \(Int.random(in: 1...5))",
-            date: Date().addingTimeInterval(-Double.random(in: 0...100000)),
-            name: "Перевод",
-            planned: Bool.random(),
-            sender: randomType == .income ? "Company XYZ" : nil,
-            destinationAccount: randomType == .wealthFund ? "Investment Fund" : nil
-        )
-        
-        transactions.append(transaction)
+        case "expense":
+            if let expenseConstant = ExpenseConstantCategory(rawValue: self.name) {
+                return .expense(.constant(expenseConstant))
+            } else if let expenseTemporary = ExpenseTemporaryCategory(rawValue: self.name) {
+                return .expense(.temporary(expenseTemporary))
+            }
+        case "wealthFund":
+            if let wealthFundConstant = WealthFundConstantCategory(rawValue: self.name) {
+                return .wealthFund(.constant(wealthFundConstant))
+            }
+        default:
+            return .error
+        }
+        return .error
     }
-    
-    return transactions
 }

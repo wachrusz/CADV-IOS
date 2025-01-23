@@ -6,10 +6,10 @@
 //
 
 import SwiftUI
-import CoreData
+import RealmSwift
 
 struct CategorySettingsView: View{
-    @Environment(\.managedObjectContext) private var viewContext
+    @Binding var urlElements: URLElements?
     @State private var categories: [CategoryEntity] = []
     
     @State var selectedCategory: String = "Доходы"
@@ -31,12 +31,14 @@ struct CategorySettingsView: View{
                 )
                 CategorySettingsList(
                     selectedCategory: $selectedCategory,
-                    showAddCategoryScreen: $showAddCategoryScreen
+                    showAddCategoryScreen: $showAddCategoryScreen,
+                    urlElements: $urlElements
                 )
 
                 NavigationLink(
                     destination: AddCategory(
                         category: $selectedCategory,
+                        urlElements: $urlElements,
                         navigationTitle: generateNavigationTitleName()
                     ),
                     isActive: $showAddCategoryScreen,
@@ -68,41 +70,30 @@ struct CategorySettingsView: View{
 struct CategorySettingsList: View {
     @Binding var selectedCategory: String
     @Binding var showAddCategoryScreen: Bool
+    @Binding var urlElements: URLElements?
+    
     @State private var customCategoriesFiltered: [CustomCategoryType] = []
-    @FetchRequest var savedCategories: FetchedResults<CategoryEntity>
-
-    init(
-        selectedCategory: Binding<String>,
-        showAddCategoryScreen: Binding<Bool>
-    ) {
-        self._selectedCategory = selectedCategory
-        self._showAddCategoryScreen = showAddCategoryScreen
-
-        let predicate: NSPredicate
-        switch selectedCategory.wrappedValue {
-        case "Доходы":
-            predicate = NSPredicate(format: "categoryType == %@", "Доходы")
-        case "Расходы":
-            predicate = NSPredicate(format: "categoryType == %@", "Расходы")
-        case "Сбережения":
-            predicate = NSPredicate(format: "categoryType == %@", "Сбережения")
-        default:
-            predicate = NSPredicate(value: true)
-        }
-
-        _savedCategories = FetchRequest(
-            entity: CategoryEntity.entity(),
-            sortDescriptors: [],
-            predicate: predicate
-        )
+    
+    private func SectionHeaderConstant() -> some View {
+        Text("Постоянные \(customCategoriesFiltered.count + (urlElements?.savedCategories.filter { $0.isConstant }.count ?? 0))")
     }
-
+    
+    private func SectionHeaderTemporary() -> some View{
+        Text("Переменные \(customCategoriesFiltered.count + (urlElements?.savedCategories.filter { !$0.isConstant }.count ?? 0))")
+    }
+    
+    private func SectionHeaderSavings() -> some View{
+        Text("Сбережения \(customCategoriesFiltered.count + (urlElements?.savedCategories.filter { $0.categoryType == "Сбережения" }.count ?? 0))")
+    }
+    
     var body: some View {
-        NavigationStack{
+        NavigationStack {
             ScrollView {
                 LazyVStack {
-                    if selectedCategory != "Сбережения"{
-                        Section(header: Text("Постоянные \(customCategoriesFiltered.count + savedCategories.filter { $0.isConstant }.count)")) {
+                    if selectedCategory != "Сбережения" {
+                        Section(header:
+                                SectionHeaderConstant()
+                        ) {
                             ForEach(customCategoriesFiltered, id: \.self) { category in
                                 CategoryRow(
                                     categoryName: category.displayName,
@@ -110,17 +101,17 @@ struct CategorySettingsList: View {
                                 )
                             }
                             
-                            ForEach(savedCategories.filter { $0.isConstant }, id: \.self) { category in
-                                if let categoryName = category.name, let imageName = category.iconName {
-                                    CategoryRow(
-                                        categoryName: categoryName,
-                                        imageName: imageName
-                                    )
-                                }
+                            ForEach(urlElements?.savedCategories.filter { $0.isConstant } ?? [], id: \.self) { category in
+                                CategoryRow(
+                                    categoryName: category.name,
+                                    imageName: category.iconName
+                                )
                             }
                         }
                         
-                        Section(header: Text("Переменные \(customCategoriesFiltered.count + savedCategories.filter { !$0.isConstant }.count)")) {
+                        Section(header:
+                                    SectionHeaderTemporary()
+                        ) {
                             ForEach(customCategoriesFiltered, id: \.self) { category in
                                 CategoryRow(
                                     categoryName: category.displayName,
@@ -128,57 +119,67 @@ struct CategorySettingsList: View {
                                 )
                             }
                             
-                            ForEach(savedCategories.filter { !$0.isConstant }, id: \.self) { category in
-                                if let categoryName = category.name, let imageName = category.iconName {
-                                    CategoryRow(
-                                        categoryName: categoryName,
-                                        imageName: imageName
-                                    )
-                                }
+                            ForEach(urlElements?.savedCategories.filter { !$0.isConstant } ?? [], id: \.self) { category in
+                                CategoryRow(
+                                    categoryName: category.name,
+                                    imageName: category.iconName
+                                )
                             }
                         }
-                    }else{
-                        ForEach(customCategoriesFiltered, id: \.self) { category in
-                            CategoryRow(
-                                categoryName: category.displayName,
-                                imageName: category.displayName
-                            )
-                        }
-                        ForEach(savedCategories.filter {$0.categoryType == "Сбережения"}, id: \.self) { category in
-                            if let categoryName = category.name, let imageName = category.iconName {
+                    } else {
+                        Section(header:
+                                    SectionHeaderSavings()
+                        ) {
+                            ForEach(customCategoriesFiltered, id: \.self) { category in
                                 CategoryRow(
-                                    categoryName: categoryName,
-                                    imageName: imageName
+                                    categoryName: category.displayName,
+                                    imageName: category.displayName
                                 )
-                                .onAppear(){
-                                }
+                            }
+                            
+                            ForEach(urlElements?.savedCategories.filter { $0.categoryType == "Сбережения" } ?? [], id: \.self) { category in
+                                CategoryRow(
+                                    categoryName: category.name,
+                                    imageName: category.iconName
+                                )
                             }
                         }
                     }
+                    
                     ActionDissmisButtons(
                         action: showAddCategoryScreenFunction,
                         actionTitle: "Добавить категорию"
                     )
                 }
             }
-            .onChange(of: selectedCategory){
-                if selectedCategory != "Сбережения" {
-                    self.customCategoriesFiltered = CustomCategoryType.allCases.filter { $0.displayIsConstant && $0.displayCategory == selectedCategory }
-                } else {
-                    self.customCategoriesFiltered = CustomCategoryType.allCases.filter { $0.displayCategory == selectedCategory }
-                }
+            .onChange(of: selectedCategory) { _ in
+                filterCategories()
             }
-            .onAppear(){
-                if selectedCategory != "Сбережения" {
-                    self.customCategoriesFiltered = CustomCategoryType.allCases.filter { $0.displayIsConstant && $0.displayCategory == selectedCategory }
-                } else {
-                    self.customCategoriesFiltered = CustomCategoryType.allCases.filter { $0.displayCategory == selectedCategory }
-                }
+            .onAppear {
+                filterCategories()
             }
         }
     }
+    
+    func initializeRealm() -> Realm? {
+        do {
+            return try Realm()
+        } catch {
+            print("Failed to initialize Realm: \(error)")
+            return nil
+        }
+    }
+    
+    private func filterCategories() {
+        if selectedCategory != "Сбережения" {
+            self.customCategoriesFiltered = CustomCategoryType.allCases.filter { $0.displayIsConstant && $0.displayCategory == selectedCategory }
+        } else {
+            self.customCategoriesFiltered = CustomCategoryType.allCases.filter { $0.displayCategory == selectedCategory }
+        }
+    }
+    
     private func showAddCategoryScreenFunction() {
-           showAddCategoryScreen = true
+        showAddCategoryScreen = true
     }
 }
 

@@ -31,6 +31,16 @@ struct SummarySectionView: View {
                             color: Color("sc2")
                         )
                         .padding()
+                        .onAppear {
+                            Logger.shared.log(.warning, "Starting checking bank accounts")
+                            for value in bankAccounts.values {
+                                Logger.shared.log(.warning, value)
+                                if !value.Array.isEmpty {
+                                    Logger.shared.log(.warning, value)
+                                    self.bankAccountsIsEmpty = false
+                                }
+                            }
+                        }
                     }
                 }else{
                     ScrollView {
@@ -54,6 +64,16 @@ struct SummarySectionView: View {
                     .frame(maxHeight: .infinity)
                     .background(Color.white)
                     .cornerRadius(10)
+                    .onAppear {
+                        Logger.shared.log(.warning, "Starting checking bank accounts")
+                        for value in bankAccounts.values {
+                            Logger.shared.log(.warning, value)
+                            if !value.Array.isEmpty {
+                                Logger.shared.log(.warning, value)
+                                self.bankAccountsIsEmpty = false
+                            }
+                        }
+                    }
                 }
             case "Счета":
                 if bankAccountsIsEmpty {
@@ -130,15 +150,6 @@ struct SummarySectionView: View {
                         }
                     }
                     .padding()
-                    .onAppear {
-                        for value in bankAccounts.values {
-                            Logger.shared.log(.info, value)
-                            if !value.Array.isEmpty {
-                                Logger.shared.log(.warning, value)
-                                self.bankAccountsIsEmpty = false
-                            }
-                        }
-                    }
                 }
             default:
                 EmptyView()
