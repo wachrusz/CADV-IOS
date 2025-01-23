@@ -13,7 +13,6 @@ struct goalsView: View{
     @Binding var selectedGoal: Goal?
     @Binding var isEditing: Bool
     @Binding var showAllGoalsView: Bool
-    @Binding var urlElements: URLElements?
     
     var body: some View {
         VStack{
@@ -50,8 +49,7 @@ struct goalsView: View{
             }
             .sheet(isPresented: $showAllGoalsView) {
                 AllGoalsView(
-                    goals: $goals,
-                    urlElements: $urlElements
+                    goals: $goals
                 )
             }
             Spacer()

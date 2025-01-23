@@ -9,7 +9,6 @@ import SwiftUI
 import RealmSwift
 
 struct CategorySettingsView: View{
-    @Binding var urlElements: URLElements?
     @State private var categories: [CategoryEntity] = []
     
     @State var selectedCategory: String = "Доходы"
@@ -31,14 +30,12 @@ struct CategorySettingsView: View{
                 )
                 CategorySettingsList(
                     selectedCategory: $selectedCategory,
-                    showAddCategoryScreen: $showAddCategoryScreen,
-                    urlElements: $urlElements
+                    showAddCategoryScreen: $showAddCategoryScreen
                 )
 
                 NavigationLink(
                     destination: AddCategory(
                         category: $selectedCategory,
-                        urlElements: $urlElements,
                         navigationTitle: generateNavigationTitleName()
                     ),
                     isActive: $showAddCategoryScreen,
@@ -70,20 +67,19 @@ struct CategorySettingsView: View{
 struct CategorySettingsList: View {
     @Binding var selectedCategory: String
     @Binding var showAddCategoryScreen: Bool
-    @Binding var urlElements: URLElements?
     
     @State private var customCategoriesFiltered: [CustomCategoryType] = []
     
     private func SectionHeaderConstant() -> some View {
-        Text("Постоянные \(customCategoriesFiltered.count + (urlElements?.savedCategories.filter { $0.isConstant }.count ?? 0))")
+        Text("Постоянные \(customCategoriesFiltered.count + (URLElements.shared.savedCategories.filter { $0.isConstant }.count ?? 0))")
     }
     
     private func SectionHeaderTemporary() -> some View{
-        Text("Переменные \(customCategoriesFiltered.count + (urlElements?.savedCategories.filter { !$0.isConstant }.count ?? 0))")
+        Text("Переменные \(customCategoriesFiltered.count + (URLElements.shared.savedCategories.filter { !$0.isConstant }.count ?? 0))")
     }
     
     private func SectionHeaderSavings() -> some View{
-        Text("Сбережения \(customCategoriesFiltered.count + (urlElements?.savedCategories.filter { $0.categoryType == "Сбережения" }.count ?? 0))")
+        Text("Сбережения \(customCategoriesFiltered.count + (URLElements.shared.savedCategories.filter { $0.categoryType == "Сбережения" }.count ?? 0))")
     }
     
     var body: some View {
@@ -101,7 +97,7 @@ struct CategorySettingsList: View {
                                 )
                             }
                             
-                            ForEach(urlElements?.savedCategories.filter { $0.isConstant } ?? [], id: \.self) { category in
+                            ForEach(URLElements.shared.savedCategories.filter { $0.isConstant } ?? [], id: \.self) { category in
                                 CategoryRow(
                                     categoryName: category.name,
                                     imageName: category.iconName
@@ -119,7 +115,7 @@ struct CategorySettingsList: View {
                                 )
                             }
                             
-                            ForEach(urlElements?.savedCategories.filter { !$0.isConstant } ?? [], id: \.self) { category in
+                            ForEach(URLElements.shared.savedCategories.filter { !$0.isConstant } ?? [], id: \.self) { category in
                                 CategoryRow(
                                     categoryName: category.name,
                                     imageName: category.iconName
@@ -137,7 +133,7 @@ struct CategorySettingsList: View {
                                 )
                             }
                             
-                            ForEach(urlElements?.savedCategories.filter { $0.categoryType == "Сбережения" } ?? [], id: \.self) { category in
+                            ForEach(URLElements.shared.savedCategories.filter { $0.categoryType == "Сбережения" }, id: \.self) { category in
                                 CategoryRow(
                                     categoryName: category.name,
                                     imageName: category.iconName

@@ -11,14 +11,14 @@ import XCTest
 class LoginViewTests: XCTestCase {
 
     func testValidEmail() {
-        let loginView = LoginView(urlElements: .constant(nil))
+        let loginView = LoginView()
         XCTAssertTrue(loginView.isValidEmail("test@example.com"))
         XCTAssertTrue(loginView.isValidEmail("user.name+tag+sorting@example.com"))
         XCTAssertTrue(loginView.isValidEmail("user@sub.example.com"))
     }
 
     func testInvalidEmail() {
-        let loginView = LoginView(urlElements: .constant(nil))
+        let loginView = LoginView()
         XCTAssertFalse(loginView.isValidEmail("test@example"))
         XCTAssertFalse(loginView.isValidEmail("test@.com"))
         XCTAssertFalse(loginView.isValidEmail("test@com"))

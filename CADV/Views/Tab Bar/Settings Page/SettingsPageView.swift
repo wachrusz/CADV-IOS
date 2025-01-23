@@ -20,7 +20,6 @@ struct SettingsPageView: View {
         NavigationStack{
             VStack(spacing: 20){
                 ProfileSection(
-                    urlElements: $dataManager.urlElements,
                     profileInfo: $profile
                 )
                 CategorySwitchButtons(
@@ -55,16 +54,14 @@ struct SettingsPageView: View {
         VStack{
             ValuteSwitcherView()
             AppNavigatingButtonsList(
-                selectedCategory: self.$selectedCategory,
-                urlElements: self.$dataManager.urlElements
+                selectedCategory: self.$selectedCategory
             )
         }
     }
     
     private func GlobalSettingsView() -> some View {
         AppNavigatingButtonsList(
-            selectedCategory: self.$selectedCategory,
-            urlElements: self.$dataManager.urlElements
+            selectedCategory: self.$selectedCategory
         )
     }
 }

@@ -75,9 +75,7 @@ struct AnalyticsPageView: View {
                             firstButtonContent: AddBankAccountView(),
                             secondButtonContent:  Group{
                                 if selectedPlan != "Транзакции"  {
-                                    CreateBankAccountView(
-                                        urlElements: self.$dataManager.urlElements
-                                ) }
+                                    CreateBankAccountView() }
                                 else{
                                     CreateTransactionAnalyticsView(
                                         dataManager: dataManager
@@ -99,8 +97,7 @@ struct AnalyticsPageView: View {
                             isEditing: $isEditing,
                             showAllGoalsView: $showAllGoalsView,
                             showAnnualPayments: $showAnnualPayments,
-                            dragOffset: $dragOffset,
-                            urlElements: self.$dataManager.urlElements
+                            dragOffset: $dragOffset
                         )
                         
                     case "Финансовое Здоровье":
@@ -132,8 +129,7 @@ struct AnalyticsPageView: View {
                         if let goal = selectedGoal {
                             EditGoalView(
                                 goal: goal,
-                                goals: $goals,
-                                urlElements: self.$dataManager.urlElements
+                                goals: $goals
                             )
                         } else {
                             Text("Ошибка: цель не выбрана.")

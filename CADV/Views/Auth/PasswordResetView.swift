@@ -8,7 +8,6 @@
 import SwiftUI
 
 struct PasswordResetView: View {
-    @Binding var urlElements: URLElements?
     @State var email: String = ""
     @State var token: String = ""
     @State private var showEmailVerification: Bool = false
@@ -17,10 +16,6 @@ struct PasswordResetView: View {
     @State private var isFine: Bool = false
     @Environment(\.dismiss) var dismiss
     private var screenName: String = "Восстановление пароля"
-    
-    init(urlElements: Binding<URLElements?>){
-        self._urlElements = urlElements
-    }
     
     var body: some View {
         NavigationStack{
@@ -74,8 +69,7 @@ struct PasswordResetView: View {
                         email: $email,
                         token: $token,
                         isNew: true,
-                        previousScreenName: screenName,
-                        urlElements: $urlElements
+                        previousScreenName: screenName
                     ),
                     isActive: $showEmailVerification,
                     label: {EmptyView()}
@@ -91,11 +85,11 @@ struct PasswordResetView: View {
                 "email": email
             ]
             do{
-                let response = try await self.urlElements?.fetchData(
+                let response = try await URLElements.shared.fetchData(
                     endpoint: "v1/auth/password",
                     parameters: parameters
                 )
-                switch response?["status_code"] as? Int{
+                switch response["status_code"] as? Int{
                 case 200:
                     showEmailVerification = true
                     

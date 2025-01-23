@@ -9,7 +9,6 @@ import SwiftUI
 
 struct AppNavigatingButtonsList: View {
     @Binding var selectedCategory: String
-    @Binding var urlElements: URLElements?
     
     var body: some View {
         VStack {
@@ -65,7 +64,7 @@ struct AppNavigatingButtonsList: View {
             Text("Подключённые счета")
                 .foregroundStyle(.black)
         case "Настройка категорий":
-            CategorySettingsView(urlElements: $urlElements)
+            CategorySettingsView()
         case "Архив операций":
             OperationsArchiveView()
         case "Экспорт отчётности":
@@ -87,14 +86,14 @@ struct AppNavigatingButtonsList: View {
     
     private func logout() async {
         do {
-            let response = try await urlElements?.fetchData(
+            let response = try await URLElements.shared.fetchData(
                 endpoint: "v1/auth/logout",
                 method: "POST",
                 needsAuthorization: true
             )
-            switch response?["status_code"] as? Int {
+            switch response["status_code"] as? Int {
             case 200:
-                urlElements?.deleteAllEntities()
+                URLElements.shared.deleteAllEntities()
             default:
                 Logger.shared.log(.error, "Failed to fetch goals.")
             }

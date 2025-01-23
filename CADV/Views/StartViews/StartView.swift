@@ -8,14 +8,13 @@
 import SwiftUI
 
 struct Start: View {
-    @Binding var urlElements: URLElements?
     var body: some View {
         NavigationStack {
             ZStack {
                 Color.white
                     .edgesIgnoringSafeArea(.all)
 
-                NavigationLink(destination: NewUser(urlElements: $urlElements)) {
+                NavigationLink(destination: NewUser()) {
                     VStack {
                         Spacer()
 
@@ -50,7 +49,6 @@ struct Start: View {
 struct NewUser: View {
     @State private var isVisible: Bool = false
     @State private var startMovement: Bool = false
-    @Binding var urlElements: URLElements?
     let hashTags: [String] = [
         "#финздоровье",
         "#акции",
@@ -121,9 +119,7 @@ struct NewUser: View {
             
             VStack(alignment: .center, spacing: 10) {
                 HStack(spacing: 20) {
-                    NavigationLink(destination: RegisterView(
-                        urlElements: $urlElements
-                    )){
+                    NavigationLink(destination: RegisterView()){
                         CustomText(
                             text: "Регистрация",
                             font: Font.custom("Gilroy", size: 16).weight(.semibold),
@@ -145,9 +141,7 @@ struct NewUser: View {
                             additionalData: additionalData
                         )
                     }
-                    NavigationLink(destination: LoginView(
-                        urlElements: $urlElements
-                    )) {
+                    NavigationLink(destination: LoginView()) {
                         CustomText(
                             text: "Вход",
                             font: Font.custom("Gilroy", size: 16).weight(.semibold),
@@ -214,8 +208,7 @@ struct NewUser: View {
 }
 
 struct StartView: View {
-    @Binding var urlElements: URLElements?
     var body: some View {
-        Start(urlElements: $urlElements)
+        Start()
     }
 }

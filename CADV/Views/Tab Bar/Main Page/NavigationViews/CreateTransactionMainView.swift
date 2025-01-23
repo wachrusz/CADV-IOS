@@ -8,8 +8,6 @@
 import SwiftUI
 
 struct CreateTransactionMainView: View {
-    @Binding var urlElements: URLElements?
-    
     var categoryName: String
     var sectionName: String
     var selectedPlan: String
@@ -29,7 +27,7 @@ struct CreateTransactionMainView: View {
             if planned{
                 HStack(alignment: .top, spacing: 10) {
                     CustomText(
-                        text: currencyCodeToSymbol(code: urlElements?.currency ?? "RUB"),
+                        text: currencyCodeToSymbol(code: URLElements.shared.currency),
                         font: Font.custom("Inter", size: 14).weight(.semibold),
                         color: Color("sc2")
                     )

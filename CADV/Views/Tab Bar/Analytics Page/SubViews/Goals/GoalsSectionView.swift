@@ -13,7 +13,6 @@ struct goalsSectionView: View{
     @Binding var selectedGoal: Goal?
     @Binding var isEditing: Bool
     @Binding var showAllGoalsView: Bool
-    @Binding var urlElements: URLElements?
     
     var body: some View {
         VStack(spacing: 5) {
@@ -31,8 +30,7 @@ struct goalsSectionView: View{
                     
                     NavigationLink(
                         destination: CreateGoalView(
-                                        goals: $goals,
-                                        urlElements: $urlElements
+                                        goals: $goals
                                     )
                     ) {
                         Image(systemName: "plus.circle.fill")
@@ -54,8 +52,7 @@ struct goalsSectionView: View{
             switch goals.count {
             case 0:
                 addGoalButton(
-                    goals: $goals,
-                    urlElements: $urlElements
+                    goals: $goals
                 )
             default:
                 goalsView(
@@ -63,8 +60,7 @@ struct goalsSectionView: View{
                     isLongPressing: $isLongPressing,
                     selectedGoal: $selectedGoal,
                     isEditing: $isEditing,
-                    showAllGoalsView: $showAllGoalsView,
-                    urlElements: $urlElements
+                    showAllGoalsView: $showAllGoalsView
                 )
             }
         }

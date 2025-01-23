@@ -88,7 +88,6 @@ struct EnterVerificationEmailCode: View {
     var isReset: Bool {
         previousScreenName == "Восстановление пароля"
     }
-    @Binding var urlElements: URLElements?
     
     var body: some View {
         NavigationStack {
@@ -185,8 +184,7 @@ struct EnterVerificationEmailCode: View {
                         NavigationLink(
                             destination: ChangePasswordView(
                                 email: $email,
-                                token: $resetToken,
-                                urlElements: $urlElements
+                                token: $resetToken
                             ),
                             isActive: $isNavigationActive
                         ) {
@@ -194,7 +192,7 @@ struct EnterVerificationEmailCode: View {
                         }
                     } else {
                         NavigationLink(
-                            destination: LocalAuthView(urlElements: $urlElements),
+                            destination: LocalAuthView(),
                             isActive: $isNavigationActive
                         ) {
                             EmptyView()
@@ -242,15 +240,14 @@ struct EnterVerificationEmailCode: View {
             "token": token
         ]
         do {
-            let response = try await self.urlElements?.fetchData(
+            let response = try await URLElements.shared.fetchData(
                 endpoint: isReset ? "v1/auth/password/confirm" : (isNew ? "v1/auth/register/confirm" : "v1/auth/login/confirm"),
                 parameters: parameters
             )
             if !isReset {
-                switch response?["status_code"] as? Int {
+                switch response["status_code"] as? Int {
                 case 200:
-                    urlElements?.saveTokenData(responseObject: response ?? [:])
-                    Logger.shared.log(.info, urlElements as Any)
+                    URLElements.shared.saveTokenData(responseObject: response)
                     self.isNavigationActive = true
                     
                     let additionalData: [String: Any] = [
@@ -265,17 +262,17 @@ struct EnterVerificationEmailCode: View {
                     )
                     return
                 case 400:
-                    let errorMessage = response?["error"] as? String ?? ""
+                    let errorMessage = response["error"] as? String ?? ""
                     self.confirmationError = errorMessage
                     return
                 default:
-                    let errorMessage = response?["error"] as? String ?? ""
+                    let errorMessage = response["error"] as? String ?? ""
                     self.confirmationError = errorMessage
                     return
                 }
             }
             
-            let resetTokenDetails = response?["token_details"] as? [String: Any] ?? [:]
+            let resetTokenDetails = response["token_details"] as? [String: Any] ?? [:]
             self.resetToken = resetTokenDetails["reset_token"] as? String ?? ""
             self.isNavigationActive = true
         } catch {

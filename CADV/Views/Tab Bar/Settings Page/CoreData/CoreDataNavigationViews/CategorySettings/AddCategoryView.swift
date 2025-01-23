@@ -11,7 +11,6 @@ import RealmSwift
 struct AddCategory: View {
     @Environment(\.dismiss) var dismiss
     @Binding var category: String
-    @Binding var urlElements: URLElements?
     
     @State var name: String = ""
     @State var navigationTitle: String
@@ -112,6 +111,12 @@ struct AddCategory: View {
     }
     
     private func saveCategory() {
+        guard Thread.isMainThread else {
+            DispatchQueue.main.async {
+                self.saveCategory()
+            }
+            return
+        }
         if check() {
             let newCategory = CategoryEntity()
             newCategory.name = name

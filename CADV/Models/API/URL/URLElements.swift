@@ -5,22 +5,132 @@
 //  Created by Misha Vakhrushin on 11.12.2024.
 //
 
-import Foundation
 import RealmSwift
 import SwiftyJSON
 
-struct URLElements {
-    var urlString: String = "https://cshdvsr.com/api/"
-    var tokenData: TokenData
-    var currency: String = "RUB"
+class URLElements {
+    static var shared = URLElements()
     
-    var savedCategories: Results<CategoryEntity> {
-        Logger.shared.log(.warning,"Realm trying at \(Thread.current)")
-        return RealmManager.shared.realm.objects(CategoryEntity.self)
+    var urlString: String = "https://cshdvsr.com/api/"
+    @Published var tokenData: TokenData = TokenData(accessToken: "null", refreshToken: "null", accessTokenExpiresAt: Date(), refreshTokenExpiresAt: Date())
+    @Published var currency: String = "RUB"
+    @Published var savedCategories: Results<CategoryEntity> = RealmManager.shared.realm.objects(CategoryEntity.self)
+
+    private var tokenDataObservation: NotificationToken?
+    private var currencyObservation: NotificationToken?
+    private var savedCategoriesObservation: NotificationToken?
+
+    private init() {
+        fetchTokenData()
+        fetchCurrency()
+        observeTokenDataChanges()
+        observeCurrencyChanges()
+        observeSavedCategoriesChanges()
     }
 
-    mutating func updateTokenData(_ newTokenData: TokenData) {
-        tokenData = newTokenData
+    private func observeTokenDataChanges() {
+        guard Thread.isMainThread else {
+            DispatchQueue.main.async {
+                self.observeTokenDataChanges()
+            }
+            return
+        }
+        guard let tokenEntity = RealmManager.shared.realm.objects(TokenEntity.self).first else {
+            return
+        }
+
+        tokenDataObservation = tokenEntity.observe { [weak self] change in
+            switch change {
+            case .change(let properties):
+                print("TokenEntity changed: \(properties)")
+                self?.updateTokenData()
+            case .deleted:
+                print("TokenEntity deleted")
+            case .error(let error):
+                print("Error observing TokenEntity: \(error)")
+            }
+        }
+    }
+
+    private func observeCurrencyChanges() {
+        guard Thread.isMainThread else {
+            DispatchQueue.main.async {
+                self.observeCurrencyChanges()
+            }
+            return
+        }
+        guard let currencyEntity = RealmManager.shared.realm.objects(CurrencyEntity.self).first else {
+            return
+        }
+
+        currencyObservation = currencyEntity.observe { [weak self] change in
+            switch change {
+            case .change(let properties):
+                print("CurrencyEntity changed: \(properties)")
+                self?.updateCurrency()
+            case .deleted:
+                print("CurrencyEntity deleted")
+            case .error(let error):
+                print("Error observing CurrencyEntity: \(error)")
+            }
+        }
+    }
+
+    private func observeSavedCategoriesChanges() {
+        guard Thread.isMainThread else {
+            DispatchQueue.main.async {
+                self.observeSavedCategoriesChanges()
+            }
+            return
+        }
+        let categories = RealmManager.shared.realm.objects(CategoryEntity.self)
+
+        savedCategoriesObservation = categories.observe { [weak self] changes in
+            switch changes {
+            case .initial:
+                print("SavedCategories initially loaded")
+            case .update(_, let deletions, let insertions, let modifications):
+                print("SavedCategories updated. Deletions: \(deletions), Insertions: \(insertions), Modifications: \(modifications)")
+                self?.savedCategories = categories // Обновляем published свойство
+            case .error(let error):
+                print("Error observing savedCategories: \(error)")
+            }
+        }
+    }
+
+    private func updateTokenData() {
+        guard Thread.isMainThread else {
+            DispatchQueue.main.async {
+                self.updateTokenData()
+            }
+            return
+        }
+        guard let tokenEntity = RealmManager.shared.realm.objects(TokenEntity.self).first else {
+            tokenData = TokenData(accessToken: "null", refreshToken: "null", accessTokenExpiresAt: Date(), refreshTokenExpiresAt: Date())
+            return
+        }
+
+        tokenData = TokenData(
+            accessToken: tokenEntity.accessToken,
+            refreshToken: tokenEntity.refreshToken,
+            accessTokenExpiresAt: tokenEntity.accessTokenExpiresAt,
+            refreshTokenExpiresAt: tokenEntity.refreshTokenExpiresAt
+        )
+    }
+
+    private func updateCurrency() {
+        guard Thread.isMainThread else {
+            DispatchQueue.main.async {
+                self.updateCurrency()
+            }
+            return
+        }
+        guard let currencyEntity = RealmManager.shared.realm.objects(CurrencyEntity.self).first else {
+            currency = "RUB"
+            return
+        }
+
+        currency = currencyEntity.currency
     }
 
     func fetchData(
@@ -170,13 +280,27 @@ struct URLElements {
         return headers
     }
 
-    mutating func fetchCurrency() {
+    func fetchCurrency() {
+        guard Thread.isMainThread else {
+            DispatchQueue.main.async {
+                self.fetchCurrency()
+            }
+            return
+        }
+        
         if let currencyEntity = RealmManager.shared.realm.objects(CurrencyEntity.self).first {
             self.currency = currencyEntity.currency
         }
     }
 
-    mutating func fetchTokenData() {
+    func fetchTokenData() {
+        guard Thread.isMainThread else {
+            DispatchQueue.main.async {
+                self.fetchTokenData()
+            }
+            return
+        }
+        
         if let tokenEntity = RealmManager.shared.realm.objects(TokenEntity.self).first {
             self.tokenData = TokenData(
                 accessToken: tokenEntity.accessToken,
@@ -184,6 +308,7 @@ struct URLElements {
                 accessTokenExpiresAt: tokenEntity.accessTokenExpiresAt,
                 refreshTokenExpiresAt: tokenEntity.refreshTokenExpiresAt
             )
+            Logger.shared.log(.info, "Succesfully loaded token data: \(tokenData)")
         }
     }
 
@@ -212,10 +337,13 @@ struct URLElements {
             )
 
             let json = JSON(response)
+            Logger.shared.log(.warning, json)
 
             if json["status_code"].intValue == 200 {
-                let newToken = json["access_token"].stringValue
-                let newRefreshToken = json["refresh_token"].stringValue
+                let tokenDetails = json["token_details"]
+                let newToken = tokenDetails["access_token"].stringValue
+                let newRefreshToken = tokenDetails["refresh_token"].stringValue
+                Logger.shared.log(.info, "Handling new tokens to saveNewTokens: \(newToken), \(newRefreshToken)")
 
                 saveNewTokens(token: newToken, refreshToken: newRefreshToken)
 
@@ -232,27 +360,32 @@ struct URLElements {
         return false
     }
 
-    mutating func saveTokenData(responseObject: [String: Any]) {
+    func saveTokenData(responseObject: [String: Any]) {
         guard
             let deviceID = responseObject["device_id"] as? String,
             let accessTokenLifeTime = responseObject["access_token_life_time"] as? Int,
             let tokenDetails = responseObject["token_details"] as? [String: Any],
             let accessToken = tokenDetails["access_token"] as? String,
             let refreshToken = tokenDetails["refresh_token"] as? String,
-            let refreshTokenExpiresAt = tokenDetails["expires_at"] as? Int64
+            let refreshTokenLifeTime = tokenDetails["refresh_token_life_time"] as? Int64
         else {
             Logger.shared.log(.error, "Error: Missing or incorrect data structure in responseObject.")
             return
         }
 
-        let tokenEntity = TokenEntity()
-        tokenEntity.deviceID = deviceID
-        tokenEntity.accessToken = accessToken
-        tokenEntity.refreshToken = refreshToken
-        tokenEntity.accessTokenExpiresAt = Date().addingTimeInterval(Double(accessTokenLifeTime))
-        tokenEntity.refreshTokenExpiresAt = Date(timeIntervalSince1970: Double(refreshTokenExpiresAt))
-
+        guard !accessToken.isEmpty, !refreshToken.isEmpty else {
+            Logger.shared.log(.error, "Empty tokens received, skipping save")
+            return
+        }
+        
         do {
+            let tokenEntity = TokenEntity()
+            tokenEntity.deviceID = deviceID
+            tokenEntity.accessToken = accessToken
+            tokenEntity.refreshToken = refreshToken
+            tokenEntity.accessTokenExpiresAt = Date().addingTimeInterval(60)
+            tokenEntity.refreshTokenExpiresAt = Date().addingTimeInterval(Double(refreshTokenLifeTime))
+
             try RealmManager.shared.realm.write {
                 RealmManager.shared.realm.add(tokenEntity, update: .modified)
             }
@@ -262,7 +395,7 @@ struct URLElements {
             Logger.shared.log(.error, "Failed to save token data: \(error.localizedDescription)")
         }
     }
-
+    
     func deleteAllEntities() {
         do {
             try RealmManager.shared.realm.write {
@@ -281,17 +414,39 @@ struct URLElements {
             }
             return
         }
+        Logger.shared.log(.info, "Saving new tokens: Token(\(token)), RefreshToken(\(refreshToken))")
         
-        if let tokenEntity = RealmManager.shared.realm.objects(TokenEntity.self).first {
-            do {
+        guard !token.isEmpty, !refreshToken.isEmpty else {
+            Logger.shared.log(.error, "Empty tokens received, skipping save")
+            return
+        }
+        
+        do {
+            if let tokenEntity = RealmManager.shared.realm.objects(TokenEntity.self).first {
                 try RealmManager.shared.realm.write {
                     tokenEntity.accessToken = token
                     tokenEntity.refreshToken = refreshToken
-                    tokenEntity.accessTokenExpiresAt = Date().addingTimeInterval(60)
+                    tokenEntity.accessTokenExpiresAt = Date().addingTimeInterval(60) // 15 минут
                 }
-            } catch {
-                Logger.shared.log(.error, "Failed to save refreshed token: \(error.localizedDescription)")
+            } else {
+                let tokenEntity = TokenEntity()
+                tokenEntity.accessToken = token
+                tokenEntity.refreshToken = refreshToken
+                tokenEntity.accessTokenExpiresAt = Date().addingTimeInterval(60) // 15 минут
+                tokenEntity.refreshTokenExpiresAt = Date().addingTimeInterval(60 * 60 * 24 * 30) // 30 дней
+                try RealmManager.shared.realm.write {
+                    RealmManager.shared.realm.add(tokenEntity)
+                }
             }
+            Logger.shared.log(.info, "New tokens saved successfully.")
+            self.tokenData = TokenData(
+                accessToken: token,
+                refreshToken: refreshToken,
+                accessTokenExpiresAt: Date().addingTimeInterval(60 * 15),
+                refreshTokenExpiresAt: Date().addingTimeInterval(60 * 60 * 24 * 30)
+            )
+            Logger.shared.log(.info, "TokenData: \(self.tokenData)")
+        } catch {
+            Logger.shared.log(.error, "Failed to save new tokens: \(error.localizedDescription)")
         }
-    }
-}
+    }}

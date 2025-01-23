@@ -12,7 +12,6 @@ struct CreateGoalView: View {
     @State private var goalAmount: String = ""
     @State private var goalTime: String = ""
     @Binding var goals: [Goal]
-    @Binding var urlElements: URLElements?
     
     @Environment(\.presentationMode) var presentationMode
     @State private var showErrorPopup: Bool = false
@@ -47,7 +46,7 @@ struct CreateGoalView: View {
                         
                         HStack(alignment: .top, spacing: 10) {
                             CustomText(
-                                text: currencyCodeToSymbol(code: urlElements?.currency ?? "RUB"),
+                                text: currencyCodeToSymbol(code: URLElements.shared.currency ?? "RUB"),
                                 font: Font.custom("Inter", size: 14).weight(.semibold),
                                 color: Color("sc2")
                             )
@@ -125,20 +124,20 @@ struct CreateGoalView: View {
             "goal":[
                 "goal": goalName,
                 "need": amount,
-                "currency": urlElements?.currency ?? "RUB",
+                "currency": URLElements.shared.currency ?? "RUB",
                 "current_state": 0,
                 "start_date": startDateString,
                 "end_date": endDateString
             ]
         ]
         do{
-            let response = try await urlElements?.fetchData(
+            let response = try await URLElements.shared.fetchData(
                 endpoint: "v1/tracker/goal",
                 method: "POST",
                 parameters: parameters,
                 needsAuthorization: true
             )
-            switch response?["status_code"] as? Int {
+            switch response["status_code"] as? Int {
             case 201:
                 presentationMode.wrappedValue.dismiss()
             default:

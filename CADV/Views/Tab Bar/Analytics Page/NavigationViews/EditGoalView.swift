@@ -13,7 +13,6 @@ struct EditGoalView: View {
     @State private var goalTime: String
     @Binding var goals: [Goal]
     var goal: Goal
-    @Binding var urlElements: URLElements?
 
     @Environment(\.presentationMode) var presentationMode
     @State private var showErrorPopup: Bool = false
@@ -26,8 +25,7 @@ struct EditGoalView: View {
     @State private var isNameFieldFine: Bool = false
 
     init(goal: Goal,
-         goals: Binding<[Goal]>,
-         urlElements: Binding<URLElements?>
+         goals: Binding<[Goal]>
     ) {
         self.goal = goal
         self._goalName = State(initialValue: goal.GoalName)
@@ -39,7 +37,6 @@ struct EditGoalView: View {
             self._goalTime = State(initialValue: "0")
         }
         self._goals = goals
-        self._urlElements = urlElements
         Logger.shared.log(.info, ".sheet, goal: \(goal)")
     }
 
@@ -75,7 +72,7 @@ struct EditGoalView: View {
                         
                         HStack(alignment: .top, spacing: 10) {
                             CustomText(
-                                text: currencyCodeToSymbol(code: urlElements?.currency ?? "RUB"),
+                                text: currencyCodeToSymbol(code: URLElements.shared.currency ?? "RUB"),
                                 font: Font.custom("Inter", size: 14).weight(.semibold),
                                 color: Color("sc2")
                             )
@@ -161,17 +158,17 @@ struct EditGoalView: View {
             ID: goal.ID,
             Need: amount,
             UserID: goal.UserID,
-            Currency: urlElements?.currency ?? "RUB"
+            Currency: URLElements.shared.currency ?? "RUB"
         )
         Logger.shared.log(.warning, "Updated goal: \(newGoal)")
         do{
-            let response = try await self.urlElements?.fetchData(
+            let response = try await URLElements.shared.fetchData(
                 endpoint: "v1/tracker/goal",
                 method: "PUT",
                 parameters: ["goal":[
                     "goal": newGoal.GoalName,
                     "need": newGoal.Need,
-                    "currency": urlElements?.currency ?? "RUB",
+                    "currency": URLElements.shared.currency,
                     "current_state": newGoal.CurrentState,
                     "start_date": newGoal.StartDate,
                     "end_date": newGoal.EndDate,
@@ -180,9 +177,9 @@ struct EditGoalView: View {
                 needsAuthorization: true,
                 needsCurrency: true
             )
-            switch response?["status_code"] as? Int {
+            switch response["status_code"] as? Int {
             case 201:
-                Logger.shared.log(.info, response ?? [:])
+                Logger.shared.log(.info, response)
                 presentationMode.wrappedValue.dismiss()
             default:
                 Logger.shared.log(.error, "Failed to fetch goals.")

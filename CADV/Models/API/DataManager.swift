@@ -10,13 +10,11 @@ import SwiftUI
 
 @MainActor
 class DataManager: ObservableObject {
+    static var shared = DataManager()
+    init(){}
+    
     @Published var urlEntities: URLEntities = URLEntities()
     @Published var isAnalyticsLoaded: Bool = false
-    var urlElements: URLElements?
-    
-    init(urlElements: URLElements?) {
-        self.urlElements = urlElements
-    }
     
     func loadAnalyticsPage() {
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
@@ -30,8 +28,8 @@ class DataManager: ObservableObject {
             await   fetchMain()
             await   fetchTracker()
             await   fetchMore()
-            self.urlElements?.fetchCurrency()
-            self.urlElements?.fetchTokenData()
+            URLElements.shared.fetchCurrency()
+            URLElements.shared.fetchTokenData()
             self.urlEntities.getGroupedTransactions()
         }
     }
@@ -51,15 +49,15 @@ class DataManager: ObservableObject {
     
     func fetchMain() async{
         do{
-            let response = try await self.urlElements?.fetchData(
+            let response = try await URLElements.shared.fetchData(
                 endpoint: "v1/profile/analytics?limit=20&offset=0",
                 method: "GET",
                 needsAuthorization: true,
                 needsCurrency: true
             )
-            switch response?["status_code"] as? Int {
+            switch response["status_code"] as? Int {
             case 200:
-                guard let analytics = response?["analytics"] as? [String: Any],
+                guard let analytics = response["analytics"] as? [String: Any],
                       let incomeArray = analytics["income"] as? [[String: Any]],
                       let expenseArray = analytics["expense"] as? [[String: Any]],
                       let wealthFundArray = analytics["wealth_fund"] as? [[String: Any]] else {
@@ -87,16 +85,16 @@ class DataManager: ObservableObject {
     
     func fetchTracker() async{
         do {
-            let response = try await self.urlElements?.fetchData(
+            let response = try await URLElements.shared.fetchData(
                 endpoint: "v1/profile/tracker?limit=20&offset=0",
                 method: "GET",
                 needsAuthorization: true,
                 needsCurrency: true
             )
-            switch response?["status_code"] as? Int {
+            switch response["status_code"] as? Int {
             case 200:
                 guard
-                    let tracker = response?["tracker"] as? [String: Any],
+                    let tracker = response["tracker"] as? [String: Any],
                     let goalArray = tracker["goal"] as? [[String: Any]]
                 else {
                     Logger.shared.log(.warning, "Error: Could not find or parse 'goal' as an array of dictionaries")
@@ -121,14 +119,14 @@ class DataManager: ObservableObject {
     
     func fetchProfileData() async{
         do{
-            let response = try await self.urlElements?.fetchData(
+            let response = try await URLElements.shared.fetchData(
                 endpoint: "v1/profile",
                 method: "GET",
                 needsAuthorization: true
             )
-            switch response?["status_code"] as? Int {
+            switch response["status_code"] as? Int {
             case 200:
-                guard let profileData = try? JSONSerialization.data(withJSONObject: response?["profile"] ?? [:], options: []) else {
+                guard let profileData = try? JSONSerialization.data(withJSONObject: response["profile"] ?? [:], options: []) else {
                     Logger.shared.log(.error, "Error: Could not serialize profile data")
                     return
                 }
@@ -140,7 +138,7 @@ class DataManager: ObservableObject {
                     Logger.shared.log(.error, "Error decoding profile: \(error)")
                 }
             default:
-                let errorMessage = response?["error"] as? String
+                let errorMessage = response["error"] as? String
                 Logger.shared.log(.error, "Error: \(errorMessage ?? "Unknown error case")")
             }
         }catch let error{
@@ -156,17 +154,17 @@ class DataManager: ObservableObject {
             "user_id": ""
         ] as [String : Any]
         do {
-            let response = try await self.urlElements?.fetchData(
+            let response = try await URLElements.shared.fetchData(
                 endpoint: "v1/settings/subscription",
                 method: "POST",
                 parameters: parameters,
                 needsAuthorization: true
             )
-            switch response?["status_code"] as? Int {
+            switch response["status_code"] as? Int {
             case 200:
-                Logger.shared.log(.info, response?["message"] as Any)
+                Logger.shared.log(.info, response["message"] as Any)
             default:
-                let errorMessage = response?["error"] as? String
+                let errorMessage = response["error"] as? String
                 Logger.shared.log(.error, "Error: \(errorMessage ?? "Unknown error case")")
             }
         }catch let error{
@@ -176,12 +174,8 @@ class DataManager: ObservableObject {
     
     func fetchMore() async {
         do {
-            guard let urlElements = self.urlElements else {
-                Logger.shared.log(.error, "Error: urlElements is nil")
-                return
-            }
             
-            let response = try await urlElements.fetchData(
+            let response = try await URLElements.shared.fetchData(
                 endpoint: "v1/profile/more",
                 method: "GET",
                 needsAuthorization: true
@@ -213,17 +207,16 @@ class DataManager: ObservableObject {
                         Logger.shared.log(.error, "Error: Invalid account data for key \(key)")
                         continue
                     }
-                    
+
                     guard let category = Int(key) else {
                         Logger.shared.log(.error, "Error: Invalid category key \(key)")
                         continue
                     }
-                    
+
                     var bankAccountsMap: [Int: BankAccount] = [:]
-                    
+
                     for accountData in accountsArray {
                         guard let bankID = accountData["bank_id"] as? Int ?? Int(accountData["bank_id"] as? String ?? ""),
-                              let accountCurrency = accountData["account_currency"] as? String,
                               let accountNumber = accountData["account_number"] as? String,
                               let accountState = accountData["account_state"] as? Double,
                               let accountType = accountData["account_type"] as? String else {
@@ -231,16 +224,17 @@ class DataManager: ObservableObject {
                             Logger.shared.log(.info, accountData)
                             continue
                         }
-                        
+
                         let accountName = accountData["account_name"] as? String ?? "Unknown"
-                        
+                        let accountCurrency = (accountData["account_currency"] as? String)?.isEmpty == true ? "RUB" : accountData["account_currency"] as? String ?? "RUB"
+
                         let subAccount = SubAccount(
                             number: accountNumber,
                             name: accountName,
                             totalAmount: accountState,
                             currency: CurrencyType(rawValue: accountCurrency) ?? .ruble
                         )
-                        
+
                         if var bankAccount = bankAccountsMap[bankID] {
                             bankAccount.subAccounts.append(subAccount)
                             bankAccount.totalAmount += subAccount.totalAmount
@@ -255,13 +249,10 @@ class DataManager: ObservableObject {
                             bankAccountsMap[bankID] = newBankAccount
                         }
                     }
-                    
+
                     categoryAccountsMap[category] = Array(bankAccountsMap.values)
                 }
-                
-                for (category, bankAccounts) in categoryAccountsMap {
-                    self.urlEntities.bankAccounts[category]?.Array = bankAccounts
-                }
+                Logger.shared.log(.info, "Data fetched successfully. Data: \(self.urlEntities.bankAccounts)")
                 
             default:
                 let errorMessage = response["error"] as? String

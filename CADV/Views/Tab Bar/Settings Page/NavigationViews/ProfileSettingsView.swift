@@ -10,7 +10,6 @@ import SwiftUI
 struct ProfileSettingsView: View{
     @Environment(\.presentationMode) var presentationMode
     @Binding public var currentData: ProfileInfo
-    @Binding var urlElements: URLElements?
     @State private var newData: ProfileInfo = ProfileInfo(Surname: "", Name: "", UserID: "", AvatarURL: "", ExpirationDate: "")
     
     @State private var showNameFieldError: Bool = false
@@ -106,13 +105,13 @@ struct ProfileSettingsView: View{
             "surname": surname
         ]
         do{
-            let response = try await self.urlElements?.fetchData(
+            let response = try await URLElements.shared.fetchData(
                 endpoint: "v1/profile/name",
                 method: "PUT",
                 parameters: parameters,
                 needsAuthorization: true
             )
-            switch response?["status_code"] as? Int{
+            switch response["status_code"] as? Int{
             case 200:
                 presentationMode.wrappedValue.dismiss()
             default:

@@ -8,12 +8,10 @@
 import SwiftUI
 
 struct ProfileSection: View {
-    @Binding var urlElements: URLElements?
     @Binding var profileInfo: ProfileInfo
     var body: some View {
         NavigationLink(destination: ProfileSettingsView(
-            currentData: $profileInfo,
-            urlElements: $urlElements
+            currentData: $profileInfo
         )) {
             HStack {
                 AsyncImage(

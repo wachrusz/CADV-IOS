@@ -17,10 +17,16 @@ class CurrencyManager: ObservableObject {
     }
     
     func loadCurrency() {
+        guard Thread.isMainThread else {
+            DispatchQueue.main.async {
+                self.loadCurrency()
+            }
+            return
+        }
+        
         if let currencyEntity = realm.object(ofType: CurrencyEntity.self, forPrimaryKey: "currency") {
             selectedCurrency = currencyEntity.currency
         } else {
-            // Если валюта не найдена, создаем новую запись с дефолтным значением
             let newCurrencyEntity = CurrencyEntity()
             newCurrencyEntity.currency = "RUB"
             do {
@@ -34,6 +40,12 @@ class CurrencyManager: ObservableObject {
     }
     
     func saveCurrency(_ currency: String) {
+        guard Thread.isMainThread else {
+            DispatchQueue.main.async {
+                self.saveCurrency(currency)
+            }
+            return
+        }
         if let currencyEntity = realm.object(ofType: CurrencyEntity.self, forPrimaryKey: "currency") {
             do {
                 try realm.write {
@@ -44,7 +56,6 @@ class CurrencyManager: ObservableObject {
                 Logger.shared.log(.error, "Ошибка сохранения валюты: \(error)")
             }
         } else {
-            // Если запись не найдена, создаем новую
             let newCurrencyEntity = CurrencyEntity()
             newCurrencyEntity.currency = currency
             do {

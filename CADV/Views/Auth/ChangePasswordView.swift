@@ -10,7 +10,6 @@ import SwiftUI
 struct ChangePasswordView: View {
     @Binding var email: String
     @Binding var token: String
-    @Binding var urlElements: URLElements?
     
     @State private var showErrorPopup: Bool = false
     @State private var errorMessage: String = ""
@@ -95,12 +94,12 @@ struct ChangePasswordView: View {
             ]
             
             do{
-                let response = try await self.urlElements?.fetchData(
+                let response = try await URLElements.shared.fetchData(
                     endpoint: "v1/auth/password",
                     method: "PUT",
                     parameters: parameters
                 )
-                switch response?["status_code"] as? Int{
+                switch response["status_code"] as? Int{
                 case 200:
                     self.isCompleted = true
                     

@@ -21,7 +21,6 @@ class URLSessionHelper: NSObject, URLSessionDelegate {
 }
 
 struct LoginView: View{
-    @Binding var urlElements: URLElements?
     @State private var email: String = ""
     @State private var password: String = ""
     @State private var showPassword: Bool = false
@@ -37,10 +36,6 @@ struct LoginView: View{
     @State private var isLoading: Bool = false
     private var screenName: String = "Авторизация"
     @State private var navigationPath = NavigationPath()
-    
-    init(urlElements: Binding<URLElements?>){
-        self._urlElements = urlElements
-    }
     
     var body: some View{
         ZStack{
@@ -127,16 +122,13 @@ struct LoginView: View{
                             email: $email,
                             token: $token,
                             isNew: false,
-                            previousScreenName: screenName,
-                            urlElements: $urlElements
+                            previousScreenName: screenName
                         ),
                         isActive: $showEmailVerification,
                         label: {EmptyView()}
                     )
                     NavigationLink(
-                        destination: PasswordResetView(
-                            urlElements: $urlElements
-                        ),
+                        destination: PasswordResetView(),
                         isActive: $showPasswordReset,
                         label: {EmptyView()}
                     )
@@ -163,13 +155,13 @@ struct LoginView: View{
                 "password": password
             ]
             do{
-                let response = try await self.urlElements?.fetchData(
+                let response = try await URLElements.shared.fetchData(
                     endpoint: "v1/auth/login",
                     parameters: parameters
                 )
-                switch response?["status_code"] as? Int{
+                switch response["status_code"] as? Int{
                 case 200:
-                    token = response?["token"] as? String ?? ""
+                    token = response["token"] as? String ?? ""
                     self.showEmailVerification = true
                     
                     let additionalData: [String: Any] = [

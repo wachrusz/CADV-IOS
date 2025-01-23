@@ -9,7 +9,6 @@ import SwiftUI
 import RealmSwift
 
 struct CreateTransactionSelectCategory: View {
-    @Binding var urlElements: URLElements?
     @Binding var selectedCategory: String
     @Binding var selectedPlan: String
     
@@ -39,7 +38,6 @@ struct CreateTransactionSelectCategory: View {
     private func ForEachConstantCustom() -> some View{
         ForEach(customCategoriesFilteredConstant, id: \.self) { category in
             CustomTransactionElementView(
-                urlElements: $urlElements,
                 selectedCategory: $selectedCategory,
                 selectedPlan: $selectedPlan,
                 category: category
@@ -52,7 +50,6 @@ struct CreateTransactionSelectCategory: View {
             if let savedCategories = savedCategories {
                 ForEach(savedCategories.filter { $0.isConstant }, id: \.self) { category in
                     CustomTransactionElementView(
-                        urlElements: $urlElements,
                         selectedCategory: $selectedCategory,
                         selectedPlan: $selectedPlan,
                         category: category.toCustomCategoryType()
@@ -66,7 +63,6 @@ struct CreateTransactionSelectCategory: View {
     private func ForEachTemporaryCustom() -> some View{
         ForEach(customCategoriesFilteredTemporary, id: \.self) { category in
             CustomTransactionElementView(
-                urlElements: $urlElements,
                 selectedCategory: $selectedCategory,
                 selectedPlan: $selectedPlan,
                 category: category
@@ -78,7 +74,6 @@ struct CreateTransactionSelectCategory: View {
             if let savedCategories = savedCategories {
                 ForEach(savedCategories.filter { !$0.isConstant }, id: \.self) { category in
                     CustomTransactionElementView(
-                        urlElements: $urlElements,
                         selectedCategory: $selectedCategory,
                         selectedPlan: $selectedPlan,
                         category: category.toCustomCategoryType()
@@ -92,7 +87,6 @@ struct CreateTransactionSelectCategory: View {
     private func ForEachSavingsCustom() -> some View{
         ForEach(customCategoriesFilteredConstant, id: \.self) { category in
             CustomTransactionElementView(
-                urlElements: $urlElements,
                 selectedCategory: $selectedCategory,
                 selectedPlan: $selectedPlan,
                 category: category
@@ -104,7 +98,6 @@ struct CreateTransactionSelectCategory: View {
             if let savedCategories = savedCategories {
                 ForEach(savedCategories.filter { $0.categoryType == "Сбережения" }, id: \.self) { category in
                     CustomTransactionElementView(
-                        urlElements: $urlElements,
                         selectedCategory: $selectedCategory,
                         selectedPlan: $selectedPlan,
                         category: category.toCustomCategoryType()
@@ -219,14 +212,12 @@ struct CreateTransactionSelectCategory: View {
 }
 
 struct CustomTransactionElementView: View {
-    @Binding var urlElements: URLElements?
     @Binding var selectedCategory: String
     @Binding var selectedPlan: String
     let category: CustomCategoryType
     
     var body: some View{
         NavigationLink(destination: CreateTransactionMainView(
-            urlElements: $urlElements,
             categoryName: category.displayCategory,
             sectionName: selectedCategory,
             selectedPlan: selectedPlan

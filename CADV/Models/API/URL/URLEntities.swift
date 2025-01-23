@@ -7,7 +7,8 @@
 
 import Foundation
 
-struct URLEntities {
+class URLEntities {
+    
     var categorizedTransactions: [CategorizedTransaction]
     var profile: ProfileInfo
     var goals: [Goal]
@@ -27,7 +28,7 @@ struct URLEntities {
         ]
     }
     
-    mutating func getGroupedTransactions()
+    func getGroupedTransactions()
     {
         let groupedTransactions = Dictionary(
             grouping: categorizedTransactions,

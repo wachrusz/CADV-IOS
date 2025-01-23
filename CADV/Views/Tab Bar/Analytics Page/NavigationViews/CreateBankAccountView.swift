@@ -8,8 +8,6 @@
 import SwiftUI
 
 struct CreateBankAccountView: View {
-    @Binding var urlElements: URLElements?
-    
     @Environment(\.dismiss) var dismiss
     @State private var bankAccountName: String = ""
     @State private var bankAccountAmount: String = ""
@@ -46,7 +44,7 @@ struct CreateBankAccountView: View {
                             
                             HStack(alignment: .top, spacing: 10) {
                                 CustomText(
-                                    text: currencyCodeToSymbol(code: urlElements?.currency ?? "RUB"),
+                                    text: currencyCodeToSymbol(code: URLElements.shared.currency ?? "RUB"),
                                     font: Font.custom("Inter", size: 14).weight(.semibold),
                                     color: Color("sc2")
                                 )
@@ -129,13 +127,13 @@ struct CreateBankAccountView: View {
             ]
         ] as [String : Any]
         do{
-            let response = try await urlElements?.fetchData(
+            let response = try await URLElements.shared.fetchData(
                 endpoint: "v1/app/accounts",
                 method: "POST",
                 parameters: parameters,
                 needsAuthorization: true
             )
-            switch response?["status_code"] as? Int{
+            switch response["status_code"] as? Int{
             case 201:
                 dismiss()
             default:

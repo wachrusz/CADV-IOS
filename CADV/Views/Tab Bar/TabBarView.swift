@@ -11,15 +11,7 @@ import RealmSwift
 struct TabBarView: View {
     @State private var selectedTab = 0
     @State private var isAnalyticsLoaded = false
-    @StateObject private var dataManager: DataManager
-    @Binding var urlElements: URLElements?
-
-    init(urlElements: Binding<URLElements?>) {
-        self._urlElements = urlElements
-        self._dataManager = StateObject(wrappedValue: DataManager(urlElements: urlElements.wrappedValue))
-        UIPageControl.appearance().currentPageIndicatorTintColor = UIColor.purple
-        UIPageControl.appearance().pageIndicatorTintColor = UIColor.lightGray
-    }
+    @StateObject private var dataManager: DataManager = DataManager.shared
     
     var body: some View {
         VStack(spacing: 0) {

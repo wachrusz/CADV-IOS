@@ -9,18 +9,15 @@ import SwiftUI
 
 struct AllGoalsView: View {
     @Binding var goals: [Goal]
-    @Binding var urlElements: URLElements?
     
     @State private var isLongPressing = false
     @State private var isEditing: Bool = false
     @State private var selectedGoal: Goal?
     
     init(
-        goals: Binding<[Goal]>,
-        urlElements: Binding<URLElements?>
+        goals: Binding<[Goal]>
     ) {
         self._goals = goals
-        self._urlElements = urlElements
         
         UIPageControl.appearance().currentPageIndicatorTintColor = UIColor.purple
         UIPageControl.appearance().pageIndicatorTintColor = UIColor.lightGray
@@ -47,8 +44,7 @@ struct AllGoalsView: View {
             if let goal = selectedGoal {
                 EditGoalView(
                     goal: goal,
-                    goals: $goals,
-                    urlElements: $urlElements
+                    goals: $goals
                 )
             } else {
                 Text("Ошибка: цель не выбрана.")

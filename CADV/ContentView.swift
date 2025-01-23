@@ -8,9 +8,7 @@
 import SwiftUI
 
 struct ContentView: View {
-    @Binding var urlElements: URLElements?
-    init(urlElements: Binding<URLElements?>) {
-        self._urlElements = urlElements
+    init() {
         let appearance = UINavigationBarAppearance()
         appearance.titleTextAttributes = [.foregroundColor: UIColor.black]
         appearance.largeTitleTextAttributes = [.foregroundColor: UIColor.black]
@@ -23,6 +21,6 @@ struct ContentView: View {
         UINavigationBar.appearance().scrollEdgeAppearance = appearance
     }
     var body: some View {
-        StartView(urlElements: $urlElements)
+        StartView()
     }
 }

@@ -5,12 +5,6 @@
 //  Created by Misha Vakhrushin on 15.01.2025.
 //
 
-//
-//  Logger.swift
-//  CADV
-//
-//  Created by Misha Vakhrushin on 15.01.2025.
-//
 
 import Foundation
 
