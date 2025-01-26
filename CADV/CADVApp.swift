@@ -17,8 +17,9 @@ struct CADVApp: App {
 
     var body: some Scene {
         WindowGroup {
-            RootView()
-                .environmentObject(notificationManager)
+            //RootView()
+            //    .environmentObject(notificationManager)
+            HomeConfigurator.configure()
         }
     }
 }

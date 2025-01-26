@@ -7,34 +7,37 @@
 
 import SwiftUI
 
-struct HomeView: View, ViewProtocol {
+struct HomeView: View {
     @ObservedObject var presenter: HomePresenter
 
     var body: some View {
-        NavigationView {
+        NavigationStack(path: $presenter.router.navigationPath) {
             VStack {
                 Text("Home Screen")
                 Button("Go to Next Screen") {
-                    presenter.router.navigateToNextScreen()
+                    Logger.shared.log(.info, "pressed button Go to Next Screen")
+                    self.presenter.router.navigateToNextScreen()
                 }
                 Button("Go Back") {
-                    presenter.router.navigateBack()
+                    Logger.shared.log(.info, "pressed button Go Back")
+                    self.presenter.router.navigateBack()
                 }
                 Button("Go to Root") {
-                    presenter.router.navigateToRoot()
+                    Logger.shared.log(.info, "pressed button Go Root")
+                    self.presenter.router.navigateToRoot()
                 }
             }
             .navigationTitle("Home")
-            .background(
-                NavigationLink(
-                    destination: presenter.router.navigationPath.last,
-                    isActive: Binding(
-                        get: { !presenter.router.navigationPath.isEmpty },
-                        set: { _ in }
-                    ),
-                    label: { EmptyView() }
-                )
-            )
+            /*
+            .navigationDestination(for: AppScreen.self) { screen in
+                switch screen {
+                case .next:
+                    NextView()
+                case .home:
+                    HomeConfigurator.configure()
+                }
+            }
+             */
         }
     }
 }

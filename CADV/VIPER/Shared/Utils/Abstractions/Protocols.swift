@@ -1,5 +1,5 @@
 //
-//  AbstractPresenter.swift
+//  Protocols.swift
 //  CADV
 //
 //  Created by Misha Vakhrushin on 26.01.2025.
@@ -29,4 +29,8 @@ protocol InteractorProtocol {
 
 protocol EntityProtocol: Identifiable {
     var id: UUID { get }
+}
+
+protocol RouterProtocol {
+    func navigate(_ type: NavigationType)
 }
