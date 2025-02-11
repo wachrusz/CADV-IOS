@@ -1,5 +1,5 @@
 //
-//  StartContentView.swift
+//  StartView.swift
 //  CADV
 //
 //  Created by Misha Vakhrushin on 08.09.2024.
@@ -7,46 +7,7 @@
 
 import SwiftUI
 
-struct Start: View {
-    var body: some View {
-        NavigationStack {
-            ZStack {
-                Color.white
-                    .edgesIgnoringSafeArea(.all)
-
-                NavigationLink(destination: NewUser()) {
-                    VStack {
-                        Spacer()
-
-                        CustomText(
-                            text: "Cash Advisor",
-                            font: Font.custom("Montserrat", size: 40).weight(.bold),
-                            color: Color("fg")
-                        )
-                        
-                        CustomText(
-                            text: "Управляйте личными финансами эффективно",
-                            font: Font.custom("Inter", size: 14).weight(.semibold),
-                            color: Color("sc2")
-                        )
-
-                        Spacer()
-
-                        CustomText(
-                            text: "Нажмите, чтобы продолжить",
-                            font: Font.custom("Gilroy", size: 16).weight(.semibold),
-                            color: Color("sc2")
-                        )
-                    }
-                    .frame(maxWidth: .infinity, maxHeight: .infinity)
-                }
-                .buttonStyle(PlainButtonStyle())
-            }
-        }
-    }
-}
-
-struct NewUser: View {
+struct StartView: View {
     @State private var isVisible: Bool = false
     @State private var startMovement: Bool = false
     let hashTags: [String] = [
@@ -202,13 +163,6 @@ struct NewUser: View {
                 )
             }
         }
-        //.navigationBarBackButtonHidden(true)
         .navigationTitle("")
-    }
-}
-
-struct StartView: View {
-    var body: some View {
-        Start()
     }
 }
