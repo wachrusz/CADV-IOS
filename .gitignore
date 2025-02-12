@@ -4,3 +4,8 @@ GoogleService-Info.plist
 Podfile
 Podfile.lock
 /VIPER/TEST
+*test*
+*Test*
+*TEST*
+*TeSt*
+*tEsT*
