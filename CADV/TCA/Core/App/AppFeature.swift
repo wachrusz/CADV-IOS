@@ -18,45 +18,31 @@ struct AppFeature {
         
         //Depandant States should be placed below
         
-        var splashScreenState = SplashScreenFeature.State()
-        var startViewState = StartViewFeature.State()
-        //var analyticsState = AnalyticsState()
+        var onboardingState = OnboardingFeature.State()
     }
     
     enum Action {
         
         //Depandant Actions should be placed below
         
-        case splashScreenAction(SplashScreenFeature.Action)
-        case startViewAction(StartViewFeature.Action)
-        //case analyticsAction(AnalyticsAction)
+        case onboardingAction(OnboardingFeature.Action)
     }
     
     var body: some ReducerOf<Self> {
         
         //Place for Scopes
         
-        Scope(state: \.splashScreenState, action: \.splashScreenAction) {
-            SplashScreenFeature()
+        Scope(state: \.onboardingState, action: \.onboardingAction) {
+            OnboardingFeature()
         }
-        
-        Scope(state: \.startViewState, action: \.startViewAction) {
-            StartViewFeature()
-        }
-        
-        /*
-         Scope(state: \.analyticsState, action: \.analyticsAction) {
-         AnalyticsFeature()
-         }
-         */
         
         //Reducer
         Reduce { state, action in
             switch action {
-                
-            case .splashScreenAction, .startViewAction:
+            case .onboardingAction:
                 return .none
             }
+                
         }
     }
 }

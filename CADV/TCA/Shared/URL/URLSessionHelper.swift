@@ -1,9 +1,11 @@
 //
-//  SessionHelper.swift
+//  URLSessionHelper.swift
 //  CADV
 //
 //  Created by Misha Vakhrushin on 12.02.2025.
 //
+
+import Foundation
 
 class URLSessionHelper: NSObject, URLSessionDelegate {
     static let shared = URLSessionHelper()

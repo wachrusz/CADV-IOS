@@ -51,3 +51,49 @@ extension View {
         }
     }
 }
+
+struct CustomPadding: ViewModifier {
+    let edges: Edge.Set
+    let length: CGFloat
+
+    func body(content: Content) -> some View {
+        content
+            .padding(edges, length)
+    }
+}
+
+extension View {
+    func customPadding(_ edges: Edge.Set = .all, _ length: CGFloat) -> some View {
+        self.modifier(CustomPadding(edges: edges, length: length))
+    }
+}
+
+extension View {
+    
+    func focusablePadding(_ edges: Edge.Set = .all, _ size: CGFloat? = nil) -> some View {
+        modifier(FocusablePadding(edges, size))
+    }
+    
+}
+
+private struct FocusablePadding : ViewModifier {
+    
+    private let edges: Edge.Set
+    private let size: CGFloat?
+    @FocusState private var focused: Bool
+    
+    init(_ edges: Edge.Set, _ size: CGFloat?) {
+        self.edges = edges
+        self.size = size
+        self.focused = false
+    }
+    
+    func body(content: Content) -> some View {
+        content
+            .focused($focused)
+            .padding(edges, size)
+            .contentShape(Rectangle())
+            .onTapGesture { focused = true }
+    }
+    
+}

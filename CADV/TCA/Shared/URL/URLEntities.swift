@@ -9,6 +9,8 @@ import Foundation
 
 class URLEntities {
     
+    static let shared = URLEntities()
+    
     var categorizedTransactions: [CategorizedTransaction]
     var profile: ProfileInfo
     var goals: [Goal]

@@ -8,6 +8,8 @@
 import SwiftUI
 
 enum AppFonts {
-    static let body: Font = .custom("Gilroy", size: 14).weight(.semibold)
-    static let header: Font = .custom("Inter", size: 24).weight(.bold)
+    static let header  = Font.system(size: 32).weight(.bold)
+    static let header2 = Font.system(size: 15).weight(.regular)
+    static let header3 = Font.system(size: 12).weight(.medium)
+    static let button  = Font.system(size: 15).weight(.medium)
 }

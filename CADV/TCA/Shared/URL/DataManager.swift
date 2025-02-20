@@ -13,7 +13,7 @@ class DataManager: ObservableObject {
     static var shared = DataManager()
     init() {}
     
-    @Published var urlEntities: URLEntities = URLEntities()
+    @Published var urlEntities: URLEntities = URLEntities.shared
     @Published var isAnalyticsLoaded: Bool = false
     
     func loadAnalyticsPage() {

@@ -17,11 +17,11 @@ struct AppView: View {
     
     var body: some View {
         WithViewStore(store, observe: { $0 }) { viewStore in
-            SplashScreenViewTCA(
-                store: store.scope(
-                    state: \.splashScreenState,
-                    action: \.splashScreenAction
-                )
+            OnboardingView(store:
+                            store.scope(
+                                state: \.onboardingState,
+                                action: \.onboardingAction
+                            )
             )
             .onAppear(){
                 Logger.shared.log(.warning, URLElements.shared.tokenData)
