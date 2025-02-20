@@ -7,17 +7,27 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		1481FD9B15673C33F6FA8AE0 /* Pods_CADV.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2CDA46F4EB9A6BB4EF96179E /* Pods_CADV.framework */; };
+		0AEEE0A8159582CB8CB62137 /* Pods_CADV_CADVUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2AD807079A30DD6E9E12BBCB /* Pods_CADV_CADVUITests.framework */; };
 		3C0C2C932CE67F910040B886 /* CreateTransactionAnalyticsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C0C2C922CE67F890040B886 /* CreateTransactionAnalyticsView.swift */; };
 		3C0C2C952CE695D70040B886 /* BankAccountCategorySelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C0C2C942CE695CC0040B886 /* BankAccountCategorySelectionView.swift */; };
 		3C21A7662D0869FD00452DF3 /* LocalAuthView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C21A7652D0869F100452DF3 /* LocalAuthView.swift */; };
 		3C21A7692D086B7600452DF3 /* LocalAuthKeychain.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C21A7682D086B7300452DF3 /* LocalAuthKeychain.swift */; };
-		3C2EC36A2D3A71ED003AF0FB /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3C2EC3692D3A71ED003AF0FB /* GoogleService-Info.plist */; };
+		3C27D22B2D5CC5C60067E488 /* URLSessionHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C27D22A2D5CC5C10067E488 /* URLSessionHelper.swift */; };
+		3C27D2322D5E32FA0067E488 /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C27D2312D5E32F40067E488 /* OnboardingView.swift */; };
+		3C27D2342D5E33040067E488 /* OnboardingFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C27D2332D5E32FD0067E488 /* OnboardingFeature.swift */; };
+		3C27D2362D5E420F0067E488 /* CustomSubViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C27D2352D5E42080067E488 /* CustomSubViews.swift */; };
+		3C27D23A2D5F3D3A0067E488 /* SignInFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C27D2392D5F3D360067E488 /* SignInFeature.swift */; };
+		3C27D23C2D5F3D420067E488 /* SignInView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C27D23B2D5F3D3D0067E488 /* SignInView.swift */; };
+		3C27D23E2D6364500067E488 /* LottieView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C27D23D2D63644D0067E488 /* LottieView.swift */; };
+		3C27D2412D660DB10067E488 /* SignUpFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C27D2402D660DAD0067E488 /* SignUpFeature.swift */; };
+		3C27D2432D660DB80067E488 /* SignUpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C27D2422D660DB40067E488 /* SignUpView.swift */; };
+		3C27D2462D673B4D0067E488 /* SignConfirmFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C27D2452D673B480067E488 /* SignConfirmFeature.swift */; };
+		3C2EC36E2D3A9BC6003AF0FB /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3C2EC36D2D3A9BC6003AF0FB /* GoogleService-Info.plist */; };
+		3C2EC37A2D3AB165003AF0FB /* Firebase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C2EC3792D3AB0E5003AF0FB /* Firebase.swift */; };
 		3C4F0ECE2CCFA6CE008A8D14 /* ProfileSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C4F0ECD2CCFA6C7008A8D14 /* ProfileSettingsView.swift */; };
 		3C5385D82CCFE56C00242054 /* CommonButtonViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C5385D72CCFE56900242054 /* CommonButtonViews.swift */; };
 		3C5385DA2CCFF58700242054 /* CommonSectionViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C5385D92CCFF57A00242054 /* CommonSectionViews.swift */; };
 		3C5617422CE13238008BA8A1 /* ChangePasswordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C5617412CE13231008BA8A1 /* ChangePasswordView.swift */; };
-		3C5617442CE22369008BA8A1 /* SplashScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C5617432CE22361008BA8A1 /* SplashScreen.swift */; };
 		3C56174A2CE23491008BA8A1 /* Inter-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 3C5617482CE23491008BA8A1 /* Inter-Bold.ttf */; };
 		3C56174B2CE23491008BA8A1 /* Inter-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 3C5617492CE23491008BA8A1 /* Inter-SemiBold.ttf */; };
 		3C56174D2CE234A3008BA8A1 /* Gilroy-Semibold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 3C56174C2CE234A3008BA8A1 /* Gilroy-Semibold.ttf */; };
@@ -36,6 +46,10 @@
 		3C72E3162CD252D300B7EA04 /* TransactionElementView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C72E3152CD252CD00B7EA04 /* TransactionElementView.swift */; };
 		3C72E3182CD2535E00B7EA04 /* BankAcoountListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C72E3172CD2535200B7EA04 /* BankAcoountListView.swift */; };
 		3C9F28182D13153C00C3DB83 /* ScoreDiadramView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C9F28172D13153500C3DB83 /* ScoreDiadramView.swift */; };
+		3C9F9C552D59FD5A00B451DE /* AppImages.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C9F9C542D59FD5600B451DE /* AppImages.swift */; };
+		3C9F9C572D5A03AF00B451DE /* CustomButtonsTCA.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C9F9C562D5A03AB00B451DE /* CustomButtonsTCA.swift */; };
+		3C9F9C592D5A03B700B451DE /* CustomTextsTCA.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C9F9C582D5A03B300B451DE /* CustomTextsTCA.swift */; };
+		3C9F9C5B2D5A03F500B451DE /* CustomNotificationsTCA.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C9F9C5A2D5A03EE00B451DE /* CustomNotificationsTCA.swift */; };
 		3CA07A1D2D131B37004AF1DB /* TempoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CA07A1C2D131B2E004AF1DB /* TempoView.swift */; };
 		3CA07A232D132702004AF1DB /* ShareInIncome.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CA07A222D1326FD004AF1DB /* ShareInIncome.swift */; };
 		3CA07A252D132767004AF1DB /* PercentBlockView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CA07A242D132763004AF1DB /* PercentBlockView.swift */; };
@@ -46,11 +60,11 @@
 		3CC53A182CD0AF2D00C0B15E /* ErrorViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CC53A172CD0AF2100C0B15E /* ErrorViews.swift */; };
 		3CC53A1A2CD0B96000C0B15E /* CategorizedTransaction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CC53A192CD0B94A00C0B15E /* CategorizedTransaction.swift */; };
 		3CC743F02C8DC49600F10E5E /* StartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CC743EF2C8DC49600F10E5E /* StartView.swift */; };
-		3CC743F22C8DC9C400F10E5E /* LoginContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CC743F12C8DC9C400F10E5E /* LoginContentView.swift */; };
-		3CC743F42C94CA9200F10E5E /* RegisterContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CC743F32C94CA9200F10E5E /* RegisterContentView.swift */; };
+		3CC743F22C8DC9C400F10E5E /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CC743F12C8DC9C400F10E5E /* LoginView.swift */; };
+		3CC743F42C94CA9200F10E5E /* RegisterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CC743F32C94CA9200F10E5E /* RegisterView.swift */; };
 		3CD536272CC69A480099B111 /* CreateBankAccountView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CD536262CC69A480099B111 /* CreateBankAccountView.swift */; };
 		3CD5362C2CC7C8A00099B111 /* AddBankAccountView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CD5362B2CC7C8A00099B111 /* AddBankAccountView.swift */; };
-		3CD5C3142C9863CA0025EFDC /* ConfirmEmailContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CD5C3132C9863CA0025EFDC /* ConfirmEmailContentView.swift */; };
+		3CD5C3142C9863CA0025EFDC /* ConfirmEmailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CD5C3132C9863CA0025EFDC /* ConfirmEmailView.swift */; };
 		3CD5C3192C9873FF0025EFDC /* PopUpContentViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CD5C3182C9873FF0025EFDC /* PopUpContentViews.swift */; };
 		3CD5C31F2CA2F8630025EFDC /* MainPageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CD5C31E2CA2F8630025EFDC /* MainPageView.swift */; };
 		3CD5C3222CA2F9E80025EFDC /* TabBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CD5C3212CA2F9E80025EFDC /* TabBarView.swift */; };
@@ -68,9 +82,8 @@
 		3CD5C33D2CB83A1E0025EFDC /* Transactions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CD5C33C2CB83A1E0025EFDC /* Transactions.swift */; };
 		3CD5C33F2CB83A310025EFDC /* Accounts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CD5C33E2CB83A310025EFDC /* Accounts.swift */; };
 		3CD9D7F52D380A1300C9BD39 /* UUID.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CD9D7F42D380A0F00C9BD39 /* UUID.swift */; };
-		3CD9D7F72D380D3B00C9BD39 /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CD9D7F62D380D3700C9BD39 /* Logger.swift */; };
-		3CE654A22D0B045100ADD08A /* URL.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CE654A02D0B045100ADD08A /* URL.swift */; };
-		3CE654A32D0B045100ADD08A /* Utility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CE654A12D0B045100ADD08A /* Utility.swift */; };
+		3CE47E6B2D5CB1E600195DF1 /* Lottie in Frameworks */ = {isa = PBXBuildFile; productRef = 3CE47E6A2D5CB1E600195DF1 /* Lottie */; };
+		3CE654A22D0B045100ADD08A /* URLElements.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CE654A02D0B045100ADD08A /* URLElements.swift */; };
 		3CE654A62D0C944E00ADD08A /* CustomTabBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CE654A52D0C944700ADD08A /* CustomTabBarView.swift */; };
 		3CE654A82D0C963300ADD08A /* URLEntities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CE654A72D0C962D00ADD08A /* URLEntities.swift */; };
 		3CE654AB2D12FE2100ADD08A /* FinHealthView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CE654AA2D12FE1C00ADD08A /* FinHealthView.swift */; };
@@ -83,8 +96,26 @@
 		3CE9FBB52CCA93540046CD22 /* ValuteSwitcherView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CE9FBB42CCA934D0046CD22 /* ValuteSwitcherView.swift */; };
 		3CE9FBBA2CCAAB0E0046CD22 /* AppNavigatingButtonsListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CE9FBB92CCAAB010046CD22 /* AppNavigatingButtonsListView.swift */; };
 		3CE9FBBD2CCAAD050046CD22 /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CE9FBBC2CCAAD020046CD22 /* ProfileView.swift */; };
+		3CEB36812D56284800565EC2 /* AppFonts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CEB36802D56284100565EC2 /* AppFonts.swift */; };
+		3CEB36872D5630AE00565EC2 /* SplashScreenView OLD.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CEB36862D5630AE00565EC2 /* SplashScreenView OLD.swift */; };
+		3CEE80662D410B4D0002C993 /* RealmTokenData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CEE80652D410B430002C993 /* RealmTokenData.swift */; };
+		3CEE80692D410CD40002C993 /* RealmCurrency.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CEE80682D410CCF0002C993 /* RealmCurrency.swift */; };
+		3CEE806B2D410D300002C993 /* RealmCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CEE806A2D410D2C0002C993 /* RealmCategory.swift */; };
+		3CEE806D2D410D890002C993 /* TokenData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CEE806C2D410D860002C993 /* TokenData.swift */; };
+		3CEE80712D4130660002C993 /* CustomCategoryType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CEE80702D41305D0002C993 /* CustomCategoryType.swift */; };
+		3CEE80C32D53B1160002C993 /* ComposableArchitecture in Frameworks */ = {isa = PBXBuildFile; productRef = 3CEE80C22D53B1160002C993 /* ComposableArchitecture */; };
+		3CEE80C52D5420A40002C993 /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CEE80C42D5420A00002C993 /* Logger.swift */; };
+		3CEE80C72D5420D10002C993 /* Validators.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CEE80C62D5420CD0002C993 /* Validators.swift */; };
+		3CEE80C92D54210B0002C993 /* Formatters.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CEE80C82D5421050002C993 /* Formatters.swift */; };
+		3CEE80CB2D54216F0002C993 /* NotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CEE80CA2D5421660002C993 /* NotificationManager.swift */; };
+		3CEE80CD2D5421B00002C993 /* ViewExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CEE80CC2D5421AC0002C993 /* ViewExtensions.swift */; };
+		3CEE80CF2D5421E40002C993 /* Logic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CEE80CE2D5421E10002C993 /* Logic.swift */; };
+		3CEE80D12D5422600002C993 /* AppFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CEE80D02D54225F0002C993 /* AppFeature.swift */; };
+		3CEE80D32D5424B60002C993 /* AppView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CEE80D22D5424B30002C993 /* AppView.swift */; };
+		3CEE80D52D542A370002C993 /* CounterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CEE80D42D542A2E0002C993 /* CounterTests.swift */; };
+		3CEE80D72D54E77B0002C993 /* AppColors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CEE80D62D54E7780002C993 /* AppColors.swift */; };
+		3CEE80DC2D54EAA20002C993 /* RealmManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CEE80DB2D54EA9E0002C993 /* RealmManager.swift */; };
 		3CF17A912C87812F00A601AC /* CADVApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CF17A902C87812F00A601AC /* CADVApp.swift */; };
-		3CF17A932C87812F00A601AC /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CF17A922C87812F00A601AC /* ContentView.swift */; };
 		3CF17A952C87813200A601AC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3CF17A942C87813200A601AC /* Assets.xcassets */; };
 		3CF17A982C87813200A601AC /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3CF17A972C87813200A601AC /* Preview Assets.xcassets */; };
 		3CF17A9A2C87813200A601AC /* Persistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CF17A992C87813200A601AC /* Persistence.swift */; };
@@ -98,9 +129,8 @@
 		3CF4C1672CDD2781007F6990 /* SupportRequestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CF4C1662CDD2776007F6990 /* SupportRequestView.swift */; };
 		3CF4C1692CDD28B6007F6990 /* CategorySettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CF4C1682CDD28B1007F6990 /* CategorySettingsView.swift */; };
 		3CF4C16B2CDD3E85007F6990 /* PasswordResetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CF4C16A2CDD3E7F007F6990 /* PasswordResetView.swift */; };
-		3CF4C1702CDD649E007F6990 /* NotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CF4C16F2CDD6496007F6990 /* NotificationManager.swift */; };
-		8829F759CE8D1DDF8974135D /* Pods_CADV_CADVUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9FA2BC9F5A751C542B6BEAB9 /* Pods_CADV_CADVUITests.framework */; };
-		AC4143B7A0FA3764888A5CE7 /* Pods_CADVTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4FFCFD52E1FDB1EA2CAC0410 /* Pods_CADVTests.framework */; };
+		680500C6E00B5E528D82E74C /* Pods_CADVTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C46078E1CDD39F903C7C4097 /* Pods_CADVTests.framework */; };
+		92FB961442E4227CB8CAFB00 /* Pods_CADV.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0DD2ADCCABCD1F572BB3ED7A /* Pods_CADV.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -121,21 +151,31 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		1079D05F03EC74786C16B580 /* Pods-CADV-CADVUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CADV-CADVUITests.debug.xcconfig"; path = "Target Support Files/Pods-CADV-CADVUITests/Pods-CADV-CADVUITests.debug.xcconfig"; sourceTree = "<group>"; };
-		1E8712A18D4F7836073C35DE /* Pods-CADVTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CADVTests.debug.xcconfig"; path = "Target Support Files/Pods-CADVTests/Pods-CADVTests.debug.xcconfig"; sourceTree = "<group>"; };
-		2CDA46F4EB9A6BB4EF96179E /* Pods_CADV.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_CADV.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		37AE10628CD737B07AC62E41 /* Pods-CADV-CADVUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CADV-CADVUITests.release.xcconfig"; path = "Target Support Files/Pods-CADV-CADVUITests/Pods-CADV-CADVUITests.release.xcconfig"; sourceTree = "<group>"; };
+		0DD2ADCCABCD1F572BB3ED7A /* Pods_CADV.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_CADV.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		104A38E442226814E2FEC67C /* Pods-CADVTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CADVTests.release.xcconfig"; path = "Target Support Files/Pods-CADVTests/Pods-CADVTests.release.xcconfig"; sourceTree = "<group>"; };
+		2AD807079A30DD6E9E12BBCB /* Pods_CADV_CADVUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_CADV_CADVUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		34239EACB831DB661FA17B8E /* Pods-CADV-CADVUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CADV-CADVUITests.release.xcconfig"; path = "Target Support Files/Pods-CADV-CADVUITests/Pods-CADV-CADVUITests.release.xcconfig"; sourceTree = "<group>"; };
 		3C0C2C922CE67F890040B886 /* CreateTransactionAnalyticsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateTransactionAnalyticsView.swift; sourceTree = "<group>"; };
 		3C0C2C942CE695CC0040B886 /* BankAccountCategorySelectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BankAccountCategorySelectionView.swift; sourceTree = "<group>"; };
 		3C21A7652D0869F100452DF3 /* LocalAuthView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalAuthView.swift; sourceTree = "<group>"; };
 		3C21A7682D086B7300452DF3 /* LocalAuthKeychain.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalAuthKeychain.swift; sourceTree = "<group>"; };
-		3C2EC3692D3A71ED003AF0FB /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		3C27D22A2D5CC5C10067E488 /* URLSessionHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLSessionHelper.swift; sourceTree = "<group>"; };
+		3C27D2312D5E32F40067E488 /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
+		3C27D2332D5E32FD0067E488 /* OnboardingFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingFeature.swift; sourceTree = "<group>"; };
+		3C27D2352D5E42080067E488 /* CustomSubViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomSubViews.swift; sourceTree = "<group>"; };
+		3C27D2392D5F3D360067E488 /* SignInFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInFeature.swift; sourceTree = "<group>"; };
+		3C27D23B2D5F3D3D0067E488 /* SignInView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInView.swift; sourceTree = "<group>"; };
+		3C27D23D2D63644D0067E488 /* LottieView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LottieView.swift; sourceTree = "<group>"; };
+		3C27D2402D660DAD0067E488 /* SignUpFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpFeature.swift; sourceTree = "<group>"; };
+		3C27D2422D660DB40067E488 /* SignUpView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpView.swift; sourceTree = "<group>"; };
+		3C27D2452D673B480067E488 /* SignConfirmFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignConfirmFeature.swift; sourceTree = "<group>"; };
 		3C2EC36C2D3A95F0003AF0FB /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
+		3C2EC36D2D3A9BC6003AF0FB /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		3C2EC3792D3AB0E5003AF0FB /* Firebase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Firebase.swift; sourceTree = "<group>"; };
 		3C4F0ECD2CCFA6C7008A8D14 /* ProfileSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileSettingsView.swift; sourceTree = "<group>"; };
 		3C5385D72CCFE56900242054 /* CommonButtonViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommonButtonViews.swift; sourceTree = "<group>"; };
 		3C5385D92CCFF57A00242054 /* CommonSectionViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommonSectionViews.swift; sourceTree = "<group>"; };
 		3C5617412CE13231008BA8A1 /* ChangePasswordView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangePasswordView.swift; sourceTree = "<group>"; };
-		3C5617432CE22361008BA8A1 /* SplashScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashScreen.swift; sourceTree = "<group>"; };
 		3C5617482CE23491008BA8A1 /* Inter-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Inter-Bold.ttf"; sourceTree = "<group>"; };
 		3C5617492CE23491008BA8A1 /* Inter-SemiBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Inter-SemiBold.ttf"; sourceTree = "<group>"; };
 		3C56174C2CE234A3008BA8A1 /* Gilroy-Semibold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Gilroy-Semibold.ttf"; sourceTree = "<group>"; };
@@ -154,6 +194,10 @@
 		3C72E3152CD252CD00B7EA04 /* TransactionElementView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionElementView.swift; sourceTree = "<group>"; };
 		3C72E3172CD2535200B7EA04 /* BankAcoountListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BankAcoountListView.swift; sourceTree = "<group>"; };
 		3C9F28172D13153500C3DB83 /* ScoreDiadramView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScoreDiadramView.swift; sourceTree = "<group>"; };
+		3C9F9C542D59FD5600B451DE /* AppImages.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppImages.swift; sourceTree = "<group>"; };
+		3C9F9C562D5A03AB00B451DE /* CustomButtonsTCA.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomButtonsTCA.swift; sourceTree = "<group>"; };
+		3C9F9C582D5A03B300B451DE /* CustomTextsTCA.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTextsTCA.swift; sourceTree = "<group>"; };
+		3C9F9C5A2D5A03EE00B451DE /* CustomNotificationsTCA.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomNotificationsTCA.swift; sourceTree = "<group>"; };
 		3CA07A1C2D131B2E004AF1DB /* TempoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TempoView.swift; sourceTree = "<group>"; };
 		3CA07A222D1326FD004AF1DB /* ShareInIncome.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareInIncome.swift; sourceTree = "<group>"; };
 		3CA07A242D132763004AF1DB /* PercentBlockView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PercentBlockView.swift; sourceTree = "<group>"; };
@@ -164,11 +208,11 @@
 		3CC53A172CD0AF2100C0B15E /* ErrorViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorViews.swift; sourceTree = "<group>"; };
 		3CC53A192CD0B94A00C0B15E /* CategorizedTransaction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategorizedTransaction.swift; sourceTree = "<group>"; };
 		3CC743EF2C8DC49600F10E5E /* StartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartView.swift; sourceTree = "<group>"; };
-		3CC743F12C8DC9C400F10E5E /* LoginContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginContentView.swift; sourceTree = "<group>"; };
-		3CC743F32C94CA9200F10E5E /* RegisterContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterContentView.swift; sourceTree = "<group>"; };
+		3CC743F12C8DC9C400F10E5E /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
+		3CC743F32C94CA9200F10E5E /* RegisterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterView.swift; sourceTree = "<group>"; };
 		3CD536262CC69A480099B111 /* CreateBankAccountView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateBankAccountView.swift; sourceTree = "<group>"; };
 		3CD5362B2CC7C8A00099B111 /* AddBankAccountView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddBankAccountView.swift; sourceTree = "<group>"; };
-		3CD5C3132C9863CA0025EFDC /* ConfirmEmailContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfirmEmailContentView.swift; sourceTree = "<group>"; };
+		3CD5C3132C9863CA0025EFDC /* ConfirmEmailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfirmEmailView.swift; sourceTree = "<group>"; };
 		3CD5C3182C9873FF0025EFDC /* PopUpContentViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopUpContentViews.swift; sourceTree = "<group>"; };
 		3CD5C31E2CA2F8630025EFDC /* MainPageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainPageView.swift; sourceTree = "<group>"; };
 		3CD5C3212CA2F9E80025EFDC /* TabBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarView.swift; sourceTree = "<group>"; };
@@ -186,9 +230,7 @@
 		3CD5C33C2CB83A1E0025EFDC /* Transactions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Transactions.swift; sourceTree = "<group>"; };
 		3CD5C33E2CB83A310025EFDC /* Accounts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Accounts.swift; sourceTree = "<group>"; };
 		3CD9D7F42D380A0F00C9BD39 /* UUID.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UUID.swift; sourceTree = "<group>"; };
-		3CD9D7F62D380D3700C9BD39 /* Logger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Logger.swift; sourceTree = "<group>"; };
-		3CE654A02D0B045100ADD08A /* URL.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URL.swift; sourceTree = "<group>"; };
-		3CE654A12D0B045100ADD08A /* Utility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utility.swift; sourceTree = "<group>"; };
+		3CE654A02D0B045100ADD08A /* URLElements.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLElements.swift; sourceTree = "<group>"; };
 		3CE654A52D0C944700ADD08A /* CustomTabBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTabBarView.swift; sourceTree = "<group>"; };
 		3CE654A72D0C962D00ADD08A /* URLEntities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLEntities.swift; sourceTree = "<group>"; };
 		3CE654AA2D12FE1C00ADD08A /* FinHealthView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FinHealthView.swift; sourceTree = "<group>"; };
@@ -201,9 +243,26 @@
 		3CE9FBB42CCA934D0046CD22 /* ValuteSwitcherView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ValuteSwitcherView.swift; sourceTree = "<group>"; };
 		3CE9FBB92CCAAB010046CD22 /* AppNavigatingButtonsListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppNavigatingButtonsListView.swift; sourceTree = "<group>"; };
 		3CE9FBBC2CCAAD020046CD22 /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
+		3CEB36802D56284100565EC2 /* AppFonts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppFonts.swift; sourceTree = "<group>"; };
+		3CEB36862D5630AE00565EC2 /* SplashScreenView OLD.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SplashScreenView OLD.swift"; sourceTree = "<group>"; };
+		3CEE80652D410B430002C993 /* RealmTokenData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmTokenData.swift; sourceTree = "<group>"; };
+		3CEE80682D410CCF0002C993 /* RealmCurrency.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmCurrency.swift; sourceTree = "<group>"; };
+		3CEE806A2D410D2C0002C993 /* RealmCategory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmCategory.swift; sourceTree = "<group>"; };
+		3CEE806C2D410D860002C993 /* TokenData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenData.swift; sourceTree = "<group>"; };
+		3CEE80702D41305D0002C993 /* CustomCategoryType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomCategoryType.swift; sourceTree = "<group>"; };
+		3CEE80C42D5420A00002C993 /* Logger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Logger.swift; sourceTree = "<group>"; };
+		3CEE80C62D5420CD0002C993 /* Validators.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Validators.swift; sourceTree = "<group>"; };
+		3CEE80C82D5421050002C993 /* Formatters.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Formatters.swift; sourceTree = "<group>"; };
+		3CEE80CA2D5421660002C993 /* NotificationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationManager.swift; sourceTree = "<group>"; };
+		3CEE80CC2D5421AC0002C993 /* ViewExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewExtensions.swift; sourceTree = "<group>"; };
+		3CEE80CE2D5421E10002C993 /* Logic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Logic.swift; sourceTree = "<group>"; };
+		3CEE80D02D54225F0002C993 /* AppFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppFeature.swift; sourceTree = "<group>"; };
+		3CEE80D22D5424B30002C993 /* AppView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppView.swift; sourceTree = "<group>"; };
+		3CEE80D42D542A2E0002C993 /* CounterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CounterTests.swift; sourceTree = "<group>"; };
+		3CEE80D62D54E7780002C993 /* AppColors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppColors.swift; sourceTree = "<group>"; };
+		3CEE80DB2D54EA9E0002C993 /* RealmManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmManager.swift; sourceTree = "<group>"; };
 		3CF17A8D2C87812F00A601AC /* CADV.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CADV.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3CF17A902C87812F00A601AC /* CADVApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CADVApp.swift; sourceTree = "<group>"; };
-		3CF17A922C87812F00A601AC /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		3CF17A942C87813200A601AC /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		3CF17A972C87813200A601AC /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		3CF17A992C87813200A601AC /* Persistence.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Persistence.swift; sourceTree = "<group>"; };
@@ -220,12 +279,11 @@
 		3CF4C1682CDD28B1007F6990 /* CategorySettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategorySettingsView.swift; sourceTree = "<group>"; };
 		3CF4C16A2CDD3E7F007F6990 /* PasswordResetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasswordResetView.swift; sourceTree = "<group>"; };
 		3CF4C16C2CDD4F35007F6990 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
-		3CF4C16F2CDD6496007F6990 /* NotificationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationManager.swift; sourceTree = "<group>"; };
-		4FFCFD52E1FDB1EA2CAC0410 /* Pods_CADVTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_CADVTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		52966CD429689BDA27164EC7 /* Pods-CADV.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CADV.debug.xcconfig"; path = "Target Support Files/Pods-CADV/Pods-CADV.debug.xcconfig"; sourceTree = "<group>"; };
-		91EFEFCEFBAE16ACD736C9E8 /* Pods-CADVTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CADVTests.release.xcconfig"; path = "Target Support Files/Pods-CADVTests/Pods-CADVTests.release.xcconfig"; sourceTree = "<group>"; };
-		92AADA714578156A92877815 /* Pods-CADV.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CADV.release.xcconfig"; path = "Target Support Files/Pods-CADV/Pods-CADV.release.xcconfig"; sourceTree = "<group>"; };
-		9FA2BC9F5A751C542B6BEAB9 /* Pods_CADV_CADVUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_CADV_CADVUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		4687CB35B90BAC7BB8C77C18 /* Pods-CADVTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CADVTests.debug.xcconfig"; path = "Target Support Files/Pods-CADVTests/Pods-CADVTests.debug.xcconfig"; sourceTree = "<group>"; };
+		7521CDA2A247FD8787B394C1 /* Pods-CADV.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CADV.release.xcconfig"; path = "Target Support Files/Pods-CADV/Pods-CADV.release.xcconfig"; sourceTree = "<group>"; };
+		B01FD7B7A9B5D9285C38DC33 /* Pods-CADV-CADVUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CADV-CADVUITests.debug.xcconfig"; path = "Target Support Files/Pods-CADV-CADVUITests/Pods-CADV-CADVUITests.debug.xcconfig"; sourceTree = "<group>"; };
+		B9DE1F01DD866B56F3294061 /* Pods-CADV.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CADV.debug.xcconfig"; path = "Target Support Files/Pods-CADV/Pods-CADV.debug.xcconfig"; sourceTree = "<group>"; };
+		C46078E1CDD39F903C7C4097 /* Pods_CADVTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_CADVTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -233,7 +291,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				1481FD9B15673C33F6FA8AE0 /* Pods_CADV.framework in Frameworks */,
+				3CEE80C32D53B1160002C993 /* ComposableArchitecture in Frameworks */,
+				3CE47E6B2D5CB1E600195DF1 /* Lottie in Frameworks */,
+				92FB961442E4227CB8CAFB00 /* Pods_CADV.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -241,7 +301,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				AC4143B7A0FA3764888A5CE7 /* Pods_CADVTests.framework in Frameworks */,
+				680500C6E00B5E528D82E74C /* Pods_CADVTests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -249,7 +309,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8829F759CE8D1DDF8974135D /* Pods_CADV_CADVUITests.framework in Frameworks */,
+				0AEEE0A8159582CB8CB62137 /* Pods_CADV_CADVUITests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -259,14 +319,24 @@
 		23C9892F425190C93B7BC2BA /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				52966CD429689BDA27164EC7 /* Pods-CADV.debug.xcconfig */,
-				92AADA714578156A92877815 /* Pods-CADV.release.xcconfig */,
-				1079D05F03EC74786C16B580 /* Pods-CADV-CADVUITests.debug.xcconfig */,
-				37AE10628CD737B07AC62E41 /* Pods-CADV-CADVUITests.release.xcconfig */,
-				1E8712A18D4F7836073C35DE /* Pods-CADVTests.debug.xcconfig */,
-				91EFEFCEFBAE16ACD736C9E8 /* Pods-CADVTests.release.xcconfig */,
+				B9DE1F01DD866B56F3294061 /* Pods-CADV.debug.xcconfig */,
+				7521CDA2A247FD8787B394C1 /* Pods-CADV.release.xcconfig */,
+				B01FD7B7A9B5D9285C38DC33 /* Pods-CADV-CADVUITests.debug.xcconfig */,
+				34239EACB831DB661FA17B8E /* Pods-CADV-CADVUITests.release.xcconfig */,
+				4687CB35B90BAC7BB8C77C18 /* Pods-CADVTests.debug.xcconfig */,
+				104A38E442226814E2FEC67C /* Pods-CADVTests.release.xcconfig */,
 			);
 			path = Pods;
+			sourceTree = "<group>";
+		};
+		34CCD122F76BBFC21229B47F /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				0DD2ADCCABCD1F572BB3ED7A /* Pods_CADV.framework */,
+				2AD807079A30DD6E9E12BBCB /* Pods_CADV_CADVUITests.framework */,
+				C46078E1CDD39F903C7C4097 /* Pods_CADVTests.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 		3C21A7672D086B0900452DF3 /* LocalAuth */ = {
@@ -289,15 +359,64 @@
 		3C21A76B2D09F02C00452DF3 /* StartViews */ = {
 			isa = PBXGroup;
 			children = (
-				3C5617432CE22361008BA8A1 /* SplashScreen.swift */,
 				3CC743EF2C8DC49600F10E5E /* StartView.swift */,
+				3CEB36862D5630AE00565EC2 /* SplashScreenView OLD.swift */,
 			);
 			path = StartViews;
+			sourceTree = "<group>";
+		};
+		3C27D2292D5CBC250067E488 /* Shared */ = {
+			isa = PBXGroup;
+			children = (
+				3C2EC36B2D3A9569003AF0FB /* Metrics */,
+				3C21A76A2D086BC200452DF3 /* KeyChain */,
+				3CEE80C42D5420A00002C993 /* Logger.swift */,
+				3CEE80CA2D5421660002C993 /* NotificationManager.swift */,
+				3CEE80722D4136FA0002C993 /* URL */,
+				3CEE80672D410CC60002C993 /* Realm */,
+			);
+			path = Shared;
+			sourceTree = "<group>";
+		};
+		3C27D2302D5E32EA0067E488 /* OnboardingFeature */ = {
+			isa = PBXGroup;
+			children = (
+				3C27D2332D5E32FD0067E488 /* OnboardingFeature.swift */,
+				3C27D2312D5E32F40067E488 /* OnboardingView.swift */,
+			);
+			path = OnboardingFeature;
+			sourceTree = "<group>";
+		};
+		3C27D2382D5F35CA0067E488 /* SignInFeature */ = {
+			isa = PBXGroup;
+			children = (
+				3C27D23B2D5F3D3D0067E488 /* SignInView.swift */,
+				3C27D2392D5F3D360067E488 /* SignInFeature.swift */,
+			);
+			path = SignInFeature;
+			sourceTree = "<group>";
+		};
+		3C27D23F2D660DA40067E488 /* SignUpFeature */ = {
+			isa = PBXGroup;
+			children = (
+				3C27D2422D660DB40067E488 /* SignUpView.swift */,
+				3C27D2402D660DAD0067E488 /* SignUpFeature.swift */,
+			);
+			path = SignUpFeature;
+			sourceTree = "<group>";
+		};
+		3C27D2442D673B3C0067E488 /* SignConfirmFeature */ = {
+			isa = PBXGroup;
+			children = (
+				3C27D2452D673B480067E488 /* SignConfirmFeature.swift */,
+			);
+			path = SignConfirmFeature;
 			sourceTree = "<group>";
 		};
 		3C2EC36B2D3A9569003AF0FB /* Metrics */ = {
 			isa = PBXGroup;
 			children = (
+				3C2EC3792D3AB0E5003AF0FB /* Firebase.swift */,
 			);
 			path = Metrics;
 			sourceTree = "<group>";
@@ -491,9 +610,9 @@
 				3C21A7672D086B0900452DF3 /* LocalAuth */,
 				3C5617412CE13231008BA8A1 /* ChangePasswordView.swift */,
 				3CF4C16A2CDD3E7F007F6990 /* PasswordResetView.swift */,
-				3CC743F12C8DC9C400F10E5E /* LoginContentView.swift */,
-				3CC743F32C94CA9200F10E5E /* RegisterContentView.swift */,
-				3CD5C3132C9863CA0025EFDC /* ConfirmEmailContentView.swift */,
+				3CC743F12C8DC9C400F10E5E /* LoginView.swift */,
+				3CC743F32C94CA9200F10E5E /* RegisterView.swift */,
+				3CD5C3132C9863CA0025EFDC /* ConfirmEmailView.swift */,
 			);
 			path = Auth;
 			sourceTree = "<group>";
@@ -522,8 +641,7 @@
 		3CD5C3232CA2FB000025EFDC /* API */ = {
 			isa = PBXGroup;
 			children = (
-				3CA07A282D19B260004AF1DB /* DataManager.swift */,
-				3CE654A72D0C962D00ADD08A /* URLEntities.swift */,
+				3CEE80702D41305D0002C993 /* CustomCategoryType.swift */,
 				3CC53A192CD0B94A00C0B15E /* CategorizedTransaction.swift */,
 				3CD5C3242CA2FB0D0025EFDC /* Income.swift */,
 				3CD5C3262CA2FB370025EFDC /* Expense.swift */,
@@ -546,17 +664,6 @@
 				3CD5C32D2CAC2D0A0025EFDC /* AnalyticsPageView.swift */,
 			);
 			path = "Analytics Page";
-			sourceTree = "<group>";
-		};
-		3CE654A42D0C8D3100ADD08A /* Utility */ = {
-			isa = PBXGroup;
-			children = (
-				3CD9D7F62D380D3700C9BD39 /* Logger.swift */,
-				3CE654A02D0B045100ADD08A /* URL.swift */,
-				3CE654A12D0B045100ADD08A /* Utility.swift */,
-				3CF4C16F2CDD6496007F6990 /* NotificationManager.swift */,
-			);
-			path = Utility;
 			sourceTree = "<group>";
 		};
 		3CE654A92D12FDFE00ADD08A /* FinHealth */ = {
@@ -608,6 +715,112 @@
 			path = ProfileView;
 			sourceTree = "<group>";
 		};
+		3CEB36822D562ABB00565EC2 /* App */ = {
+			isa = PBXGroup;
+			children = (
+				3C9F9C542D59FD5600B451DE /* AppImages.swift */,
+				3CEB36802D56284100565EC2 /* AppFonts.swift */,
+				3CEE80D62D54E7780002C993 /* AppColors.swift */,
+				3CEE80D22D5424B30002C993 /* AppView.swift */,
+				3CEE80D02D54225F0002C993 /* AppFeature.swift */,
+			);
+			path = App;
+			sourceTree = "<group>";
+		};
+		3CEB36882D56319800565EC2 /* CustomElements */ = {
+			isa = PBXGroup;
+			children = (
+				3C27D2352D5E42080067E488 /* CustomSubViews.swift */,
+				3C9F9C5A2D5A03EE00B451DE /* CustomNotificationsTCA.swift */,
+				3C9F9C582D5A03B300B451DE /* CustomTextsTCA.swift */,
+				3C9F9C562D5A03AB00B451DE /* CustomButtonsTCA.swift */,
+			);
+			path = CustomElements;
+			sourceTree = "<group>";
+		};
+		3CEE80672D410CC60002C993 /* Realm */ = {
+			isa = PBXGroup;
+			children = (
+				3CEE806A2D410D2C0002C993 /* RealmCategory.swift */,
+				3CEE80682D410CCF0002C993 /* RealmCurrency.swift */,
+				3CEE80652D410B430002C993 /* RealmTokenData.swift */,
+				3CEE80DB2D54EA9E0002C993 /* RealmManager.swift */,
+			);
+			path = Realm;
+			sourceTree = "<group>";
+		};
+		3CEE80722D4136FA0002C993 /* URL */ = {
+			isa = PBXGroup;
+			children = (
+				3C27D22A2D5CC5C10067E488 /* URLSessionHelper.swift */,
+				3CE654A72D0C962D00ADD08A /* URLEntities.swift */,
+				3CE654A02D0B045100ADD08A /* URLElements.swift */,
+				3CEE806C2D410D860002C993 /* TokenData.swift */,
+				3CA07A282D19B260004AF1DB /* DataManager.swift */,
+			);
+			path = URL;
+			sourceTree = "<group>";
+		};
+		3CEE80732D4689E00002C993 /* MVVM */ = {
+			isa = PBXGroup;
+			children = (
+				3CF17AC22C87874A00A601AC /* Views */,
+				3CF17ABF2C8783DF00A601AC /* Models */,
+			);
+			path = MVVM;
+			sourceTree = "<group>";
+		};
+		3CEE809A2D49E9D00002C993 /* TCA */ = {
+			isa = PBXGroup;
+			children = (
+				3C27D2292D5CBC250067E488 /* Shared */,
+				3CEE809B2D49EAA50002C993 /* Features */,
+				3CEE809C2D49EAB60002C993 /* Core */,
+				3CEE809D2D49EABC0002C993 /* Services */,
+				3CEE809E2D49EAC10002C993 /* Utitilies */,
+			);
+			path = TCA;
+			sourceTree = "<group>";
+		};
+		3CEE809B2D49EAA50002C993 /* Features */ = {
+			isa = PBXGroup;
+			children = (
+				3C27D2442D673B3C0067E488 /* SignConfirmFeature */,
+				3C27D23F2D660DA40067E488 /* SignUpFeature */,
+				3C27D2382D5F35CA0067E488 /* SignInFeature */,
+				3C27D2302D5E32EA0067E488 /* OnboardingFeature */,
+			);
+			path = Features;
+			sourceTree = "<group>";
+		};
+		3CEE809C2D49EAB60002C993 /* Core */ = {
+			isa = PBXGroup;
+			children = (
+				3CEB36822D562ABB00565EC2 /* App */,
+			);
+			path = Core;
+			sourceTree = "<group>";
+		};
+		3CEE809D2D49EABC0002C993 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				3CEB36882D56319800565EC2 /* CustomElements */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		3CEE809E2D49EAC10002C993 /* Utitilies */ = {
+			isa = PBXGroup;
+			children = (
+				3C27D23D2D63644D0067E488 /* LottieView.swift */,
+				3CEE80CE2D5421E10002C993 /* Logic.swift */,
+				3CEE80CC2D5421AC0002C993 /* ViewExtensions.swift */,
+				3CEE80C82D5421050002C993 /* Formatters.swift */,
+				3CEE80C62D5420CD0002C993 /* Validators.swift */,
+			);
+			path = Utitilies;
+			sourceTree = "<group>";
+		};
 		3CF17A842C87812F00A601AC = {
 			isa = PBXGroup;
 			children = (
@@ -617,7 +830,7 @@
 				3CF17AAF2C87813300A601AC /* CADVUITests */,
 				3CF17A8E2C87812F00A601AC /* Products */,
 				23C9892F425190C93B7BC2BA /* Pods */,
-				B28CDF1ABF86B5FE438A2B6F /* Frameworks */,
+				34CCD122F76BBFC21229B47F /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -634,17 +847,16 @@
 		3CF17A8F2C87812F00A601AC /* CADV */ = {
 			isa = PBXGroup;
 			children = (
+				3CEE809A2D49E9D00002C993 /* TCA */,
+				3CEE80732D4689E00002C993 /* MVVM */,
 				3C5617452CE23458008BA8A1 /* Fonts */,
 				3CF4C16C2CDD4F35007F6990 /* Info.plist */,
-				3CF17AC22C87874A00A601AC /* Views */,
-				3CF17ABF2C8783DF00A601AC /* Models */,
 				3CF17A902C87812F00A601AC /* CADVApp.swift */,
-				3CF17A922C87812F00A601AC /* ContentView.swift */,
 				3CF17A942C87813200A601AC /* Assets.xcassets */,
 				3CF17A992C87813200A601AC /* Persistence.swift */,
 				3CF17A9B2C87813200A601AC /* CADV.xcdatamodeld */,
 				3CF17A962C87813200A601AC /* Preview Content */,
-				3C2EC3692D3A71ED003AF0FB /* GoogleService-Info.plist */,
+				3C2EC36D2D3A9BC6003AF0FB /* GoogleService-Info.plist */,
 			);
 			path = CADV;
 			sourceTree = "<group>";
@@ -660,6 +872,7 @@
 		3CF17AA52C87813300A601AC /* CADVTests */ = {
 			isa = PBXGroup;
 			children = (
+				3CEE80D42D542A2E0002C993 /* CounterTests.swift */,
 				3CF17AA62C87813300A601AC /* CADVTests.swift */,
 			);
 			path = CADVTests;
@@ -677,10 +890,7 @@
 		3CF17ABF2C8783DF00A601AC /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				3C2EC36B2D3A9569003AF0FB /* Metrics */,
-				3C21A76A2D086BC200452DF3 /* KeyChain */,
 				3CD5C3232CA2FB000025EFDC /* API */,
-				3CE654A42D0C8D3100ADD08A /* Utility */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -717,32 +927,34 @@
 			path = CategorySettings;
 			sourceTree = "<group>";
 		};
-		B28CDF1ABF86B5FE438A2B6F /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-				2CDA46F4EB9A6BB4EF96179E /* Pods_CADV.framework */,
-				9FA2BC9F5A751C542B6BEAB9 /* Pods_CADV_CADVUITests.framework */,
-				4FFCFD52E1FDB1EA2CAC0410 /* Pods_CADVTests.framework */,
-			);
-			name = Frameworks;
-			sourceTree = "<group>";
-		};
 /* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		3C2EC3742D3AA822003AF0FB /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
 		3CF17A8C2C87812F00A601AC /* CADV */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 3CF17AB62C87813300A601AC /* Build configuration list for PBXNativeTarget "CADV" */;
 			buildPhases = (
-				C7F26E3107159552D25CF75A /* [CP] Check Pods Manifest.lock */,
+				B83C2505DB31CA5F63F5A62B /* [CP] Check Pods Manifest.lock */,
+				3C2EC3742D3AA822003AF0FB /* Headers */,
 				3CF17A892C87812F00A601AC /* Sources */,
 				3CF17A8A2C87812F00A601AC /* Frameworks */,
 				3CF17A8B2C87812F00A601AC /* Resources */,
-				5CF0EB07956BF5887F8FE285 /* [CP] Embed Pods Frameworks */,
+				0CF8A64505383094DD04EF65 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				3CEE80BF2D53A8FA0002C993 /* PBXTargetDependency */,
 			);
 			name = CADV;
 			productName = CADV;
@@ -753,7 +965,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 3CF17AB92C87813300A601AC /* Build configuration list for PBXNativeTarget "CADVTests" */;
 			buildPhases = (
-				4348A2BE7C23ABDF8BFCC07F /* [CP] Check Pods Manifest.lock */,
+				77BB4320ED7DA59E124D2F30 /* [CP] Check Pods Manifest.lock */,
 				3CF17A9E2C87813300A601AC /* Sources */,
 				3CF17A9F2C87813300A601AC /* Frameworks */,
 				3CF17AA02C87813300A601AC /* Resources */,
@@ -772,11 +984,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 3CF17ABC2C87813300A601AC /* Build configuration list for PBXNativeTarget "CADVUITests" */;
 			buildPhases = (
-				9AB05C8D43DCDDE0D69E0797 /* [CP] Check Pods Manifest.lock */,
+				ED0D2A0841F5BA2F77834F71 /* [CP] Check Pods Manifest.lock */,
 				3CF17AA82C87813300A601AC /* Sources */,
 				3CF17AA92C87813300A601AC /* Frameworks */,
 				3CF17AAA2C87813300A601AC /* Resources */,
-				B128FE7D05A181AEDF582D41 /* [CP] Embed Pods Frameworks */,
+				BE77EEEBBF3A0E672C9FFDC8 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -820,6 +1032,10 @@
 				Base,
 			);
 			mainGroup = 3CF17A842C87812F00A601AC;
+			packageReferences = (
+				3CEE80BA2D53A4EA0002C993 /* XCRemoteSwiftPackageReference "swift-composable-architecture" */,
+				3CE47E692D5CB01300195DF1 /* XCRemoteSwiftPackageReference "lottie-spm" */,
+			);
 			productRefGroup = 3CF17A8E2C87812F00A601AC /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -837,7 +1053,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				3C56174A2CE23491008BA8A1 /* Inter-Bold.ttf in Resources */,
-				3C2EC36A2D3A71ED003AF0FB /* GoogleService-Info.plist in Resources */,
+				3C2EC36E2D3A9BC6003AF0FB /* GoogleService-Info.plist in Resources */,
 				3C56174D2CE234A3008BA8A1 /* Gilroy-Semibold.ttf in Resources */,
 				3C56174B2CE23491008BA8A1 /* Inter-SemiBold.ttf in Resources */,
 				3C56174F2CE234B4008BA8A1 /* Gilroy-Bold.ttf in Resources */,
@@ -864,7 +1080,24 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		4348A2BE7C23ABDF8BFCC07F /* [CP] Check Pods Manifest.lock */ = {
+		0CF8A64505383094DD04EF65 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-CADV/Pods-CADV-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-CADV/Pods-CADV-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-CADV/Pods-CADV-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		77BB4320ED7DA59E124D2F30 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -886,63 +1119,7 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		5CF0EB07956BF5887F8FE285 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-CADV/Pods-CADV-frameworks-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-CADV/Pods-CADV-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-CADV/Pods-CADV-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		9AB05C8D43DCDDE0D69E0797 /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-CADV-CADVUITests-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-		B128FE7D05A181AEDF582D41 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-CADV-CADVUITests/Pods-CADV-CADVUITests-frameworks-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-CADV-CADVUITests/Pods-CADV-CADVUITests-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-CADV-CADVUITests/Pods-CADV-CADVUITests-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		C7F26E3107159552D25CF75A /* [CP] Check Pods Manifest.lock */ = {
+		B83C2505DB31CA5F63F5A62B /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -964,6 +1141,45 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
+		BE77EEEBBF3A0E672C9FFDC8 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-CADV-CADVUITests/Pods-CADV-CADVUITests-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-CADV-CADVUITests/Pods-CADV-CADVUITests-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-CADV-CADVUITests/Pods-CADV-CADVUITests-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		ED0D2A0841F5BA2F77834F71 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-CADV-CADVUITests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -977,47 +1193,68 @@
 				3C72E30A2CD2503B00B7EA04 /* AnnualPaymentsSectionView.swift in Sources */,
 				3CA28B452CEB3C9400AD1D33 /* CreateTransactionSelectCategoryView.swift in Sources */,
 				3C0C2C952CE695D70040B886 /* BankAccountCategorySelectionView.swift in Sources */,
-				3CD5C3142C9863CA0025EFDC /* ConfirmEmailContentView.swift in Sources */,
+				3CD5C3142C9863CA0025EFDC /* ConfirmEmailView.swift in Sources */,
 				3CD5362C2CC7C8A00099B111 /* AddBankAccountView.swift in Sources */,
 				3CA07A232D132702004AF1DB /* ShareInIncome.swift in Sources */,
-				3CC743F22C8DC9C400F10E5E /* LoginContentView.swift in Sources */,
+				3C27D22B2D5CC5C60067E488 /* URLSessionHelper.swift in Sources */,
+				3CC743F22C8DC9C400F10E5E /* LoginView.swift in Sources */,
 				3C5385DA2CCFF58700242054 /* CommonSectionViews.swift in Sources */,
+				3C27D2462D673B4D0067E488 /* SignConfirmFeature.swift in Sources */,
 				3CD5C3372CB55BEB0025EFDC /* AnnualPayments.swift in Sources */,
+				3CEE80CB2D54216F0002C993 /* NotificationManager.swift in Sources */,
+				3CEB36872D5630AE00565EC2 /* SplashScreenView OLD.swift in Sources */,
 				3C72E3082CD2500900B7EA04 /* GoalsView.swift in Sources */,
 				3C21A7692D086B7600452DF3 /* LocalAuthKeychain.swift in Sources */,
 				3CD5C31F2CA2F8630025EFDC /* MainPageView.swift in Sources */,
+				3C27D23C2D5F3D420067E488 /* SignInView.swift in Sources */,
 				3CD5C32E2CAC2D0A0025EFDC /* AnalyticsPageView.swift in Sources */,
-				3CC743F42C94CA9200F10E5E /* RegisterContentView.swift in Sources */,
+				3CC743F42C94CA9200F10E5E /* RegisterView.swift in Sources */,
 				3C5617422CE13238008BA8A1 /* ChangePasswordView.swift in Sources */,
+				3C27D2322D5E32FA0067E488 /* OnboardingView.swift in Sources */,
 				3C72E3062CD24FDF00B7EA04 /* AddGoalButtonView.swift in Sources */,
 				3C72E3162CD252D300B7EA04 /* TransactionElementView.swift in Sources */,
 				3C4F0ECE2CCFA6CE008A8D14 /* ProfileSettingsView.swift in Sources */,
-				3C5617442CE22369008BA8A1 /* SplashScreen.swift in Sources */,
 				3CE654A62D0C944E00ADD08A /* CustomTabBarView.swift in Sources */,
 				3CC53A182CD0AF2D00C0B15E /* ErrorViews.swift in Sources */,
 				3CD5C33F2CB83A310025EFDC /* Accounts.swift in Sources */,
 				3CE9FBB52CCA93540046CD22 /* ValuteSwitcherView.swift in Sources */,
-				3CE654A22D0B045100ADD08A /* URL.swift in Sources */,
+				3CE654A22D0B045100ADD08A /* URLElements.swift in Sources */,
 				3CE654B52D12FED500ADD08A /* PlanningDetailsView.swift in Sources */,
-				3CE654A32D0B045100ADD08A /* Utility.swift in Sources */,
+				3CEE806B2D410D300002C993 /* RealmCategory.swift in Sources */,
 				3CE654AB2D12FE2100ADD08A /* FinHealthView.swift in Sources */,
+				3C27D2432D660DB80067E488 /* SignUpView.swift in Sources */,
+				3CEE80C52D5420A40002C993 /* Logger.swift in Sources */,
 				3CD9D7F52D380A1300C9BD39 /* UUID.swift in Sources */,
+				3CEE80D12D5422600002C993 /* AppFeature.swift in Sources */,
 				3CD5C3312CAC31B30025EFDC /* Goal.swift in Sources */,
 				3C72E3182CD2535E00B7EA04 /* BankAcoountListView.swift in Sources */,
 				3C9F28182D13153C00C3DB83 /* ScoreDiadramView.swift in Sources */,
 				3CF4C1632CDCFE01007F6990 /* AddCategoryView.swift in Sources */,
 				3C72E3142CD2521F00B7EA04 /* SummaryView.swift in Sources */,
+				3CEE80692D410CD40002C993 /* RealmCurrency.swift in Sources */,
 				3CD5C3252CA2FB0D0025EFDC /* Income.swift in Sources */,
 				3CD5C3392CB6D1BC0025EFDC /* EditGoalView.swift in Sources */,
+				3C9F9C592D5A03B700B451DE /* CustomTextsTCA.swift in Sources */,
 				3CA07A292D19B264004AF1DB /* DataManager.swift in Sources */,
+				3C27D23E2D6364500067E488 /* LottieView.swift in Sources */,
 				3CD5C33D2CB83A1E0025EFDC /* Transactions.swift in Sources */,
 				3C21A7662D0869FD00452DF3 /* LocalAuthView.swift in Sources */,
 				3C72E3042CD24F9100B7EA04 /* GoalsSectionView.swift in Sources */,
+				3C2EC37A2D3AB165003AF0FB /* Firebase.swift in Sources */,
+				3C27D23A2D5F3D3A0067E488 /* SignInFeature.swift in Sources */,
+				3CEE80D72D54E77B0002C993 /* AppColors.swift in Sources */,
+				3CEE80D32D5424B60002C993 /* AppView.swift in Sources */,
 				3CA28B472CEB649600AD1D33 /* CreateTransactionMainView.swift in Sources */,
 				3C5617542CE236F9008BA8A1 /* CustomTextView.swift in Sources */,
+				3C27D2412D660DB10067E488 /* SignUpFeature.swift in Sources */,
 				3CD5C3272CA2FB370025EFDC /* Expense.swift in Sources */,
+				3C27D2342D5E33040067E488 /* OnboardingFeature.swift in Sources */,
+				3CEE80712D4130660002C993 /* CustomCategoryType.swift in Sources */,
+				3CEE80CF2D5421E40002C993 /* Logic.swift in Sources */,
 				3CE654AD2D12FEAA00ADD08A /* ExpenceDetailsView.swift in Sources */,
+				3CEE80C92D54210B0002C993 /* Formatters.swift in Sources */,
 				3C72E30C2CD2507300B7EA04 /* AnnualPaymentsItemView.swift in Sources */,
+				3C27D2362D5E420F0067E488 /* CustomSubViews.swift in Sources */,
 				3CD5C32B2CA2FB600025EFDC /* Profile.swift in Sources */,
 				3CF4C1692CDD28B6007F6990 /* CategorySettingsView.swift in Sources */,
 				3CE9FBBA2CCAAB0E0046CD22 /* AppNavigatingButtonsListView.swift in Sources */,
@@ -1025,28 +1262,34 @@
 				3CF17A9A2C87813200A601AC /* Persistence.swift in Sources */,
 				3CA07A272D13277C004AF1DB /* PointerView.swift in Sources */,
 				3CC743F02C8DC49600F10E5E /* StartView.swift in Sources */,
-				3CF4C1702CDD649E007F6990 /* NotificationManager.swift in Sources */,
-				3CD9D7F72D380D3B00C9BD39 /* Logger.swift in Sources */,
 				3CA07A1D2D131B37004AF1DB /* TempoView.swift in Sources */,
 				3CA07A252D132767004AF1DB /* PercentBlockView.swift in Sources */,
 				3CD5C33B2CB80B6D0025EFDC /* AllGoalsView.swift in Sources */,
 				3C6196382CE25B550001B233 /* StepView.swift in Sources */,
+				3C9F9C552D59FD5A00B451DE /* AppImages.swift in Sources */,
 				3CD5C3332CAC34AA0025EFDC /* FinHealth.swift in Sources */,
+				3CEE80CD2D5421B00002C993 /* ViewExtensions.swift in Sources */,
 				3CE654B12D12FEC200ADD08A /* InvestmentDetailsView.swift in Sources */,
 				3CF201032CCA742C00A5620A /* SettingsPageView.swift in Sources */,
 				3CE9FBBD2CCAAD050046CD22 /* ProfileView.swift in Sources */,
 				3CF4C1652CDD24B9007F6990 /* OperationsArchiveView.swift in Sources */,
 				3CD5C3222CA2F9E80025EFDC /* TabBarView.swift in Sources */,
+				3C9F9C5B2D5A03F500B451DE /* CustomNotificationsTCA.swift in Sources */,
 				3CE654B32D12FECF00ADD08A /* DebtDetailsView.swift in Sources */,
 				3C0C2C932CE67F910040B886 /* CreateTransactionAnalyticsView.swift in Sources */,
 				3CF4C1672CDD2781007F6990 /* SupportRequestView.swift in Sources */,
-				3CF17A932C87812F00A601AC /* ContentView.swift in Sources */,
 				3C72E3102CD2513800B7EA04 /* CategoryListView.swift in Sources */,
 				3CE654AF2D12FEB800ADD08A /* SavingDetailsView.swift in Sources */,
 				3CC53A1A2CD0B96000C0B15E /* CategorizedTransaction.swift in Sources */,
 				3CE654B82D13027500ADD08A /* ScoreView.swift in Sources */,
+				3CEB36812D56284800565EC2 /* AppFonts.swift in Sources */,
+				3CEE80662D410B4D0002C993 /* RealmTokenData.swift in Sources */,
 				3CF17A912C87812F00A601AC /* CADVApp.swift in Sources */,
+				3CEE80DC2D54EAA20002C993 /* RealmManager.swift in Sources */,
+				3CEE80C72D5420D10002C993 /* Validators.swift in Sources */,
+				3C9F9C572D5A03AF00B451DE /* CustomButtonsTCA.swift in Sources */,
 				3C5385D82CCFE56C00242054 /* CommonButtonViews.swift in Sources */,
+				3CEE806D2D410D890002C993 /* TokenData.swift in Sources */,
 				3CF17A9D2C87813200A601AC /* CADV.xcdatamodeld in Sources */,
 				3CF4C16B2CDD3E85007F6990 /* PasswordResetView.swift in Sources */,
 				3CD5C3192C9873FF0025EFDC /* PopUpContentViews.swift in Sources */,
@@ -1058,6 +1301,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3CEE80D52D542A370002C993 /* CounterTests.swift in Sources */,
 				3CF17AA72C87813300A601AC /* CADVTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1074,6 +1318,10 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		3CEE80BF2D53A8FA0002C993 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			productRef = 3CEE80BE2D53A8FA0002C993 /* ComposableArchitecture */;
+		};
 		3CF17AA42C87813300A601AC /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 3CF17A8C2C87812F00A601AC /* CADV */;
@@ -1144,9 +1392,11 @@
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
+				OTHER_SWIFT_FLAGS = "";
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 6.0;
 			};
 			name = Debug;
 		};
@@ -1200,15 +1450,17 @@
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
+				OTHER_SWIFT_FLAGS = "";
 				SDKROOT = iphoneos;
 				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_VERSION = 6.0;
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
 		};
 		3CF17AB72C87813300A601AC /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 52966CD429689BDA27164EC7 /* Pods-CADV.debug.xcconfig */;
+			baseConfigurationReference = B9DE1F01DD866B56F3294061 /* Pods-CADV.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -1222,10 +1474,12 @@
 				INFOPLIST_FILE = CADV/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "Cash Advisor";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.finance";
+				INFOPLIST_KEY_NSFaceIDUsageDescription = "Мы используем Face ID для подтверждения вашей личности.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UILaunchStoryboardName = SplashScreenView.swift;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.6;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1245,7 +1499,7 @@
 		};
 		3CF17AB82C87813300A601AC /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 92AADA714578156A92877815 /* Pods-CADV.release.xcconfig */;
+			baseConfigurationReference = 7521CDA2A247FD8787B394C1 /* Pods-CADV.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -1259,10 +1513,12 @@
 				INFOPLIST_FILE = CADV/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "Cash Advisor";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.finance";
+				INFOPLIST_KEY_NSFaceIDUsageDescription = "Мы используем Face ID для подтверждения вашей личности.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UILaunchStoryboardName = SplashScreenView.swift;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.6;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1282,7 +1538,7 @@
 		};
 		3CF17ABA2C87813300A601AC /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 1E8712A18D4F7836073C35DE /* Pods-CADVTests.debug.xcconfig */;
+			baseConfigurationReference = 4687CB35B90BAC7BB8C77C18 /* Pods-CADVTests.debug.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
@@ -1302,7 +1558,7 @@
 		};
 		3CF17ABB2C87813300A601AC /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 91EFEFCEFBAE16ACD736C9E8 /* Pods-CADVTests.release.xcconfig */;
+			baseConfigurationReference = 104A38E442226814E2FEC67C /* Pods-CADVTests.release.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
@@ -1322,7 +1578,7 @@
 		};
 		3CF17ABD2C87813300A601AC /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 1079D05F03EC74786C16B580 /* Pods-CADV-CADVUITests.debug.xcconfig */;
+			baseConfigurationReference = B01FD7B7A9B5D9285C38DC33 /* Pods-CADV-CADVUITests.debug.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
@@ -1340,7 +1596,7 @@
 		};
 		3CF17ABE2C87813300A601AC /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 37AE10628CD737B07AC62E41 /* Pods-CADV-CADVUITests.release.xcconfig */;
+			baseConfigurationReference = 34239EACB831DB661FA17B8E /* Pods-CADV-CADVUITests.release.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
@@ -1396,6 +1652,43 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		3CE47E692D5CB01300195DF1 /* XCRemoteSwiftPackageReference "lottie-spm" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/airbnb/lottie-spm.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 4.5.1;
+			};
+		};
+		3CEE80BA2D53A4EA0002C993 /* XCRemoteSwiftPackageReference "swift-composable-architecture" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/pointfreeco/swift-composable-architecture";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.17.1;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		3CE47E6A2D5CB1E600195DF1 /* Lottie */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 3CE47E692D5CB01300195DF1 /* XCRemoteSwiftPackageReference "lottie-spm" */;
+			productName = Lottie;
+		};
+		3CEE80BE2D53A8FA0002C993 /* ComposableArchitecture */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 3CEE80BA2D53A4EA0002C993 /* XCRemoteSwiftPackageReference "swift-composable-architecture" */;
+			productName = ComposableArchitecture;
+		};
+		3CEE80C22D53B1160002C993 /* ComposableArchitecture */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 3CEE80BA2D53A4EA0002C993 /* XCRemoteSwiftPackageReference "swift-composable-architecture" */;
+			productName = ComposableArchitecture;
+		};
+/* End XCSwiftPackageProductDependency section */
 
 /* Begin XCVersionGroup section */
 		3CF17A9B2C87813200A601AC /* CADV.xcdatamodeld */ = {
